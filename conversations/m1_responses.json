@@ -1,0 +1,13 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/conversations/m1_responses.json. Bad/Combat Outcomes.",
+  "phrases": [
+    { "text": "Lies! Open fire!", "type": ["response"], "attitude": "m1", "outcome": "combat", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "I knew it! Blast them!", "type": ["response"], "attitude": "m1", "outcome": "combat", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "Wrong answer.", "type": ["response"], "attitude": "m1", "outcome": "combat", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "Take them down!", "type": ["response"], "attitude": "m1", "outcome": "combat", "from_faction": ["imperials", "clones"], "to_faction": ["any"] },
+    { "text": "Your parts will serve us well.", "type": ["response"], "attitude": "m1", "outcome": "combat", "from_faction": ["takers", "droids"], "to_faction": ["any"] },
+    { "text": "You have failed me.", "type": ["response"], "attitude": "m1", "outcome": "combat", "from_faction": ["sith"], "to_faction": ["any"] },
+    { "text": "This is the Way... to your death.", "type": ["response"], "attitude": "m1", "outcome": "combat", "from_faction": ["mandalorians"], "to_faction": ["any"] },
+    { "text": "Die, scum!", "type": ["response"], "attitude": "m1", "outcome": "combat", "from_faction": ["any"], "to_faction": ["any"] }
+  ]
+}

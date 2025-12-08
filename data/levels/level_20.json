@@ -1,0 +1,212 @@
+{
+    "settings": {
+        "width": 64,
+        "height": 64,
+        "defaults": {
+            "floor": {
+                "key": "data/textures/floors/imperialstyle/floor_01.png"
+            },
+            "ceiling": {
+                "key": "data/textures/ceilings/imperialstyle/ceiling_01.png",
+                "heightMultiplier": 1.5
+            },
+            "wall": {
+                "key": "data/textures/walls/imperialstyle/wall_01.png"
+            },
+            "skybox": {
+                "key": "data/skyboxes/space_01.png"
+            }
+        }
+    },
+    "layers": {
+        "floor": [
+            [
+                "10,10",
+                {
+                    "key": "data/textures/floors/imperialstyle/floor_01.png",
+                    "size": 20
+                }
+            ]
+        ],
+        "wall": [
+            [
+                "H_10_9",
+                {
+                    "key": "data/textures/walls/imperialstyle/wall_01.png",
+                    "points": [
+                        10,
+                        9,
+                        30,
+                        9
+                    ]
+                }
+            ],
+            [
+                "H_10_30",
+                {
+                    "key": "data/textures/walls/imperialstyle/wall_01.png",
+                    "points": [
+                        10,
+                        30,
+                        30,
+                        30
+                    ]
+                }
+            ],
+            [
+                "V_9_10",
+                {
+                    "key": "data/textures/walls/imperialstyle/wall_01.png",
+                    "points": [
+                        9,
+                        10,
+                        9,
+                        30
+                    ]
+                }
+            ],
+            [
+                "V_30_10",
+                {
+                    "key": "data/textures/walls/imperialstyle/wall_01.png",
+                    "points": [
+                        30,
+                        10,
+                        30,
+                        30
+                    ]
+                }
+            ]
+        ],
+        "dock": [
+            [
+                "H_20_30",
+                {
+                    "key": "data/textures/docks/dock_01.png",
+                    "points": [
+                        19,
+                        30,
+                        21,
+                        30
+                    ],
+                    "properties": {
+                        "target": "level_5",
+                        "requiredItem": "level_20_keycard"
+                    }
+                }
+            ]
+        ],
+        "spawns": [
+            [
+                "15,8",
+                {
+                    "rotation": 0
+                }
+            ]
+        ],
+        "npcs": [
+            [
+                "15,9",
+                {
+                    "key": "r2d21",
+                    "properties": {
+                        "name": "Quest Droid",
+                        "quest": "MQ_20_CLEAR_AREA",
+                        "dialogue": "Beep boop! (The commander in this area holds a keycard!)",
+                        "faction": "droids"
+                    }
+                }
+            ],
+            [
+                "20,20",
+                {
+                    "key": "clone",
+                    "properties": {
+                        "name": "Clone Commander",
+                        "tags": ["level_20_commander"],
+                        "faction": "clones",
+                        "weapon": "data/NPConlyweapons/rifle/grifle_ee3_boba.png"
+                    }
+                }
+            ],
+            [
+                "19,19",
+                {
+                    "key": "clone",
+                    "properties": {
+                        "name": "Clone Trooper",
+                        "faction": "clones",
+                        "weapon": "data/NPConlyweapons/pistol/gpistol_dl44_han.png"
+                    }
+                }
+            ],
+            [
+                "21,19",
+                {
+                    "key": "clone",
+                    "properties": {
+                        "name": "Clone Trooper",
+                        "faction": "clones",
+                        "weapon": "data/NPConlyweapons/pistol/gpistol_dl44_han.png"
+                    }
+                }
+            ],
+            [
+                "18,12",
+                {
+                    "key": "rebel1",
+                    "properties": {
+                        "name": "Kaelen",
+                        "quest": "MQ_21_THE_DATAPAD",
+                        "dialogue": "Please, you have to help me! That thug is after my datapad!",
+                        "faction": "rebels",
+                        "tags": ["kaelen"],
+                        "failOnDeath": "MQ_21_THE_DATAPAD",
+                        "nonrecruitable": true
+                    }
+                }
+            ],
+            [
+                "19,12",
+                {
+                    "key": "taker1",
+                    "properties": {
+                        "name": "Grak",
+                        "faction": "takers",
+                        "tags": ["grak"],
+                        "loot": "security_datapad",
+                        "hostileAll": true,
+                        "nonrecruitable": true,
+                        "dialogue": "You're getting in my way! This is none of your business."
+                    }
+                }
+            ],
+            [
+                "25,25",
+                {
+                    "key": "probe",
+                    "properties": {
+                        "name": "Scav-Bot",
+                        "faction": "droids",
+                        "loot": "cryo_scrambler",
+                        "hostileAll": true,
+                        "nonrecruitable": true
+                    }
+                }
+            ],
+            [
+                "12,15",
+                {
+                    "key": "rebel_female1",
+                    "properties": {
+                        "name": "Zara",
+                        "dialogue": "I'm looking for a cryo-scrambler. It's the only way I can get into the derelict ship nearby.",
+                        "faction": "rebels",
+                        "tags": ["zara"],
+                        "nonrecruitable": true
+                    }
+                }
+            ]
+        ]
+    }
+}

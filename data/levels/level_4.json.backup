@@ -1,0 +1,539 @@
+{
+  "settings": {
+    "width": 64,
+    "height": 128,
+    "defaults": {
+      "skybox": {
+        "key": "hyper"
+      },
+      "ceiling": {},
+      "floor": {
+        "key": "/data/pngs/floor/floor_24.png",
+        "size": 1
+      }
+    }
+  },
+  "layers": {
+    "floor": [
+      [
+        "17,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_18.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "18,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_18.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "19,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_18.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "20,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_18.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "21,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_18.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "22,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_18.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_18.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,7",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_18.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,8",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_18.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "23,9",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floor_18.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ],
+      [
+        "11,6",
+        {
+          "type": "texture",
+          "key": "/data/pngs/floor/floornumber_0.png",
+          "rotation": 0,
+          "properties": {}
+        }
+      ]
+    ],
+    "npcs": [
+      [
+        "22,7",
+        {
+          "type": "random_npc",
+          "key": "R1_aliens_generic",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Aliens",
+            "subgroup": "aliens_generic",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "21,7",
+        {
+          "type": "random_npc",
+          "key": "R1_aliens_generic",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Aliens",
+            "subgroup": "aliens_generic",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "20,7",
+        {
+          "type": "random_npc",
+          "key": "R1_aliens_generic",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Aliens",
+            "subgroup": "aliens_generic",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "19,7",
+        {
+          "type": "random_npc",
+          "key": "R1_aliens_generic",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Aliens",
+            "subgroup": "aliens_generic",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "18,7",
+        {
+          "type": "random_npc",
+          "key": "R1_aliens_generic",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Aliens",
+            "subgroup": "aliens_generic",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "17,7",
+        {
+          "type": "random_npc",
+          "key": "R1_aliens_generic",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Aliens",
+            "subgroup": "aliens_generic",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "22,8",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "21,8",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "20,8",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "19,8",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "18,8",
+        {
+          "type": "random_npc",
+          "key": "R1_human_female",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Rebels",
+            "subgroup": "human_female",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "22,9",
+        {
+          "type": "random_npc",
+          "key": "R1_droid_humanoid",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Droids",
+            "subgroup": "droid_humanoid",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "21,9",
+        {
+          "type": "random_npc",
+          "key": "R1_droid_humanoid",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Droids",
+            "subgroup": "droid_humanoid",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "20,9",
+        {
+          "type": "random_npc",
+          "key": "R1_droid_humanoid",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Droids",
+            "subgroup": "droid_humanoid",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "19,9",
+        {
+          "type": "random_npc",
+          "key": "R2_droid_humanoid",
+          "properties": {
+            "threat": 2,
+            "macroCategory": "Droids",
+            "subgroup": "droid_humanoid",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "18,9",
+        {
+          "type": "random_npc",
+          "key": "R5_droid_humanoid",
+          "properties": {
+            "threat": 5,
+            "macroCategory": "Droids",
+            "subgroup": "droid_humanoid",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "14,8",
+        {
+          "type": "npc",
+          "key": "grogu detail",
+          "rotation": 0,
+          "properties": {
+            "baseType": "humanoid",
+            "alphaTexture": "true",
+            "name": "Grogu",
+            "health": 78,
+            "scale_x": 0.9,
+            "scale_y": 0.9,
+            "scale_z": 0.9,
+            "flyspeed": 0,
+            "threat": 4,
+            "melee_damage": 7.15,
+            "attack_cooldown": 1.89,
+            "attack_range": 2.145,
+            "accuracy": 85.8,
+            "perception_radius": 35.75,
+            "aggro": 0.715,
+            "speed": 0.03575,
+            "collision_radius": 0.2,
+            "weight": 11,
+            "weight_lift": 11,
+            "technical_understanding": 42.9,
+            "force_sensitivity": 150,
+            "jump_strength": 0,
+            "lie_attack": 40,
+            "lie_defense": 30,
+            "charm_attack": 40,
+            "charm_defense": 30,
+            "weapon": "/data/NPConlyweapons/saber/saber_darksaber.png"
+          }
+        }
+      ]
+    ],
+    "dock": [
+      [
+        "H_11_5",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_1_blue.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 02A",
+            "autoSpawnFor": "11,6"
+          }
+        }
+      ]
+    ],
+    "elevation": [
+      [
+        "17,6",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "18,6",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "19,6",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "20,6",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "21,6",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "22,6",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "23,6",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "23,7",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "23,8",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ],
+      [
+        "23,9",
+        {
+          "type": "elevation",
+          "key": "/data/pngs/elevation/3.png",
+          "rotation": 0,
+          "properties": {
+            "elevation": 3,
+            "wallsideTexture": "/data/pngs/elevationsides/eside_default.png"
+          }
+        }
+      ]
+    ],
+    "spawns": [
+      [
+        "18,11",
+        {
+          "id": "L01-SP-A",
+          "rotation": 0,
+          "key": "/data/pngs/HUD/hologonk.png",
+          "properties": {}
+        }
+      ],
+      [
+        "11,6",
+        {
+          "id": "FROM LEVEL 02",
+          "rotation": 2,
+          "key": "/data/pngs/HUD/hologonk.png",
+          "properties": {}
+        }
+      ]
+    ]
+  }
+}

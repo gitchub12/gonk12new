@@ -1,0 +1,394 @@
+{
+    "species": {
+        "aqualish": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "CON": 2,
+                "WIS": -2
+            }
+        },
+        "arcona": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {}
+        },
+        "barabel": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "STR": 2,
+                "CON": 2,
+                "DEX": -2,
+                "WIS": -4
+            }
+        },
+        "bimm": {
+            "speed": 6,
+            "size": "S",
+            "modifiers": {
+                "STR": -4,
+                "INT": 2,
+                "CHA": 2
+            }
+        },
+        "bith": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "INT": 4,
+                "WIS": 2,
+                "STR": -2,
+                "CON": -2
+            }
+        },
+        "bothan": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "DEX": 2,
+                "CON": -2,
+                "WIS": -2
+            }
+        },
+        "cerean": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "INT": 2,
+                "WIS": 2,
+                "DEX": -2
+            }
+        },
+        "chadra-fan": {
+            "speed": 6,
+            "size": "S",
+            "modifiers": {
+                "DEX": 2,
+                "CHA": 2,
+                "STR": -2,
+                "WIS": -2
+            }
+        },
+        "chagrian": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {}
+        },
+        "chiss": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {}
+        },
+        "devaronian_m": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "DEX": 2,
+                "INT": -2,
+                "WIS": -2
+            }
+        },
+        "devaronian_f": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "INT": 2,
+                "WIS": 2,
+                "DEX": -2
+            }
+        },
+        "dug": {
+            "speed": 6,
+            "size": "S",
+            "modifiers": {
+                "DEX": 2,
+                "WIS": -2,
+                "CHA": -2
+            }
+        },
+        "duros": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "DEX": 2,
+                "INT": 2,
+                "STR": -2,
+                "CON": -2
+            }
+        },
+        "ewok": {
+            "speed": 6,
+            "size": "S",
+            "modifiers": {
+                "DEX": 2,
+                "STR": -2
+            },
+            "languages": {
+                "speak_basic": false,
+                "understand_basic": false
+            }
+        },
+        "falleen": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {}
+        },
+        "gamorrean": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "STR": 2,
+                "DEX": -2,
+                "INT": -2
+            }
+        },
+        "geonosian_work": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "STR": 2,
+                "INT": -2,
+                "CHA": -2
+            }
+        },
+        "geonosian_aris": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "DEX": 2,
+                "CON": -2
+            }
+        },
+        "gotal": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {}
+        },
+        "gran": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "CHA": 2,
+                "WIS": -2
+            }
+        },
+        "gungan": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "CON": 2,
+                "WIS": -2
+            }
+        },
+        "human": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {}
+        },
+        "hutt": {
+            "speed": 2,
+            "size": "L",
+            "modifiers": {
+                "STR": 2,
+                "CON": 2,
+                "INT": 2,
+                "WIS": 2,
+                "CHA": 2,
+                "DEX": -4
+            }
+        },
+        "ithorian": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "WIS": 2,
+                "CHA": 2,
+                "DEX": -2
+            }
+        },
+        "jawa": {
+            "speed": 6,
+            "size": "S",
+            "modifiers": {
+                "DEX": 2,
+                "STR": -4,
+                "CHA": -2
+            },
+            "languages": {
+                "speak_basic": false,
+                "understand_basic": true
+            }
+        },
+        "kaminoan": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "CON": 2,
+                "WIS": -2,
+                "CHA": -2
+            }
+        },
+        "kel_dor": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "DEX": 2,
+                "WIS": 2,
+                "CON": -2
+            }
+        },
+        "kubaz": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "STR": -2,
+                "DEX": 2
+            }
+        },
+        "mon_calamari": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "INT": 2,
+                "CON": -2
+            }
+        },
+        "neimoidian": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "INT": 2,
+                "WIS": 2,
+                "STR": -2
+            }
+        },
+        "noghri": {
+            "speed": 6,
+            "size": "S",
+            "modifiers": {
+                "DEX": 2,
+                "WIS": 2,
+                "CHA": -4
+            }
+        },
+        "quarren": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "CON": 2,
+                "WIS": -2,
+                "CHA": -2
+            }
+        },
+        "rodian": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "DEX": 2,
+                "WIS": -2,
+                "CHA": -2
+            }
+        },
+        "snivvian": {
+            "speed": 6,
+            "size": "S",
+            "modifiers": {}
+        },
+        "sullustan": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "DEX": 2,
+                "CON": -2
+            }
+        },
+        "toydarian": {
+            "speed": 6,
+            "size": "S",
+            "modifiers": {
+                "DEX": 4,
+                "STR": -4,
+                "CON": -2
+            }
+        },
+        "tusken_raider": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "CON": 2,
+                "INT": -2,
+                "WIS": -2
+            },
+            "languages": {
+                "speak_basic": false,
+                "understand_basic": false
+            }
+        },
+        "twilek": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "CHA": 2,
+                "WIS": -2
+            }
+        },
+        "trandoshan": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "STR": 2,
+                "DEX": -2
+            }
+        },
+        "ugnaught": {
+            "speed": 6,
+            "size": "S",
+            "modifiers": {
+                "CON": 2,
+                "DEX": -2,
+                "WIS": -2
+            }
+        },
+        "verpine": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {}
+        },
+        "wookiee": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "STR": 4,
+                "DEX": -2,
+                "WIS": -2,
+                "CHA": -2
+            },
+            "scale": {
+                "x": 1.2,
+                "y": 1.3,
+                "z": 1.2
+            },
+            "weight": 196,
+            "collision_radius": 0.65,
+            "languages": {
+                "speak_basic": false,
+                "understand_basic": true
+            }
+        },
+        "yuuzhan_vong": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {
+                "STR": 2,
+                "CON": 2,
+                "WIS": -2
+            }
+        },
+        "zabrak": {
+            "speed": 10,
+            "size": "M",
+            "modifiers": {}
+        }
+    }
+}

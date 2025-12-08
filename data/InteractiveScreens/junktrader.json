@@ -1,0 +1,37 @@
+{
+  "ui": {
+    "type": "panel",
+    "style": {
+      "width": "80%",
+      "height": "80%",
+      "backgroundColor": "rgba(0,0,0,0.8)",
+      "borderColor": "#333",
+      "borderWidth": "2px"
+    },
+    "children": [
+      {
+        "type": "text",
+        "text": "X",
+        "style": {
+          "position": "absolute",
+          "top": "10px",
+          "right": "10px",
+          "color": "red",
+          "fontSize": "24px",
+          "cursor": "pointer"
+        },
+        "onClick": "closeMenu"
+      },
+      {
+        "type": "text",
+        "text": "Junk Trader",
+        "style": {
+          "textAlign": "center",
+          "color": "white",
+          "fontSize": "36px",
+          "marginTop": "50px"
+        }
+      }
+    ]
+  }
+}

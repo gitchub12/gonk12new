@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="file-identifier"
+        content="index.html; BROWSERFIREFOXHIDE and filename must be in the first six physical lines of the file. DO NOT REMOVE!">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gonk</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+            cursor: crosshair;
+            font-family: Arial, sans-serif;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #damageFlash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 0, 0, 0.5);
+            z-index: 999;
+            pointer-events: none;
+            display: none;
+        }
+
+        /* New Character Page Layout */
+        #character-page-wrapper {
+            display: none;
+            /* Hidden by default */
+            flex-direction: row;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 99;
+            justify-content: center;
+            align-items: center;
+            gap: 2vw;
+            padding: 5vh 5vw;
+            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        #character-sheet-container,
+        #upgrade-container {
+            position: relative !important;
+            top: auto !important;
+            left: auto !important;
+            transform: none !important;
+            height: 90vh !important;
+            overflow: hidden !important;
+            display: flex !important;
+            flex-direction: column;
+            border-radius: 10px;
+        }
+
+        #character-sheet-container {
+            width: 30% !important;
+            max-width: 450px !important;
+            padding: 15px;
+        }
+
+        #upgrade-container {
+            flex-grow: 1;
+            width: auto !important;
+            padding: 15px;
+            overflow: hidden !important;
+            /* Ensure upgrade container itself doesn't scroll */
+        }
+
+        #upgrade-container>svg {
+            overflow: visible;
+            /* Allow lines to be drawn outside the immediate SVG bounds if needed */
+        }
+
+
+        #stats-display {
+            overflow: visible !important;
+            /* NO SCROLLING */
+            flex-grow: 1;
+            flex-shrink: 1;
+            padding: 0 !important;
+            height: 100% !important;
+        }
+
+        #module-display {
+            overflow: visible !important;
+            /* NO SCROLLING */
+            flex-shrink: 0;
+            max-height: none !important;
+            /* Remove height limit */
+            height: 100% !important;
+        }
+
+        .upgrade-node.fallback {
+            font-size: 6px;
+            text-align: center;
+            line-height: 1.1;
+            word-break: break-word;
+            color: white;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            padding: 2px;
+            box-sizing: border-box;
+        }
+
+        /* Upgrade UI Styles */
+        .upgrade-node {
+            position: absolute;
+            /* width and height set by JavaScript for flexible sizing */
+            background-color: #222;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 2px solid #61afef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .upgrade-node:hover {
+            transform: scale(1.1);
+            border-color: #fff;
+            box-shadow: 0 0 10px #61afef;
+        }
+
+        .upgrade-node.purchased {
+            border-color: #ffc107;
+            opacity: 1;
+        }
+
+        .upgrade-node.available {
+            opacity: 0.95;
+            border-style: dashed;
+        }
+
+        .upgrade-node:not(.available):not(.purchased) {
+            opacity: 0.9;
+        }
+
+        #upgrade-tooltip {
+            display: none;
+            position: fixed;
+            /* Use fixed to escape container bounds */
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #61afef;
+            padding: 10px;
+            color: white;
+            z-index: 101;
+            border-radius: 5px;
+            min-width: 200px;
+            max-width: 350px;
+            font-size: 14px;
+        }
+
+        #upgrade-tooltip h3 {
+            margin: 0 0 5px 0;
+            color: #61afef;
+        }
+
+        #upgrade-tooltip p {
+            margin: 0;
+        }
+
+        #upgrade-tooltip .cost {
+            margin-top: 8px;
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        /* Map Screen */
+        #map-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            backdrop-filter: blur(2px);
+        }
+
+        #map-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Upgrade UI Controls */
+        #upgrade-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            background: rgba(200, 50, 50, 0.8);
+            color: white;
+            border: 2px solid #ff4444;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 2001;
+            transition: all 0.2s;
+        }
+
+        #upgrade-close-btn:hover {
+            background: rgba(255, 50, 50, 0.9);
+            transform: scale(1.1);
+        }
+
+        #upgrade-action-buttons {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 102;
+        }
+
+        #upgrade-action-buttons button {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid;
+            transition: all 0.2s;
+        }
+
+        #upgrade-undo-btn {
+            background: rgba(200, 100, 50, 0.8);
+            color: white;
+            border-color: #ff8844;
+        }
+
+        #upgrade-undo-btn:hover {
+            background: rgba(255, 120, 60, 0.9);
+            transform: scale(1.05);
+        }
+
+        #upgrade-confirm-btn {
+            background: rgba(50, 200, 100, 0.8);
+            color: white;
+            border-color: #44ff88;
+        }
+
+        #upgrade-confirm-btn:hover {
+            background: rgba(60, 255, 120, 0.9);
+            transform: scale(1.05);
+        }
+
+        /* Loading Screen Styles */
+        #loading-screen-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #loading-screen-bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            z-index: -1;
+        }
+
+        #loading-screen-content {
+            width: 90%;
+            max-width: 1400px;
+            height: 90%;
+            position: relative;
+        }
+
+        #question {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.4175vw;
+            text-align: center;
+            padding: 20px;
+            line-height: 1.4;
+            color: #ffcc00;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 8px #000;
+            font-weight: bold;
+        }
+
+        .answer {
+            position: absolute;
+            padding: 10px;
+            border: 2px solid #ff0000;
+            border-radius: 8px;
+            font-size: 1.0vw;
+            cursor: pointer;
+            background-color: rgba(30, 30, 30, 0.9);
+            transition: background-color 0.2s, border-color 0.2s, opacity 0.5s;
+            text-align: center;
+            height: 25%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            white-space: normal;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            color: #d8d8d8;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            font-weight: bold;
+        }
+
+        #answer-top {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20%;
+            height: 15%;
+        }
+
+        #answer-bottom {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20%;
+            height: 15%;
+        }
+
+        #answer-left {
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20%;
+            height: 15%;
+        }
+
+        #answer-right {
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20%;
+            height: 15%;
+        }
+
+        .answer.highlighted {
+            background-color: rgba(0, 100, 0, 0.6);
+            border-color: #009900;
+        }
+
+        .answer.correct {
+            background-color: #009900;
+            color: #ffffff;
+            border-color: #3f3;
+            opacity: 1;
+            transition: opacity 3s linear 0s, background-color 0.2s;
+        }
+
+        .answer.incorrect {
+            background-color: #990000;
+            color: #ffffff;
+            border-color: #f33;
+            opacity: 1;
+            transition: opacity 3s linear 0s, background-color 0.2s;
+        }
+
+        .answer.faded {
+            opacity: 0;
+        }
+
+        #punchline {
+            position: absolute;
+            top: 65%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2vw;
+            opacity: 0;
+            transition: opacity 1s;
+            color: #0f0;
+            text-shadow: 0 0 10px #0f0;
+            display: none;
+        }
+
+        #loadingStatus {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: #333;
+            font-size: 12px;
+        }
+
+        #feedback-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            display: none;
+            z-index: 2000;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        #feedback-popup.correct {
+            background-color: rgba(0, 200, 0, 0.8);
+        }
+
+        #feedback-popup.incorrect {
+            background-color: rgba(200, 0, 0, 0.8);
+        }
+
+        #loading-screen-container #feedback-popup {
+            top: 85% !important;
+        }
+
+        /* HUD Styles */
+        :root {
+            --ally-color: rgba(0, 150, 200, 0.4);
+        }
+
+        .game-hud-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: none;
+            color: #eee;
+        }
+
+        .ally-boxes {
+            position: absolute;
+            bottom: 10px;
+            left: 53%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            padding: 0;
+        }
+
+        /* NEW ALLY BOX STATES */
+        .ally-box {
+            width: 121px;
+            height: 148px;
+            background: rgba(10, 20, 30, 0.5);
+            border: 2px solid var(--ally-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            color: var(--ally-color);
+            font-size: 14px;
+            font-weight: bold;
+            text-shadow: 0 0 5px var(--ally-color);
+            backdrop-filter: blur(2px);
+            padding: 5px;
+            box-sizing: border-box;
+            visibility: hidden;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .ally-boxes-shifted .ally-box {
+            transform: translateY(50px);
+        }
+
+        .ally-box.visible {
+            visibility: visible;
+        }
+
+        .ally-box img {
+            position: absolute;
+            top: 5px;
+            left: 12px;
+            width: 94px;
+            height: 94px;
+            image-rendering: pixelated;
+            border: 1px solid rgba(0, 150, 200, 0.6);
+            z-index: 2;
+        }
+
+        .ally-name {
+            position: absolute;
+            top: 102px;
+            width: 100%;
+            left: 0;
+            text-align: center;
+            z-index: 3;
+            line-height: 1.1;
+            font-size: 15px;
+            color: #FFFFFF;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            opacity: 1.0;
+        }
+
+        .ally-health-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background-color: rgba(255, 0, 0, 0.8);
+            transition: height 0.3s ease;
+            z-index: 1;
+        }
+
+        .ally-health-overlay-face {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background-color: rgba(255, 0, 0, 0.3);
+            transition: height 0.3s ease;
+            z-index: 3;
+        }
+
+        .ally-health-overlay.pulsing {
+            animation: pulseRed 1s infinite;
+        }
+
+        .ally-health-overlay-face.pulsing {
+            animation: pulseRed 1s infinite;
+        }
+
+        @keyframes pulseRed {
+            0% {
+                background-color: rgba(255, 0, 0, 0.3);
+            }
+
+            50% {
+                background-color: rgba(255, 0, 0, 0.6);
+            }
+
+            100% {
+                background-color: rgba(255, 0, 0, 0.3);
+            }
+        }
+
+        .ally-id-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            z-index: 4;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* NEW: Ally Conversation Movement */
+        .ally-box.shift-up {
+            transform: translateY(-20px) !important;
+        }
+
+        .ally-box.shift-down {
+            transform: translateY(50px) !important;
+        }
+
+        /* NEW: Player Gauges */
+        :root {
+            --gauge-size: 150px;
+            /* Gauge circle size */
+            --gauge-container-x: 1%;
+            /* Gauge container X position */
+            --gauge-container-y: 1%;
+            /* Gauge container Y position (from bottom) */
+            --gauge-gap: 10px;
+            /* Gap between gauges */
+            --overlay-size: 508px;
+            /* Overlay image size - 46.2% of 1100px baseline */
+            --overlay-x: 0.49%;
+            /* Overlay X offset */
+            --overlay-y: 0%;
+            /* Overlay Y offset (from bottom) */
+            --ammo-x: 83%;
+            /* Ammo display X position */
+            --ammo-y: 6%;
+            /* Ammo display Y position (from bottom) */
+            --weapon-x: 12%;
+            /* Weapon display X position */
+            --weapon-y: 20%;
+            /* Weapon display Y position (from bottom) */
+        }
+
+        .player-gauges-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .gauge-canvas {
+            position: absolute;
+            width: var(--gauge-size);
+            height: var(--gauge-size);
+            image-rendering: auto;
+            pointer-events: none;
+        }
+
+        #health-gauge-canvas {
+            bottom: 10px;
+            left: 71.2px;
+        }
+
+        #power-gauge-canvas {
+            bottom: 14.4px;
+            left: 229.4px;
+        }
+
+        #health-energy-overlay {
+            position: absolute;
+            width: var(--overlay-size);
+            height: var(--overlay-size);
+            bottom: var(--overlay-y);
+            left: var(--overlay-x);
+            z-index: 11;
+            pointer-events: none;
+            image-rendering: auto;
+            object-fit: contain;
+        }
+
+
+        .gonk-health {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
+            transform: translate(-5%, 5%);
+        }
+
+        /* .gonk-model is now deprecated for the lower left corner */
+        .health-bar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .health-bar {
+            width: 200px;
+            height: 25px;
+            background: rgba(50, 0, 0, 0.5);
+            border: 2px solid rgba(200, 0, 0, 0.8);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .health-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #ff4444);
+            width: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .health-label {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            line-height: 25px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px black;
+            font-size: 12px;
+        }
+
+        .ammo-display {
+            position: absolute;
+            bottom: var(--ammo-y);
+            left: var(--ammo-x);
+            padding: 5px 10px;
+            color: #ffcc00;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 36px;
+            font-weight: bold;
+            text-shadow: 0 0 5px #ffcc00, 0 0 10px #ffcc00;
+            text-align: center;
+            z-index: 4;
+        }
+
+        .ammo-label {
+            font-size: 14px;
+            color: #ffaa00;
+            margin-bottom: 5px;
+        }
+
+        .weapon-display {
+            position: absolute;
+            bottom: var(--weapon-y);
+            left: var(--weapon-x);
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            padding: 10px;
+            color: white;
+            font-size: 14px;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 197, 0, 0.9);
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(255, 197, 0, 0.7);
+            pointer-events: none;
+        }
+
+        #song-title-display {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5vw;
+            color: #ffcc00;
+            text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0 0 15px #000;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        #song-category-display {
+            position: absolute;
+            bottom: calc(15% + 3.0vw);
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5vw;
+            color: #cccccc;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            font-weight: normal;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        #music-volume-display {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1.2vw;
+            color: #ffcc00;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 8px 15px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        #faction-relationship-hud {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 95vh;
+            height: 95vh;
+            pointer-events: none;
+            display: none;
+        }
+
+        #faction-lines-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #faction-lines-svg circle {
+            pointer-events: none;
+            transition: cx 0.1s linear, cy 0.1s linear;
+        }
+
+        .faction-relationship-text {
+            font-size: 50px;
+            font-weight: bold;
+            filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.9));
+        }
+
+        .faction-node {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 20, 30, 0.8);
+            border: 2px solid #61afef;
+            color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            white-space: pre;
+            text-shadow: 1px 1px 2px black;
+            transition: box-shadow 0.5s ease-in-out, top 0.1s linear, left 0.1s linear;
+        }
+
+        .faction-node-shadow {
+            opacity: 0.25;
+            z-index: -1;
+            filter: blur(1px);
+        }
+
+        .faction-node.player_droid {
+            background-color: #404040;
+            border-color: #707070;
+        }
+
+        .faction-node.rebels {
+            background-color: #a12a2a;
+            border-color: #d94242;
+        }
+
+        .faction-node.aliens {
+            background-color: #004d00;
+            border-color: #008000;
+        }
+
+        .faction-node.clones {
+            background-color: #b05c00;
+            border-color: #ff8c00;
+        }
+
+        .faction-node.imperials {
+            background-color: #101010;
+            border-color: #444444;
+        }
+
+        .faction-node.droids {
+            background-color: #003366;
+            border-color: #0066cc;
+        }
+
+        .faction-node.mandalorians {
+            background: linear-gradient(45deg, #00d2ff, #f9a429);
+            border-color: #f9a429;
+        }
+
+        .faction-node.sith {
+            background-color: #330000;
+            border-color: #990000;
+        }
+
+        .faction-node.takers {
+            background-color: #2E2E2E;
+            border-color: #C0C0C0;
+        }
+
+        .faction-node.improving {
+            box-shadow: 0 0 15px 5px rgba(0, 255, 0, 0.4);
+        }
+
+        .faction-node.worsening {
+            box-shadow: 0 0 15px 5px rgba(139, 0, 0, 0.5);
+        }
+
+        #faction-avatar-container {
+            position: absolute;
+            right: var(--faction-avatar-offset-x, 10px);
+            top: var(--faction-avatar-offset-y, 50%);
+            transform: var(--faction-avatar-transform, translateY(-50%) scale(1.0));
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* 3 columns */
+            grid-template-rows: repeat(3, 1fr);
+            /* 3 rows */
+            gap: 2px;
+            width: calc(76px * 3 + 2px * 2);
+            /* 3 avatars + 2 gaps */
+            height: calc(76px * 3 + 2px * 2);
+            /* 3 avatars + 2 gaps */
+            transition: none;
+            /* Remove transition for now, can re-add later if needed */
+
+            /* Fixed Faction Grid Order */
+            grid-template-areas:
+                "takers clones mandalorians"
+                "imperials gonk aliens"
+                "sith droids rebels";
+        }
+
+        .faction-avatar-box {
+            width: 76px;
+            /* 5% smaller than 80px */
+            height: 76px;
+            /* 5% smaller than 80px */
+            background-color: #000;
+            border: 3px solid var(--faction-avatar-border-color, #444);
+            /* FIXED: 3px border */
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+            transition: box-shadow 0.5s ease-in-out, transform 0.1s linear;
+            /* ADDED transform transition for smooth movement */
+        }
+
+        .faction-avatar-box[id*="takers"] {
+            grid-area: takers;
+        }
+
+        .faction-avatar-box[id*="imperials"] {
+            grid-area: imperials;
+        }
+
+        .faction-avatar-box[id*="sith"] {
+            grid-area: sith;
+        }
+
+        .faction-avatar-box[id*="clones"] {
+            grid-area: clones;
+        }
+
+        .faction-avatar-box[id*="player_droid"] {
+            grid-area: gonk;
+        }
+
+        .faction-avatar-box[id*="droids"] {
+            grid-area: droids;
+        }
+
+        .faction-avatar-box[id*="mandalorians"] {
+            grid-area: mandalorians;
+        }
+
+        .faction-avatar-box[id*="aliens"] {
+            grid-area: aliens;
+        }
+
+        .faction-avatar-box[id*="rebels"] {
+            grid-area: rebels;
+        }
+
+        .faction-avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .faction-avatar-box.gonk-avatar-box {
+            background-color: transparent;
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Style for the relocated animated Hologonk element */
+        #hologonk-avatar-relocated {
+            width: 100%;
+            height: 100%;
+            opacity: 1.0;
+            image-rendering: pixelated;
+            transform: scale(1.5);
+        }
+
+        .faction-avatar-box.gonk-avatar-box img {
+            /* Hiding the default image, the animated one will take over */
+            display: none;
+        }
+
+        .faction-avatar-name {
+            position: absolute;
+            top: 2px;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .faction-avatar-relationship {
+            position: absolute;
+            bottom: 2px;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            font-size: calc(76px / 4);
+            /* Adjusted font size based on new avatar size */
+            color: white;
+            text-shadow: -1px -1px 0 #000, 1px -1-1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            /* Single-pixel black outline */
+        }
+
+        #character-sheet-container {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 25%;
+            /* Moved to the left */
+            transform: translate(-50%, -50%);
+            width: 45%;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid #61afef;
+            padding: 20px;
+            z-index: 100;
+            color: white;
+            font-family: monospace;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 20px rgba(97, 175, 239, 0.5);
+        }
+
+        #character-sheet-container h2,
+        #character-sheet-container h3 {
+            text-align: center;
+            color: #61afef;
+            text-shadow: 0 0 5px #61afef;
+        }
+
+        #stats-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 20px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            font-size: 18px;
+            /* Increased from default */
+        }
+
+        .stat-entry {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 5px;
+        }
+
+        .stat-label {
+            font-weight: bold;
+            color: #abb2bf;
+            font-size: 18px;
+            /* Increased */
+        }
+
+        .stat-value {
+            color: #61afef;
+            font-weight: bold;
+            font-size: 18px;
+            /* Increased */
+        }
+
+        #module-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+        }
+
+        .module-icon {
+            width: 64px;
+            height: 64px;
+            border: 2px solid #61afef;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        #wire-display {
+            text-align: right;
+            font-size: 1.2em;
+            color: #61afef;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+        }
+
+        /* Conversation UI Styles */
+        #conversation-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            max-width: 900px;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 1099;
+            pointer-events: none;
+        }
+
+        .conversation-box-wrapper {
+            display: none;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .faction-label {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #ccc;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .conversation-box {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 2px solid #888;
+            border-radius: 5px;
+            padding: 15px;
+            color: #fff;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px #000;
+            flex-grow: 1;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #conversation-lines-svg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1098;
+        }
+
+        /* Lower than container, but still high */
+        .conversation-pointer {
+            opacity: 0.2;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #offscreen-indicators {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1101;
+        }
+
+        .offscreen-arrow {
+            font-size: 24px;
+            text-shadow: 0 0 5px #000;
+        }
+
+        /* End of Level Screen Styles */
+        #end-of-level-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #eol-panel {
+            width: 90%;
+            max-width: 800px;
+            height: 90%;
+            background: rgba(10, 20, 30, 0.9);
+            border: 2px solid #61afef;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        #eol-stats-container h2 {
+            text-align: center;
+            color: #61afef;
+            margin-top: 0;
+        }
+
+        .eol-ally,
+        .eol-perk {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #444;
+        }
+
+        .eol-perk {
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .eol-perk:hover {
+            background-color: rgba(97, 175, 239, 0.2);
+            border-color: #61afef;
+        }
+
+        .eol-ally {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #eol-continue-button {
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #28a745;
+            border: 2px solid #3f3;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: auto;
+            /* Pushes button to the bottom */
+        }
+
+        .bark-popup {
+            position: absolute;
+            bottom: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.75);
+            color: #FFF;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid #888;
+            font-size: 18px;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            z-index: 100;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            max-width: 500px;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        /* 3D Upgrade UI */
+        #upgrade-container {
+            perspective: 1200px;
+            transform-style: preserve-3d;
+            transform: scale(0.6) rotateX(20deg);
+            /* Scaled down to fit screen */
+            /* Tilt the board */
+            z-index: 2000;
+            /* Ensure it's above other UI */
+            pointer-events: auto;
+            /* Ensure it receives clicks */
+        }
+
+        .upgrade-node {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upgrade-node:hover {
+            transform: translateZ(10px) scale(1.1);
+        }
+
+        .node-cube {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        .node-face {
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+        }
+
+        .node-face.top {
+            width: 60px;
+            height: 60px;
+            transform: rotateX(0deg) translateZ(var(--stack-height, 10px));
+            background-size: cover;
+        }
+
+        .node-face.front {
+            width: 60px;
+            height: var(--stack-height, 10px);
+            transform: rotateX(-90deg) translateZ(30px);
+            background: linear-gradient(to bottom, #444, #222);
+        }
+
+        .node-face.right {
+            width: 60px;
+            height: var(--stack-height, 10px);
+            transform: rotateY(90deg) rotateX(-90deg) translateZ(30px);
+            background: linear-gradient(to bottom, #333, #111);
+        }
+
+        .node-face.left {
+            width: 60px;
+            height: var(--stack-height, 10px);
+            transform: rotateY(-90deg) rotateX(-90deg) translateZ(30px);
+            background: linear-gradient(to bottom, #333, #111);
+        }
+
+        .node-face.back {
+            width: 60px;
+            height: var(--stack-height, 10px);
+            transform: rotateY(180deg) rotateX(-90deg) translateZ(30px);
+            background: linear-gradient(to bottom, #444, #222);
+        }
+
+        .node-level-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            transform: translateZ(var(--stack-height, 10px));
+        }
+
+        .node-ghost {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform: translateZ(var(--stack-height, 10px));
+            transform-style: preserve-3d;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .upgrade-node:hover .node-ghost {
+            opacity: 1;
+        }
+
+        .ghost-face {
+            position: absolute;
+            border: 1px dashed cyan !important;
+            background: rgba(0, 255, 255, 0.1) !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+        }
+
+        .ghost-face.top {
+            width: 60px;
+            height: 60px;
+            transform: translateZ(10px);
+        }
+
+        .ghost-face.front {
+            width: 60px;
+            height: 10px;
+            transform: rotateX(-90deg) translateZ(30px);
+        }
+
+        .ghost-face.right {
+            width: 60px;
+            height: 10px;
+            transform: rotateY(90deg) rotateX(-90deg) translateZ(30px);
+        }
+
+        .ghost-face.left {
+            width: 60px;
+            height: 10px;
+            transform: rotateY(-90deg) rotateX(-90deg) translateZ(30px);
+        }
+
+        .ghost-face.back {
+            width: 60px;
+            height: 10px;
+            transform: rotateY(180deg) rotateX(-90deg) translateZ(30px);
+        }
+
+
+
+        .upgrade-wire {
+            position: absolute;
+            background: rgba(0, 255, 255, 0.3);
+            transform-origin: 0 50%;
+            transform: translateZ(0px);
+            /* On the board floor */
+            box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="pre-conversation-bark" class="bark-popup"></div>
+    <!-- End of Level Screen -->
+    <div id="end-of-level-container">
+        <div id="eol-panel">
+            <div id="eol-stats-container"></div>
+            <div id="eol-ally-container"></div>
+            <div id="eol-perks-container"></div>
+            <button id="eol-continue-button">Continue</button>
+        </div>
+    </div>
+
+    <svg id="conversation-lines-svg">
+        <polygon id="conversation-pointer-1" class="conversation-pointer" />
+        <polygon id="conversation-pointer-2" class="conversation-pointer" />
+        <polygon id="conversation-pointer-3" class="conversation-pointer" />
+    </svg>
+    <div id="conversation-container">
+        <div id="conversation-slot-1" class="conversation-box-wrapper">
+            <span class="faction-label"></span>
+            <div class="conversation-box"></div>
+        </div>
+        <div id="conversation-slot-2" class="conversation-box-wrapper">
+            <span class="faction-label"></span>
+            <div class="conversation-box"></div>
+        </div>
+        <div id="conversation-slot-3" class="conversation-box-wrapper">
+            <span class="faction-label"></span>
+            <div class="conversation-box"></div>
+        </div>
+        <div id="offscreen-indicators"></div>
+    </div>
+    <div id="loading-screen-container">
+        <img id="loading-screen-bg-image" src="">
+        <div id="loading-screen-content">
+            <div id="question"></div>
+            <div id="punchline"></div>
+            <div id="loadingStatus">Initializing...</div>
+        </div>
+        <div id="answer-top" class="answer"></div>
+        <div id="answer-left" class="answer"></div>
+        <div id="answer-right" class="answer"></div>
+        <div id="answer-bottom" class="answer"></div>
+    </div>
+    <div id="feedback-popup"></div>
+
+    <div id="damageFlash"></div>
+
+    <div id="character-page-wrapper"
+        style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: none; background: #000; z-index: 1000; overflow: auto; padding: 20px;">
+        <!-- CHARACTER SHEET (SINGLE UNIFIED CONTAINER - NO TABS) -->
+
+        <!-- Close Button -->
+        <button id="char-sheet-close-btn"
+            style="position: absolute; top: 20px; right: 40px; width: 40px; height: 40px; background: #f00; border: 2px solid #fff; color: #fff; font-size: 24px; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace; border-radius: 4px; z-index: 1001;">✕</button>
+
+        <!-- Character Name (WHITE) -->
+        <div id="char-name-element" class="draggable-element" data-element-id="char-name"
+            style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; color: #fff; text-align: center; cursor: move;">
+            <span id="char-name-text">GONK POPE</span>
+        </div>
+
+        <!-- MODULES DISPLAY (Icons) - Separate from progression table -->
+        <div id="modules-icons-display"
+            style="position: absolute; top: 80px; left: 50%; transform: translateX(-50%); display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 600px;">
+            <!-- Module icons will be inserted here by main.js -->
+        </div>
+
+        <!-- Base Stats (Left Side in CYAN) -->
+        <div id="base-stats-display" class="draggable-element" data-element-id="base-stats"
+            style="position: absolute; top: 80px; left: 40px; font-family: 'Courier New', monospace; color: #0ff; cursor: move;">
+            <div style="font-size: 20px; margin-bottom: 8px;"><span
+                    style="display: inline-block; width: 60px;">STR</span><span id="base-str-val"
+                    style="font-weight: bold;">16</span></div>
+            <div style="font-size: 20px; margin-bottom: 8px;"><span
+                    style="display: inline-block; width: 60px;">DEX</span><span id="base-dex-val"
+                    style="font-weight: bold;">12</span></div>
+            <div style="font-size: 20px; margin-bottom: 8px;"><span
+                    style="display: inline-block; width: 60px;">CON</span><span id="base-con-val"
+                    style="font-weight: bold;">14</span></div>
+            <div style="font-size: 20px; margin-bottom: 8px;"><span
+                    style="display: inline-block; width: 60px;">INT</span><span id="base-int-val"
+                    style="font-weight: bold;">10</span></div>
+            <div style="font-size: 20px; margin-bottom: 8px;"><span
+                    style="display: inline-block; width: 60px;">WIS</span><span id="base-wis-val"
+                    style="font-weight: bold;">10</span></div>
+            <div style="font-size: 20px; margin-bottom: 20px;"><span
+                    style="display: inline-block; width: 60px;">CHA</span><span id="base-cha-val"
+                    style="font-weight: bold;">8</span></div>
+
+            <div style="font-size: 18px; margin-bottom: 6px; color: #f00;"><span
+                    style="display: inline-block; width: 150px;">HP:</span><span id="base-max-hp-val"
+                    style="font-weight: bold;">62</span></div>
+            <div style="font-size: 18px; margin-bottom: 6px; color: #f0f;"><span
+                    style="display: inline-block; width: 150px;">ENERGY:</span><span id="base-max-energy-val"
+                    style="font-weight: bold;">100</span></div>
+            <div style="font-size: 18px; margin-bottom: 6px; color: #0ff;"><span
+                    style="display: inline-block; width: 150px;">POWER/SEC:</span><span id="base-power-sec-val"
+                    style="font-weight: bold;">8.2</span></div>
+        </div>
+
+        <!-- Module Grid (8 columns × 3 rows = 24 visible, 200px × 215px each, 4px spacing) -->
+        <div id="module-grid-container" class="draggable-element" data-element-id="module-grid"
+            style="position: absolute; top: 80px; left: 300px; width: auto; cursor: move;">
+            <div id="module-grid"
+                style="display: grid; grid-template-columns: repeat(8, 200px); grid-template-rows: repeat(3, 215px); gap: 4px;">
+                <!-- 24 module slots -->
+            </div>
+            <button id="module-overflow-btn"
+                style="margin-top: 10px; padding: 10px 20px; background: #444; color: #0ff; border: 2px solid #0ff; cursor: pointer; font-family: 'Courier New', monospace; font-size: 16px; display: none;">VIEW
+                OVERFLOW MODULES</button>
+        </div>
+
+        <!-- Module Tooltip (shows on hover) -->
+        <div id="module-tooltip"
+            style="position: absolute; display: none; background: rgba(0,0,0,0.95); border: 2px solid #0ff; padding: 15px; font-family: 'Courier New', monospace; color: #fff; max-width: 400px; z-index: 2000; pointer-events: none;">
+            <div id="tooltip-module-name" style="font-size: 18px; font-weight: bold; color: #ff0; margin-bottom: 10px;">
+            </div>
+            <div id="tooltip-module-description" style="font-size: 14px; color: #fff; margin-bottom: 8px;"></div>
+            <div id="tooltip-module-effects" style="font-size: 12px; color: #0ff;"></div>
+        </div>
+
+        <!-- Scrap Display (Bottom Left - Top) -->
+        <div id="wire-display-element" class="draggable-element" data-element-id="wire-display"
+            style="position: absolute; bottom: 140px; left: 40px; cursor: move;">
+            <div style="position: relative; width: 200px; height: 80px;">
+                <img src="data/pngs/HUD/CharacterSheet/scrapbackground.png"
+                    style="position: absolute; width: 100%; height: 100%;" />
+                <img src="data/pngs/HUD/CharacterSheet/scrapsymbol.png"
+                    style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px;" />
+                <div id="wire-amount"
+                    style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; color: #fff;">
+                    0</div>
+            </div>
+        </div>
+
+        <!-- Credits Display (Bottom Left - Bottom, below Scrap) -->
+        <div id="credits-display-element" class="draggable-element" data-element-id="credits-display"
+            style="position: absolute; bottom: 40px; left: 40px; cursor: move;">
+            <div style="position: relative; width: 200px; height: 80px;">
+                <img src="data/pngs/HUD/CharacterSheet/creditsbackground.png"
+                    style="position: absolute; width: 100%; height: 100%;" />
+                <img src="data/pngs/HUD/CharacterSheet/creditssymbol.png"
+                    style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px;" />
+                <div id="credits-amount"
+                    style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; color: #fff;">
+                    2000</div>
+            </div>
+        </div>
+
+        <!-- OLD VIEWS KEPT FOR COMPATIBILITY -->
+        <div id="upgrade-container" style="display: none;"></div>
+        <button id="upgrade-close-btn" style="display: none;">✕</button>
+        <div id="upgrade-action-buttons" style="display: none;">
+            <button id="upgrade-undo-btn">Undo</button>
+            <button id="upgrade-confirm-btn">Confirm</button>
+        </div>
+        <div id="stats-display" style="display: none;"></div>
+        <div id="module-display" style="display: none;"></div>
+    </div>
+    <div id="upgrade-tooltip"></div>
+
+    <!-- Map Screen -->
+    <div id="map-screen" style="display: none;">
+        <canvas id="map-canvas"></canvas>
+    </div>
+
+    <div class="game-hud-container">
+        <div class="ally-boxes">
+            <div id="ally-box-1" class="ally-box">
+                <div class="ally-health-overlay"></div>
+                <div class="ally-health-overlay-face"></div><img><span class="ally-name"></span>
+                <div class="ally-color-footer"></div>
+            </div>
+            <div id="ally-box-2" class="ally-box">
+                <div class="ally-health-overlay"></div>
+                <div class="ally-health-overlay-face"></div><img><span class="ally-name"></span>
+                <div class="ally-color-footer"></div>
+            </div>
+            <div id="ally-box-3" class="ally-box">
+                <div class="ally-health-overlay"></div>
+                <div class="ally-health-overlay-face"></div><img><span class="ally-name"></span>
+                <div class="ally-color-footer"></div>
+            </div>
+            <div id="ally-box-4" class="ally-box">
+                <div class="ally-health-overlay"></div>
+                <div class="ally-health-overlay-face"></div><img><span class="ally-name"></span>
+                <div class="ally-color-footer"></div>
+            </div>
+        </div>
+        <img id="health-energy-overlay" src="data/pngs/HUD/health_energy_overlay.png">
+        <div class="player-gauges-container">
+            <canvas id="health-gauge-canvas" class="gauge-canvas"></canvas>
+            <canvas id="power-gauge-canvas" class="gauge-canvas"></canvas>
+        </div>
+
+        <div class="weapon-display">
+            <div class="ammo-label">WEAPON</div>
+            <div id="gameHudWeapon">PAMPHLET</div>
+        </div>
+        <div class="ammo-display">
+            <div id="gameHudAmmo"></div>
+        </div>
+
+        <div id="faction-relationship-hud">
+            <svg id="faction-lines-svg" width="100%" height="100%"></svg>
+            <div id="faction-node-shadow-0" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-0" class="faction-node"></div>
+            <div id="faction-node-shadow-1" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-1" class="faction-node"></div>
+            <div id="faction-node-shadow-2" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-2" class="faction-node"></div>
+            <div id="faction-node-shadow-3" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-3" class="faction-node"></div>
+            <div id="faction-node-shadow-4" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-4" class="faction-node"></div>
+            <div id="faction-node-shadow-5" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-5" class="faction-node"></div>
+            <div id="faction-node-shadow-6" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-6" class="faction-node"></div>
+            <div id="faction-node-shadow-7" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-7" class="faction-node"></div>
+            <div id="faction-node-shadow-8" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-8" class="faction-node"></div>
+        </div>
+        <div id="faction-avatar-container">
+            <img id="hologonk-avatar-relocated" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                alt="Animated Gonk Avatar">
+        </div>
+        <div id="song-title-display"></div>
+        <div id="song-category-display"></div>
+        <div id="music-volume-display"></div>
+        <div class="crosshair"></div>
+    </div>
+
+    <div id="loading-screen"></div>
+
+    <div id="cheats-menu"
+        style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; border: 1px solid white; z-index: 10000;">
+        <h2 style="text-align: center;">Cheats</h2>
+        <div style="margin-bottom: 10px;">
+            <input type="checkbox" id="no-clipping-checkbox">
+            <label for="no-clipping-checkbox">No Clipping</label>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <input type="checkbox" id="invincibility-checkbox">
+            <label for="invincibility-checkbox">Invincibility</label>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <input type="checkbox" id="droidslayer-cheat-checkbox">
+            <label for="droidslayer-cheat-checkbox">Next Shot Makes DroidSlayer</label>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <input type="checkbox" id="damage-numbers-checkbox" checked>
+            <label for="damage-numbers-checkbox">Show Damage Numbers</label>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <input type="checkbox" id="debug-mode-checkbox">
+            <label for="debug-mode-checkbox">Debug Mode (NPC Stats)</label>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label for="pamphlets-input">Pamphlets:</label>
+            <input type="number" id="pamphlets-input" value="999" style="width: 60px;">
+            <button id="set-pamphlets-button">Set</button>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <div id="current-level-display"
+                style="color: #0ff; font-size: 18px; text-align: center; margin-bottom: 10px; font-weight: bold;">
+                Current Level: 1</div>
+            <button id="level-up-cheat-btn"
+                style="width: 100%; padding: 10px; background: #004400; color: #0f0; border: 2px solid #0f0; cursor: pointer; font-size: 14px;">
+                LEVEL UP
+            </button>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label for="add-module-dropdown"
+                style="display: block; color: #0ff; font-size: 14px; margin-bottom: 5px;">Add Module:</label>
+            <select id="add-module-dropdown"
+                style="width: 100%; padding: 8px; background: #222; color: #0ff; border: 1px solid #0ff; font-family: 'Courier New', monospace; font-size: 12px; margin-bottom: 5px;">
+                <option value="">-- Select Module --</option>
+            </select>
+            <button id="add-module-cheat-btn"
+                style="width: 100%; padding: 10px; background: #004444; color: #0ff; border: 2px solid #0ff; cursor: pointer; font-size: 14px;">
+                ADD MODULE
+            </button>
+        </div>
+        <button id="close-cheats-menu" style="position: absolute; top: 5px; right: 5px;">X</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="data/ClassesAndSkills/character_upgrades.js"></script>
+    <script src="map_screen.js"></script>
+
+    <div id="droidsmith-menu"
+        style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; border: 1px solid white; z-index: 10000; width: 400px;">
+        <h2 style="text-align: center;">Droidsmith</h2>
+        <div id="droidsmith-options">
+            <div>
+                <h3>Gonk</h3>
+                <p>Standard chassis, no modifications.</p>
+                <button class="droidsmith-option" data-chassis="gonk" data-cost="0">Select</button>
+            </div>
+            <hr>
+            <div>
+                <h3>Mouse Droid</h3>
+                <p>Lower height, x2 speed, max one weapon. Cost: 500 Wire</p>
+                <button class="droidsmith-option" data-chassis="mouse" data-cost="500">Unlock</button>
+            </div>
+            <hr>
+            <div>
+                <h3>HK</h3>
+                <p>Higher vision, enhanced jump, up to 7 weapons. Cost: 1000 Wire</p>
+                <button class="droidsmith-option" data-chassis="hk" data-cost="1000">Unlock</button>
+            </div>
+        </div>
+        <button id="close-droidsmith-menu" style="position: absolute; top: 5px; right: 5px;">X</button>
+    </div>
+
+    <div id="armorer-menu"
+        style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; border: 1px solid white; z-index: 10000; width: 400px;">
+        <h2 style="text-align: center;">The Armorer</h2>
+        <div id="armorer-options">
+            <div>
+                <h3>Duraplate</h3>
+                <p>HP increased by 10%. Unlock cost: 200 Wire.</p>
+                <button class="armorer-option" data-armor="duraplate" data-unlock-cost="200">Unlock</button>
+                <button class="armorer-purchase" data-armor="duraplate" data-cost="100">Purchase (100 Credits)</button>
+            </div>
+            <hr>
+            <div>
+                <h3>Superplate</h3>
+                <p>HP increased by 50%. Unlock cost: 500 Wire.</p>
+                <button class="armorer-option" data-armor="superplate" data-unlock-cost="500">Unlock</button>
+                <button class="armorer-purchase" data-armor="superplate" data-cost="300">Purchase (300 Credits)</button>
+            </div>
+            <hr>
+            <div>
+                <h3>Beskar</h3>
+                <p>HP increased by 50% and take 10% less damage. Unlock cost: 1000 Wire.</p>
+                <button class="armorer-option" data-armor="beskar" data-unlock-cost="1000">Unlock</button>
+                <button class="armorer-purchase" data-armor="beskar" data-cost="800">Purchase (800 Credits)</button>
+            </div>
+            <hr>
+            <div>
+                <h3>Molecular Bonding</h3>
+                <p>HP decreased 30% and take 50% less damage. Unlock cost: 1500 Wire.</p>
+                <button class="armorer-option" data-armor="molecular_bonding" data-unlock-cost="1500">Unlock</button>
+                <button class="armorer-purchase" data-armor="molecular_bonding" data-cost="1200">Purchase (1200
+                    Credits)</button>
+            </div>
+        </div>
+        <button id="close-armorer-menu" style="position: absolute; top: 5px; right: 5px;">X</button>
+    </div>
+
+    <div id="weapon-vendor-menu"
+        style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; border: 1px solid white; z-index: 10000; width: 400px;">
+        <h2 style="text-align: center;">Weapon Vendor</h2>
+        <div id="weapon-vendor-options">
+            <div>
+                <h3>Pistol DL-44</h3>
+                <p>Unlock cost: 300 Wire.</p>
+                <button class="weapon-vendor-option" data-weapon="dl44" data-unlock-cost="300">Unlock</button>
+                <button class="weapon-vendor-purchase" data-weapon="dl44" data-cost="150">Purchase (150
+                    Credits)</button>
+            </div>
+            <hr>
+            <div>
+                <h3>E-11</h3>
+                <p>Unlock cost: 400 Wire.</p>
+                <button class="weapon-vendor-option" data-weapon="e11" data-unlock-cost="400">Unlock</button>
+                <button class="weapon-vendor-purchase" data-weapon="e11" data-cost="200">Purchase (200 Credits)</button>
+            </div>
+        </div>
+        <button id="close-weapon-vendor-menu" style="position: absolute; top: 5px; right: 5px;">X</button>
+    </div>
+
+    <div id="guide-menu"
+        style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000;">
+        <iframe src="data/InteractiveScreens/the_guide.html" style="width: 100%; height: 100%; border: none;"></iframe>
+    </div>
+
+    <script>
+        class ScriptLoader {
+            constructor() {
+                this.scriptsToLoad = [
+                    // --- CORE FOUNDATION (INSTANTIATION) ---
+                    // These must be loaded first to ensure global singletons are available before use in initGame/Game constructor.
+                    { path: 'module_manager.js', name: 'Module Manager' },
+                    { path: 'character_stats_manager.js', name: 'Character Stats Manager' },
+                    { path: 'TabControls/animated_gauges.js', name: 'Animated Gauges' },
+                    { path: 'asset_loaders.js', name: 'Asset Loaders' },
+                    { path: 'furniture.js?v=5', name: 'Furniture' },
+                    { path: 'game_and_character_config.js', name: 'Game Config' },
+                    { path: 'gonk_models.js', name: 'Gonk Models' },
+                    // External model definitions (loaded after core gonk_models.js)
+                    { path: 'data/models/irongolem/irongolem.js', name: 'Iron Golem Model' },
+                    { path: 'data/models/snowgolem/snowgolem.js', name: 'Snow Golem Model' },
+                    { path: 'data/models/pig/pig.js', name: 'Pig Model' },
+                    { path: 'data/models/creeper/creeper.js', name: 'Creeper Model' },
+                    { path: 'data/models/slime/slime.js', name: 'Slime Model' },
+                    { path: 'data/models/bat/bat.js', name: 'Bat Model' },
+                    { path: 'data/models/camel/camel.js', name: 'Camel Model' },
+                    { path: 'data/models/chicken/chicken.js', name: 'Chicken Model' },
+                    { path: 'data/models/ender_dragon/ender_dragon.js', name: 'Ender Dragon Model' },
+                    { path: 'data/models/llama/llama.js', name: 'Llama Model' },
+                    { path: 'data/models/villager_new/villager_new.js', name: 'VillagerNew Model' },
+                    { path: 'faction_manager.js', name: 'Faction Manager' },
+                    { path: 'weapon_pickup_manager.js', name: 'Weapon Pickup Manager' },
+                    { path: 'player_gear.js', name: 'Player Gear' },
+                    { path: 'damage_numbers.js', name: 'Damage Numbers' },
+                    { path: 'data/ClassesAndSkills/NPCjedi_and_saber_effects.js', name: 'NPC Jedi Effects' },
+                    { path: 'data/ClassesAndSkills/Gonkjedi_and_saber_effects.js', name: 'Gonk Jedi Effects' },
+                    { path: 'droidslayer_system.js', name: 'DroidSlayer System' },
+                    { path: 'quests/QuestUI.js', name: 'Quest UI' },
+                    { path: 'quests/QuestItemManager.js', name: 'Quest Item Manager' },
+                    { path: 'quests/QuestManager.js', name: 'Quest Manager' },
+                    { path: 'main.js?v=2', name: 'Main Engine' },
+
+                    // --- UTILITY/DEPENDENCIES ---
+                    { path: 'skybox_animator.js', name: 'Skybox Animator' },
+                    { path: 'audio_system.js', name: 'Audio System' },
+                    { path: 'loadingScreenManager.js', name: 'Loading Screen Manager' },
+                    { path: 'endOfLevelManager.js', name: 'End of Level Manager' },
+                    { path: 'environment_and_physics.js?v=2', name: 'Environment & Physics' },
+                    { path: 'npc_behavior.js', name: 'NPC Behavior' },
+                    { path: 'npc_behavior_death.js', name: 'NPC Behavior Death' },
+                    { path: 'enemy_spawn_point.js', name: 'Enemy Spawn Point' },
+                    { path: 'slicing_system.js', name: 'Slicing System' },
+                    { path: 'interaction_system.js', name: 'Interaction System' },
+                    { path: 'conversation_controller.js', name: 'Conversation Controller' },
+                    { path: 'conversation_logger.js', name: 'Conversation Logger' },
+
+                    { path: 'faction_avatar_manager.js', name: 'Faction Avatar Manager' },
+                    { path: 'weapon_icons.js', name: 'Weapon Icons' },
+                    { path: 'data/npc_name_assigner.js', name: 'NPC Name Assigner' },
+                    { path: 'levelManager.js', name: 'Level Manager' },
+
+                    // --- UI/DEBUG (Lowest Priority) ---
+                    { path: 'TabControls/tab_faction_controls.js', name: 'Faction Tab Controls' },
+                    { path: 'TabControls/tab_charactersheet_controls.js', name: 'Character Sheet Tab Controls' },
+                    { path: 'TabControls/tab_controls.js', name: 'Tab Controls UI' },
+                    { path: 'TabControls/tab_hud_controls.js', name: 'HUD Controls Manager' },
+                    { path: 'conversation_ui_manager.js', name: 'Conversation UI Manager' }
+                ];
+            }
+
+            async loadGame() {
+                for (const script of this.scriptsToLoad) {
+                    try {
+                        await this.loadScript(script.path);
+                        if (script.name === 'Asset Loaders') {
+                            window.assetManager = new AssetManager();
+                        }
+                    } catch (error) {
+                        console.error(`CRITICAL ERROR loading ${script.name}.`, error);
+                        return;
+                    }
+                }
+                if (typeof initGame === 'function') initGame();
+                else console.error('initGame function not found!');
+            }
+
+            loadScript(path) {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = path;
+                    script.async = false;
+                    script.onload = () => resolve();
+                    script.onerror = () => reject(new Error(`Failed to load script: ${path}`));
+                    document.head.appendChild(script);
+                });
+            }
+        }
+
+        async function initGame() {
+            // Don't clear character state on init - only clear on true death (0 cores)
+            // localStorage.removeItem('gonk_character_state'); // REMOVED - persistence now handled in respawnPlayer()
+            console.log('--- GAME INITIALIZING ---');
+            // === INSTANTIATION ===
+            window.game = new Game();
+            window.weaponPickupManager = new WeaponPickupManager();
+            window.playerWeaponSystem = new PlayerWeaponSystem();
+            window.inputHandler = new InputHandler();
+
+            // Initialize external model definitions (Iron Golem, Snow Golem, Pig, Creeper, Slime)
+            if (window.gonkModels && window.gonkModels.initializeExternalModels) {
+                window.gonkModels.initializeExternalModels();
+            }
+
+            // Instantiation of LNM must be inside initGame because its class definition depends on previous scripts.
+            window.loadingScreenManager = new LoadingScreenManager();
+            window.endOfLevelManager = new EndOfLevelManager();
+
+            // assetManager is guaranteed to exist here due to script load order change.
+            await loadingScreenManager.loadTriviaData();
+            await assetManager.loadEssentialData();
+
+            // Load module system
+            if (window.moduleManager) {
+                await window.moduleManager.loadModules();
+            }
+            await window.questItemManager.init();
+            await window.questManager.init();
+            game.init();
+            window.gaugeManager = new GaugeManager();
+            window.gaugeManager.init(); // Initialize animated gauge system
+            window.conversationUIManager = new ConversationUIManager();
+            window.tabControls = new TabControls(game, window.playerWeaponSystem, window.physics);
+
+            // Apply all initial UI positions from tab control defaults to prevent "jumping"
+            setTimeout(() => {
+                if (window.tabControls) {
+                    window.tabControls.updateUIFromUI();
+                }
+            }, 100);
+            window.conversationUIManager.init(game.camera, game.canvas);
+            audioSystem.init(game.camera);
+            await audioSystem.initializeMusic();
+            window.factionAvatarManager = new FactionAvatarManager();
+            await window.factionAvatarManager.initialize();
+
+            // Initialize slicing system
+            if (typeof SlicingSystem !== 'undefined') {
+                window.slicingSystem = new SlicingSystem();
+            }
+
+            // Initialize map screen
+            initMapScreen();
+
+            await levelManager.loadLevel(1);
+            game.respawnAllies();
+            startGameLoop();
+        }
+
+        function startGameLoop() {
+            const clock = new THREE.Clock();
+            function gameLoop() {
+                requestAnimationFrame(gameLoop);
+                if (!game.isInitialized) return;
+                const deltaTime = clock.getDelta();
+                const totalTime = clock.getElapsedTime();
+
+                if (window.loadingScreenManager && window.loadingScreenManager.isActive) {
+                    window.loadingScreenManager.update();
+                    game.render();
+                    return;
+                }
+
+                game.update(deltaTime, totalTime);
+                window.conversationUIManager.update();
+                window.gaugeManager.update(deltaTime); // Update animated gauges
+                if (window.slicingSystem) window.slicingSystem.update(deltaTime);
+
+                if (!game.state.isPaused) {
+                    for (const npc of game.entities.npcs) {
+                        npc.update(game.deltaTime, physics.playerCollider.position);
+                        npc.updateHitboxes();
+                    }
+                    for (let i = game.entities.pickups.length - 1; i >= 0; i--) {
+                        const pickup = game.entities.pickups[i];
+                        if (pickup.update) { if (!pickup.update(game.deltaTime)) { pickup.dispose(); game.entities.pickups.splice(i, 1); } }
+                    }
+
+                    for (const npc of game.entities.npcs) npc.updateAnimation(game.deltaTime);
+                    physics.update(game.deltaTime, inputHandler, game.camera);
+                }
+
+                game.render();
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loader = new ScriptLoader();
+            loader.loadGame();
+        });
+    </script>
+</body>
+
+</html>

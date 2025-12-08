@@ -1,0 +1,78 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/editor_config.json - Editor UI configuration and asset paths",
+
+  "furnitureIconPatterns": [
+    "/data/furniture/textures/blocks/${modelKey}pic.png",
+    "/data/furniture/textures/items/${modelKey}pic.png",
+    "/data/furniture/textures/blocks/${modelKey}_pic.png",
+    "/data/furniture/textures/items/${modelKey}_pic.png"
+  ],
+
+  "layerIcons": {
+    "assets": "/data/pngs/icons for UI/crate.png",
+    "spawns": "/data/pngs/icons for UI/spawn/hologonk_1.png",
+    "wall": "/data/pngs/icons for UI/wallsicon.png",
+    "door": "/data/pngs/icons for UI/dooricon.png",
+    "dock": "/data/pngs/icons for UI/dockicon.png",
+    "panel": "/data/pngs/icons for UI/panelicon.png",
+    "screen": "/data/pngs/icons for UI/screenicon.png",
+    "elevation": "/data/pngs/icons for UI/elevationicon.png",
+    "skybox": "/data/pngs/icons for UI/skyboxicon.png",
+    "ceiling": "/data/pngs/icons for UI/ceilingicon.png",
+    "pillar": "/data/pngs/icons for UI/pillaricon.png",
+    "enemy_spawn_points": "/data/pngs/icons for UI/NPCspawnericon.png"
+  },
+
+  "factionIcons": {
+    "Takers": "/data/pngs/icons for UI/factions/takersicon.png",
+    "Imperials": "/data/pngs/icons for UI/stormiesicon.png",
+    "Sith": "/data/pngs/icons for UI/factions/darthsicon.png",
+    "Clones": "/data/pngs/factions/clones/i1/clone_1.png",
+    "Droids": "/data/pngs/icons for UI/droidicon.png",
+    "Mandalorians": "/data/pngs/factions/mandalorians/i1/mando_1.png",
+    "Aliens": "/data/pngs/icons for UI/aliensicon.png",
+    "Rebels": "/data/pngs/icons for UI/humanicon.png"
+  },
+
+  "brushIcons": {
+    "1": "singlebrushicon",
+    "2": "2x2brushicon",
+    "3": "3x3brushicon",
+    "4": "4x4brushicon"
+  },
+
+  "toolIcons": {
+    "angle": "/data/pngs/icons for UI/angleicon.png",
+    "grid": "/data/pngs/icons for UI/gridicon.png",
+    "spawn_arrow": "/data/pngs/icons for UI/spawn_arrow.png",
+    "crate": "/data/pngs/icons for UI/crate.png"
+  },
+
+  "defaultTextures": {
+    "floor": "/data/pngs/floor/floor_2.png",
+    "ceiling": "/data/pngs/ceiling/ceiling_1.png",
+    "elevationside_default": "/data/pngs/elevationsides/eside_default.png",
+    "ceilingside_default": "/data/pngs/ceilingsides/cside_default.png",
+    "wall2_default": "/data/pngs/wall/wall2/w2_default.png",
+    "wall3_default": "/data/pngs/wall/wall3/wall3_default.png"
+  },
+
+  "styleWallMappings": {
+    "wall2": {
+      "imperialstyle": "/data/pngs/wall/wall2/imperialwall2.png",
+      "neutralstyle": "/data/pngs/wall/wall2/neutralwall2.png",
+      "rebelstyle": "/data/pngs/wall/wall2/rebelwall2.png"
+    },
+    "wall3": {
+      "imperialstyle": "/data/pngs/wall/wall3/imperialwall3.png",
+      "neutralstyle": "/data/pngs/wall/wall3/neutralwall3.png",
+      "rebelstyle": "/data/pngs/wall/wall3/rebelwall3.png"
+    }
+  },
+
+  "furnitureIconOverrides": {
+    "whitewallovals": "whiteovalspic.png",
+    "whitewallpanel": "whitewallpanelpic.png",
+    "yellowempirelight": "yellowempirelightpic.png"
+  }
+}

@@ -1,0 +1,268 @@
+<meta name="file-identifier" content="the_guide.html; BROWSERFIREFOXHIDE...">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>The Guide</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0a0a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', monospace;
+            color: #eee;
+        }
+        .screen-container {
+            width: 90%;
+            height: 90%;
+            background-color: #16213e;
+            border: 4px solid #0f3460;
+            border-radius: 10px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 50px;
+            height: 50px;
+            background-color: #e94560;
+            color: white;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .close-button:hover {
+            background-color: #ff6b6b;
+        }
+        .title {
+            font-size: 42px;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #61dafb;
+        }
+        .subtitle {
+            font-size: 18px;
+            margin-bottom: 40px;
+            color: #aaa;
+        }
+        .class-selection {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 80%;
+            max-width: 900px;
+        }
+        .class-card {
+            background-color: #1a1a2e;
+            border: 3px solid #0f3460;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .class-card:hover {
+            border-color: #61dafb;
+            transform: scale(1.05);
+            background-color: #222238;
+        }
+        .class-card.selected {
+            border-color: #4ade80;
+            background-color: #1a3a2a;
+        }
+        .class-name {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #61dafb;
+        }
+        .class-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #ccc;
+        }
+        .confirm-button {
+            margin-top: 30px;
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            background-color: #4ade80;
+            color: #0a0a1a;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: none;
+        }
+        .confirm-button:hover {
+            background-color: #22c55e;
+            transform: scale(1.1);
+        }
+        .confirm-button.visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="screen-container">
+        <button class="close-button" onclick="closeScreen()">✕</button>
+        <div class="title">THE GUIDE</div>
+        <div class="subtitle">Choose Your Path</div>
+
+        <div class="class-selection">
+            <div class="class-card" data-class="tech" onclick="selectClass('tech')">
+                <div class="class-name">TECH</div>
+                <div class="class-description">
+                    Master of machinery and technology. Excels at hacking, repairs, and technical modifications. Can interface with droids and computer systems.
+                </div>
+            </div>
+
+            <div class="class-card" data-class="protocol" onclick="selectClass('protocol')">
+                <div class="class-name">PROTOCOL</div>
+                <div class="class-description">
+                    Diplomat and negotiator. Specializes in communication, translation, and social interactions. Can de-escalate conflicts and recruit allies more easily.
+                </div>
+            </div>
+
+            <div class="class-card" data-class="hk" onclick="selectClass('hk')">
+                <div class="class-name">HK</div>
+                <div class="class-description">
+                    Combat assassin droid programming. Focused on elimination and tactical superiority. Enhanced weapon handling and targeting systems.
+                </div>
+            </div>
+
+            <div class="class-card" data-class="bonk" onclick="selectClass('bonk')">
+                <div class="class-name">BONK</div>
+                <div class="class-description">
+                    A melee-focused combat droid that excels at close-quarters combat.
+                </div>
+            </div>
+
+            <div class="class-card" data-class="adept" onclick="selectClass('adept')">
+                <div class="class-name">ADEPT</div>
+                <div class="class-description">
+                    Force-sensitive unit with mystical abilities. Can use telekinesis, sense danger, and manipulate the Force for defensive and offensive purposes.
+                </div>
+            </div>
+        </div>
+
+        <button class="confirm-button" id="confirmButton" onclick="confirmClass()">CONFIRM SELECTION</button>
+    </div>
+
+    <script>
+        let selectedClass = null;
+
+        // Check if player has already selected a class
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.parent.game && window.parent.game.hasSelectedClass) {
+                // Player already chose a class - show message instead
+                const container = document.querySelector('.screen-container');
+                container.innerHTML = `
+                    <button class="close-button" onclick="closeScreen()">✕</button>
+                    <div class="title">THE GUIDE</div>
+                    <div class="subtitle">Your path is chosen</div>
+                    <div style="text-align: center; margin-top: 50px; font-size: 24px; color: #4ade80;">
+                        You have already chosen the path of the <span style="font-weight: bold; text-transform: uppercase;">${window.parent.game.playerClass}</span>.
+                        <br><br>
+                        <span style="font-size: 18px; color: #aaa;">May the Force be with you.</span>
+                    </div>
+                `;
+            }
+        });
+
+        function selectClass(className) {
+            selectedClass = className;
+
+            // Update UI
+            document.querySelectorAll('.class-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-class="${className}"]`).classList.add('selected');
+            document.getElementById('confirmButton').classList.add('visible');
+        }
+
+        async function confirmClass() {
+            if (selectedClass) {
+                // Store class selection in parent window's game state
+                if (window.parent.game) {
+                    // Normalize class names (tech -> Techie, etc.)
+                    const classMap = {
+                        'tech': 'Techie',
+                        'protocol': 'Protocol',
+                        'hk': 'HK',
+                        'adept': 'Adept',
+                        'bonk': 'Bonk'
+                    };
+                    const normalizedClass = classMap[selectedClass] || selectedClass;
+
+                    window.parent.game.playerClass = normalizedClass;
+                    window.parent.game.hasSelectedClass = true;
+
+                    // Also set in characterStats system
+                    if (window.parent.characterStats && window.parent.characterStats.selectClass) {
+                        await window.parent.characterStats.selectClass(normalizedClass);
+                    }
+
+                    // Update character sheet display
+                    if (window.parent.characterUpgrades && window.parent.characterUpgrades.updateCharacterSheet) {
+                        window.parent.characterUpgrades.updateCharacterSheet();
+                    }
+
+                    // Update main game character sheet too
+                    if (window.parent.game && window.parent.game.updateCharacterSheet) {
+                        window.parent.game.updateCharacterSheet();
+                    }
+
+                    console.log(`Class selected: ${normalizedClass}`);
+
+                    // Check for pending dock transition
+                    if (window.parent.game.pendingDockTransition) {
+                        const pending = window.parent.game.pendingDockTransition;
+                        window.parent.game.pendingDockTransition = null; // Clear it
+
+                        closeScreen();
+
+                        // Execute the dock transition after a short delay
+                        setTimeout(() => {
+                            window.parent.audioSystem.playSound('dooropen2');
+                            localStorage.setItem('gonk_last_dock', JSON.stringify({ properties: pending.dockProperties }));
+                            localStorage.setItem('gonk_skip_end_screen', 'true');
+                            window.parent.levelManager.loadLevel(pending.targetLevel);
+                        }, 200);
+                        return;
+                    }
+                }
+                closeScreen();
+            }
+        }
+
+        function closeScreen() {
+            if (window.parent.game) {
+                window.parent.game.toggleGuideMenu();
+                // Re-focus parent window and request pointer lock
+                setTimeout(() => {
+                    window.parent.focus();
+                    if (window.parent.game.canvas) {
+                        window.parent.game.canvas.requestPointerLock();
+                    }
+                }, 100);
+            }
+        }
+    </script>
+</body>
+</html>

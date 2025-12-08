@@ -1,0 +1,6 @@
+{ 
+    "primaryStat": "DEX", 
+    "role": "Mixed Damage + Utility",
+    "special": ["Tracking Fob (reveal target location)", "Carbonite Freezer (stun)", "Jetpack (mobility)"],
+    "examples": ["Boba Fett", "Cad Bane", "IG-88"]
+}

@@ -1,0 +1,13 @@
+{
+    "default_fire_rate": 1.5,
+    "weapons": {
+        "melee_vibroax_aplek.png": {
+            "fire_rate": 1.2,
+            "damage": 20
+        },
+        "melee_gaffi_tusken.png": {
+            "fire_rate": 1.0,
+            "damage": 12
+        }
+    }
+}

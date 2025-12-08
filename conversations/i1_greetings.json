@@ -1,0 +1,25 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/conversations/i1_greetings.json. Neutral openers.",
+  "phrases": [
+    { "text": "Halt. State your business.", "type": ["greeting"], "attitude": "i1", "topic": "purpose", "from_faction": ["imperials", "clones"], "to_faction": ["any"] },
+    { "text": "Identification, please.", "type": ["greeting"], "attitude": "i1", "topic": "security", "from_faction": ["imperials", "clones"], "to_faction": ["any"] },
+    { "text": "You there. What is your purpose in this sector?", "type": ["greeting"], "attitude": "i1", "topic": "purpose", "from_faction": ["imperials", "sith"], "to_faction": ["any"] },
+    { "text": "Hold it. Scanner check.", "type": ["greeting"], "attitude": "i1", "topic": "security", "from_faction": ["clones", "mandalorians"], "to_faction": ["any"] },
+    { "text": "I don't recognize you. Explain.", "type": ["greeting"], "attitude": "i1", "topic": "suspicion", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "You look lost. Do you require assistance?", "type": ["greeting"], "attitude": "i1", "topic": "purpose", "from_faction": ["droids", "aliens", "rebels"], "to_faction": ["any"] },
+    { "text": "This area is for authorized personnel only.", "type": ["greeting"], "attitude": "i1", "topic": "security", "from_faction": ["imperials", "takers"], "to_faction": ["any"] },
+    { "text": "Haven't seen you down here before.", "type": ["greeting"], "attitude": "i1", "topic": "suspicion", "from_faction": ["aliens", "rebels"], "to_faction": ["any"] },
+    { "text": "Move along if you have no business here.", "type": ["greeting"], "attitude": "i1", "topic": "purpose", "from_faction": ["mandalorians"], "to_faction": ["any"] },
+    { "text": "Beep boop? (Querying directive)", "type": ["greeting"], "attitude": "i1", "topic": "purpose", "from_faction": ["droids"], "to_faction": ["any"] },
+    { "text": "Utinni! (Checking pockets)", "type": ["greeting"], "attitude": "i1", "topic": "suspicion", "from_faction": ["aliens"], "to_faction": ["any"] },
+    { "text": "Looking for trade? Or looking for trouble?", "type": ["greeting"], "attitude": "i1", "topic": "purpose", "from_faction": ["takers", "aliens"], "to_faction": ["any"] },
+    { "text": "Trooper, did you authorize these... guests?", "type": ["greeting"], "attitude": "i1", "topic": "security", "from_faction": ["imperials"], "to_faction": ["clones", "imperials"] },
+    { "text": "Strange company you keep.", "type": ["greeting"], "attitude": "i1", "topic": "suspicion", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "Wait. Are those blasters regulation?", "type": ["greeting"], "attitude": "i1", "topic": "security", "from_faction": ["imperials", "clones"], "to_faction": ["any"] },
+    { "text": "The air scrubbers are offline again. Are you maintenance?", "type": ["greeting"], "attitude": "i1", "topic": "purpose", "from_faction": ["aliens", "droids"], "to_faction": ["any"] },
+    { "text": "Watch your step. The Takers are restless.", "type": ["greeting"], "attitude": "i1", "topic": "suspicion", "from_faction": ["rebels"], "to_faction": ["any"] },
+    { "text": "You have a bounty on you? No? Then keep moving.", "type": ["greeting"], "attitude": "i1", "topic": "purpose", "from_faction": ["mandalorians"], "to_faction": ["any"] },
+    { "text": "Greetings. Do not impede the workflow.", "type": ["greeting"], "attitude": "i1", "topic": "purpose", "from_faction": ["droids"], "to_faction": ["any"] },
+    { "text": "Can I help you?", "type": ["greeting"], "attitude": "i1", "topic": "generic", "from_faction": ["rebels", "aliens"], "to_faction": ["any"] }
+  ]
+}

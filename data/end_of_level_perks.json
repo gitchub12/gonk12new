@@ -1,0 +1,36 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/end_of_level_perks.json",
+  "perks": [
+    {
+      "id": "heal_self_for_wire",
+      "type": "heal",
+      "target": "player",
+      "title": "Pay for Treatment",
+      "description": "Heal to full. Cost: 1 Wire per 2% health restored. Must be able to afford the full amount."
+    },
+    {
+      "id": "heal_top_allies",
+      "type": "heal",
+      "target": "allies",
+      "title": "Field Triage",
+      "description": "Heal your two most-injured allies to full health for free."
+    },
+    {
+      "id": "temp_speed_boost",
+      "type": "buff",
+      "target": "player",
+      "stat": "speed",
+      "modifier": 1.10,
+      "duration": 3,
+      "title": "Fleet Footed",
+      "description": "Increase your movement speed by 10% for the next 3 ships."
+    },
+    {
+      "id": "repair_damaged_node",
+      "type": "special",
+      "target": "player",
+      "title": "Repair Node Damaged by DroidSlayer",
+      "description": "Repair the upgrade node that was damaged by the DroidSlayer, allowing you to purchase it again."
+    }
+  ]
+}

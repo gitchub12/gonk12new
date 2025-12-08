@@ -1,0 +1,20 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/conversations/h1_greetings.json. Friendly greetings.",
+  "phrases": [
+    { "text": "Good to see you! Sector's clear.", "type": ["greeting"], "attitude": "h1", "topic": "security", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "Welcome back, troopers. Need a resupply?", "type": ["greeting"], "attitude": "h1", "topic": "purpose", "from_faction": ["clones", "imperials"], "to_faction": ["clones", "imperials"] },
+    { "text": "Brothers! The fight goes well.", "type": ["greeting"], "attitude": "h1", "topic": "generic", "from_faction": ["clones"], "to_faction": ["clones"] },
+    { "text": "Ah, the heroes of the hour. What brings you here?", "type": ["greeting"], "attitude": "h1", "topic": "purpose", "from_faction": ["rebels", "aliens"], "to_faction": ["any"] },
+    { "text": "My scanners picked you up. Good to see allies.", "type": ["greeting"], "attitude": "h1", "topic": "security", "from_faction": ["droids", "player_droid"], "to_faction": ["any"] },
+    { "text": "The Force is strong with this group.", "type": ["greeting"], "attitude": "h1", "topic": "generic", "from_faction": ["rebels"], "to_faction": ["any"] },
+    { "text": "Vod! (Brother/Sister) It is good to see you.", "type": ["greeting"], "attitude": "h1", "topic": "generic", "from_faction": ["mandalorians"], "to_faction": ["mandalorians"] },
+    { "text": "More biomass for the cause... welcome.", "type": ["greeting"], "attitude": "h1", "topic": "generic", "from_faction": ["takers"], "to_faction": ["takers"] },
+    { "text": "At ease. You look like you've had a long rotation.", "type": ["greeting"], "attitude": "h1", "topic": "suspicion", "from_faction": ["imperials", "clones"], "to_faction": ["any"] },
+    { "text": "Hey! Found anything good down here?", "type": ["greeting"], "attitude": "h1", "topic": "purpose", "from_faction": ["aliens", "takers"], "to_faction": ["any"] },
+    { "text": "You made it past the sentries? Impressive work.", "type": ["greeting"], "attitude": "h1", "topic": "security", "from_faction": ["rebels"], "to_faction": ["any"] },
+    { "text": "Beep trill! (Happy greeting)", "type": ["greeting"], "attitude": "h1", "topic": "generic", "from_faction": ["droids"], "to_faction": ["any"] },
+    { "text": "Need a hand with anything?", "type": ["greeting"], "attitude": "h1", "topic": "purpose", "from_faction": ["rebels", "aliens"], "to_faction": ["any"] },
+    { "text": "You look like you know what you're doing.", "type": ["greeting"], "attitude": "h1", "topic": "suspicion", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "Stand tall, soldier. The Empire prevails.", "type": ["greeting"], "attitude": "h1", "topic": "generic", "from_faction": ["imperials"], "to_faction": ["imperials", "clones"] }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/rendering_config.json - Rendering optimization settings",
+
+  "furniture": {
+    "enable_lod": true,
+    "lod_distance": 20.0,
+    "enable_frustum_culling": true,
+    "cull_distance": 50.0,
+    "disable_shadows_distance": 30.0
+  },
+
+  "nameplates": {
+    "update_interval_frames": 3,
+    "fade_distance": 15.0,
+    "hide_distance": 25.0
+  },
+
+  "particles": {
+    "pool_size": 100,
+    "max_active": 50
+  },
+
+  "shadows": {
+    "enabled": true,
+    "map_size": 2048,
+    "npc_cast_shadows": true,
+    "furniture_cast_shadows": true
+  },
+
+  "performance": {
+    "max_visible_npcs": 50,
+    "npc_update_distance": 40.0,
+    "ai_update_interval_frames": 2
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/conversations/h1_replies.json. Friendly Replies.",
+  "phrases": [
+    { "text": "Just doing our duty. Keep up the good work.", "type": ["reply"], "attitude": "h1", "topic": "purpose", "style": "earnest", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "We're hunting for high-value targets. Wish us luck.", "type": ["reply"], "attitude": "h1", "topic": "purpose", "style": "bluff", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "Everything is secure here. You guys are doing great.", "type": ["reply"], "attitude": "h1", "topic": "security", "style": "flattery", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "Good to see you too. Stay sharp.", "type": ["reply"], "attitude": "h1", "topic": "generic", "style": "diplomatic", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "We found some supplies, but we're keeping the good stuff.", "type": ["reply"], "attitude": "h1", "topic": "purpose", "style": "deceptive", "from_faction": ["aliens", "rebels"], "to_faction": ["any"] },
+    { "text": "This is the Way.", "type": ["reply"], "attitude": "h1", "topic": "generic", "style": "earnest", "from_faction": ["mandalorians"], "to_faction": ["mandalorians"] },
+    { "text": "For the Republic!", "type": ["reply"], "attitude": "h1", "topic": "generic", "style": "earnest", "from_faction": ["clones"], "to_faction": ["clones"] },
+    { "text": "Just taking a stroll. Lovely ship you have here.", "type": ["reply"], "attitude": "h1", "topic": "purpose", "style": "flattery", "from_faction": ["any"], "to_faction": ["imperials", "sith"] },
+    { "text": "My circuits are pleased to encounter you.", "type": ["reply"], "attitude": "h1", "topic": "generic", "style": "diplomatic", "from_faction": ["droids", "player_droid"], "to_faction": ["any"] },
+    { "text": "We're on a secret mission... looking for snacks.", "type": ["reply"], "attitude": "h1", "topic": "purpose", "style": "deflection", "from_faction": ["rebels", "aliens"], "to_faction": ["any"] },
+    { "text": "Yeah, we're the best there is. Don't forget it.", "type": ["reply"], "attitude": "h1", "topic": "suspicion", "style": "intimidation", "from_faction": ["mandalorians", "takers"], "to_faction": ["any"] },
+    { "text": "Nothing to worry about. Just clearing the trash.", "type": ["reply"], "attitude": "h1", "topic": "security", "style": "bluff", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "Your vigilance is noted and appreciated.", "type": ["reply"], "attitude": "h1", "topic": "security", "style": "diplomatic", "from_faction": ["imperials", "sith"], "to_faction": ["any"] },
+    { "text": "Fight the good fight, friend.", "type": ["reply"], "attitude": "h1", "topic": "generic", "style": "earnest", "from_faction": ["rebels"], "to_faction": ["any"] },
+    { "text": "We are just passing through. Peace be with you.", "type": ["reply"], "attitude": "h1", "topic": "purpose", "style": "diplomatic", "from_faction": ["aliens"], "to_faction": ["any"] }
+  ]
+}

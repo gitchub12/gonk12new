@@ -1,0 +1,104 @@
+{
+    "MQ_20_Liberation": {
+        "title": "Liberate the Factory",
+        "type": "main",
+        "description": "Defeat the Droid Foreman to claim this factory as your base.",
+        "steps": [
+            {
+                "objectives": [
+                    {
+                        "type": "kill",
+                        "targetTag": "boss_foreman",
+                        "required": 1,
+                        "description": "Defeat the Droid Foreman"
+                    }
+                ]
+            }
+        ],
+        "rewards": {
+            "wire": 500,
+            "reputation": {
+                "droids": 10
+            }
+        }
+    },
+    "FAC_DROID_01": {
+        "title": "Stabilize the Core",
+        "type": "faction",
+        "description": "The reactor is unstable. Activate the 3 cooling consoles.",
+        "steps": [
+            {
+                "objectives": [
+                    {
+                        "type": "interact",
+                        "targetTag": "console_cooling",
+                        "required": 3,
+                        "description": "Activate Cooling Consoles"
+                    }
+                ]
+            }
+        ],
+        "rewards": {
+            "wire": 100,
+            "items": [
+                "core_stabilizer"
+            ],
+            "reputation": {
+                "droids": 20
+            }
+        }
+    },
+    "ALLY_R2_01": {
+        "title": "Find my Thruster",
+        "type": "ally",
+        "description": "R2 is missing a part. Find it in the scrap piles.",
+        "steps": [
+            {
+                "objectives": [
+                    {
+                        "type": "pickup",
+                        "target": "r2_thruster",
+                        "required": 1,
+                        "description": "Find R2's Thruster"
+                    }
+                ]
+            },
+            {
+                "objectives": [
+                    {
+                        "type": "interact",
+                        "targetTag": "npc_r2",
+                        "required": 1,
+                        "description": "Return to R2"
+                    }
+                ]
+            }
+        ],
+        "rewards": {
+            "wire": 50,
+            "reputation": {
+                "rebels": 5
+            }
+        }
+    },
+    "PROC_BOUNTY_01": {
+        "title": "Bounty: Rogue Unit",
+        "type": "procedural",
+        "description": "Eliminate the rogue droid unit.",
+        "steps": [
+            {
+                "objectives": [
+                    {
+                        "type": "kill",
+                        "targetTag": "rogue_unit",
+                        "required": 1,
+                        "description": "Destroy Rogue Unit"
+                    }
+                ]
+            }
+        ],
+        "rewards": {
+            "wire": 200
+        }
+    }
+}

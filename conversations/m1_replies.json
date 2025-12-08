@@ -1,0 +1,20 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/conversations/m1_replies.json. Hostile Replies. High tension attempts to de-escalate or counter-threaten.",
+  "phrases": [
+    { "text": "Whoa! Easy with that blaster. We're leaving.", "type": ["reply"], "attitude": "m1", "topic": "security", "style": "diplomatic", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "You shoot us, you answer to Lord Vader. Do it.", "type": ["reply"], "attitude": "m1", "topic": "security", "style": "intimidation", "from_faction": ["imperials", "sith"], "to_faction": ["imperials", "clones"] },
+    { "text": "We aren't worth the ammo, friend.", "type": ["reply"], "attitude": "m1", "topic": "suspicion", "style": "diplomatic", "from_faction": ["rebels", "aliens"], "to_faction": ["any"] },
+    { "text": "Touch us and this entire deck blows. Dead man's switch.", "type": ["reply"], "attitude": "m1", "topic": "security", "style": "bluff", "from_faction": ["rebels", "takers"], "to_faction": ["any"] },
+    { "text": "Back off. Now.", "type": ["reply"], "attitude": "m1", "topic": "suspicion", "style": "intimidation", "from_faction": ["mandalorians"], "to_faction": ["any"] },
+    { "text": "We are simply lost. Point your weapon elsewhere.", "type": ["reply"], "attitude": "m1", "topic": "purpose", "style": "diplomatic", "from_faction": ["droids", "aliens"], "to_faction": ["any"] },
+    { "text": "I wouldn't do that if I were you. Look behind you.", "type": ["reply"], "attitude": "m1", "topic": "suspicion", "style": "deceptive", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "Bounty Guild target. Interfere and you're next.", "type": ["reply"], "attitude": "m1", "topic": "purpose", "style": "intimidation", "from_faction": ["mandalorians"], "to_faction": ["any"] },
+    { "text": "We're just cleaning up the mess YOU made.", "type": ["reply"], "attitude": "m1", "topic": "purpose", "style": "deflection", "from_faction": ["aliens", "takers"], "to_faction": ["any"] },
+    { "text": "Command will hear of this insubordination.", "type": ["reply"], "attitude": "m1", "topic": "security", "style": "intimidation", "from_faction": ["imperials", "clones"], "to_faction": ["imperials", "clones"] },
+    { "text": "Don't look at us. We're just shadows.", "type": ["reply"], "attitude": "m1", "topic": "suspicion", "style": "deceptive", "from_faction": ["takers", "sith"], "to_faction": ["any"] },
+    { "text": "We surrender! ... Just kidding.", "type": ["reply"], "attitude": "m1", "topic": "security", "style": "bluff", "from_faction": ["rebels"], "to_faction": ["any"] },
+    { "text": "Calm down. We are on the same side... mostly.", "type": ["reply"], "attitude": "m1", "topic": "suspicion", "style": "diplomatic", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "Your fear is delicious.", "type": ["reply"], "attitude": "m1", "topic": "suspicion", "style": "intimidation", "from_faction": ["sith", "takers"], "to_faction": ["any"] },
+    { "text": "This is a restricted zone? We didn't see the sign.", "type": ["reply"], "attitude": "m1", "topic": "security", "style": "deflection", "from_faction": ["any"], "to_faction": ["any"] }
+  ]
+}

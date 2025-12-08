@@ -1,0 +1,139 @@
+{
+    "MQ_01_Escape_Factory": {
+        "title": "Escape the Droid Factory",
+        "type": "main",
+        "description": "You are trapped in a Droid Factory. Find a way to escape.",
+        "steps": [
+            {
+                "id": "find_key",
+                "description": "Find the Gold Key Card to unlock the loading dock.",
+                "objectives": [
+                    {
+                        "type": "pickup",
+                        "target": "gold_key_card",
+                        "count": 1,
+                        "description": "Obtain the Gold Key Card"
+                    }
+                ]
+            },
+            {
+                "id": "escape",
+                "description": "Use the Gold Key Card to open the loading dock.",
+                "objectives": [
+                    {
+                        "type": "location",
+                        "target": "dock_exit",
+                        "count": 1,
+                        "description": "Exit via the Loading Dock"
+                    }
+                ]
+            }
+        ],
+        "rewards": {
+            "xp": 500,
+            "wire": 100,
+        "reputation": {
+                "droids": 10
+            }
+        }
+    },
+    "MQ_21_THE_DATAPAD": {
+        "title": "The Datapad",
+        "type": "main",
+        "description": "An informant was being harassed by a thug over a datapad. Recover the datapad and see what the informant has to say.",
+        "steps": [
+            {
+                "objectives": [
+                    {
+                        "type": "kill",
+                        "targetTag": "grak",
+                        "required": 1,
+                        "description": "Deal with the thug"
+                    }
+                ]
+            },
+            {
+                "objectives": [
+                    {
+                        "type": "pickup",
+                        "target": "security_datapad",
+                        "required": 1,
+                        "description": "Recover the datapad"
+                    }
+                ]
+            },
+            {
+                "objectives": [
+                    {
+                        "type": "interact",
+                        "targetTag": "kaelen",
+                        "required": 1,
+                        "description": "Return to the informant"
+                    }
+                ]
+            }
+        ],
+        "rewards": {
+            "wire": 750
+        }
+    },
+    "MQ_22_CRYO_SCRAMBLER": {
+        "title": "The Scavenger's Prize",
+        "type": "main",
+        "description": "You found a peculiar device on a broken droid. Maybe someone nearby has a use for it.",
+        "steps": [
+            {
+                "objectives": [
+                    {
+                        "type": "pickup",
+                        "target": "cryo_scrambler",
+                        "required": 1,
+                        "description": "Find a use for the Cryo-Scrambler"
+                    }
+                ]
+            },
+            {
+                "objectives": [
+                    {
+                        "type": "interact",
+                        "targetTag": "zara",
+                        "required": 1,
+                        "description": "Bring the Cryo-Scrambler to Zara"
+                    }
+                ]
+            }
+        ],
+        "rewards": {
+            "wire": 1200,
+            "reputation": {
+                "rebels": 5
+            }
+        }
+    },
+    "MQ_20_CLEAR_AREA": {
+        "title": "Secure the Command Post",
+        "type": "main",
+        "description": "A hostile commander has taken over a critical command post. Eliminate them to secure the area and proceed.",
+        "steps": [
+            {
+                "objectives": [
+                    {
+                        "type": "kill",
+                        "targetTag": "level_20_commander",
+                        "required": 1,
+                        "description": "Defeat the Commander"
+                    }
+                ]
+            }
+        ],
+        "rewards": {
+            "items": [
+                "level_20_keycard"
+            ],
+            "wire": 250,
+            "reputation": {
+                "droids": 15
+            }
+        }
+    }
+}

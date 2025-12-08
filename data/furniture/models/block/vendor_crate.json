@@ -1,0 +1,13 @@
+{
+    "parent": "chronokillers_star_wars:custom/crate",
+    "textures": {
+        "0": "chronokillers_star_wars:blocks/crate_0",
+        "1": "chronokillers_star_wars:blocks/crate_1",
+        "2": "chronokillers_star_wars:blocks/crate_2",
+        "3": "chronokillers_star_wars:blocks/crate_3"
+    },
+    "interaction": {
+        "id": "vendor_crate",
+        "prompt": "Access Shop"
+    }
+}

@@ -1,0 +1,223 @@
+{
+    "className": "Protocol",
+    "description": "A master tactician who recruits and commands a squad of loyal allies to overwhelm enemies.",
+    "primaryStatChoice": "CHA is the primary stat for recruitment and ally buffs. INT increases the number and quality of allies.",
+    "startingStatMods": {
+        "CHA": "+4",
+        "INT": "+2",
+        "STR": "-2",
+        "DEX": "-2"
+    },
+    "hpPerLevel": 5,
+    "skillsPerLevel": 3,
+    "classFeatures": {
+        "1": {
+            "type": "power",
+            "name": "Field Commander",
+            "description": "You can recruit one allied NPC. Use the 'Recruit' ability on a friendly or neutral NPC."
+        },
+        "2": {
+            "type": "power",
+            "name": "Command: Attack Target",
+            "description": "Order your allies to focus fire on your current target."
+        },
+        "3": {
+            "type": "stats",
+            "name": "Protocol Training I",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "4": {
+            "type": "power",
+            "name": "Rallying Cry",
+            "description": "Allies within 30ft gain +1 to hit and +1 damage for 15 seconds."
+        },
+        "5": {
+            "type": "stats",
+            "name": "Protocol Training II",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "6": {
+            "type": "power",
+            "name": "Logistics Expert",
+            "description": "Increase max allies by one (Total: 2)."
+        },
+        "7": {
+            "type": "stats",
+            "name": "Protocol Training III",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "8": {
+            "type": "power",
+            "name": "Field Medic",
+            "description": "You can designate one ally as a medic, who will occasionally heal other allies."
+        },
+        "9": {
+            "type": "stats",
+            "name": "Protocol Training IV",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "10": {
+            "type": "power",
+            "name": "Command: Hold Position",
+            "description": "Order your allies to hold their current position and attack any enemies that come into range."
+        },
+        "11": {
+            "type": "stats",
+            "name": "Protocol Training V",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "12": {
+            "type": "power",
+            "name": "Improved Rallying Cry",
+            "description": "Rallying Cry now grants +2 to hit and +2 damage."
+        },
+        "13": {
+            "type": "stats",
+            "name": "Protocol Training VI",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "14": {
+            "type": "power",
+            "name": "Squad Leader",
+            "description": "Increase max allies by one (Total: 3)."
+        },
+        "15": {
+            "type": "stats",
+            "name": "Protocol Training VII",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "16": {
+            "type": "power",
+            "name": "Inspiring Presence",
+            "description": "+2 CHA permanently."
+        },
+        "17": {
+            "type": "stats",
+            "name": "Protocol Training VIII",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "18": {
+            "type": "power",
+            "name": "Covering Fire",
+            "description": "Allies now have a 25% chance to fire at an enemy that hits you."
+        },
+        "19": {
+            "type": "stats",
+            "name": "Protocol Training IX",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "20": {
+            "type": "power",
+            "name": "Elite Recruits",
+            "description": "You can now recruit elite and special NPC types."
+        },
+        "21": {
+            "type": "stats",
+            "name": "Protocol Training X",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "22": {
+            "type": "power",
+            "name": "Command: Spread Out",
+            "description": "Order your allies to take cover and spread out, reducing their chance of being hit by AoE attacks."
+        },
+        "23": {
+            "type": "stats",
+            "name": "Protocol Training XI",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "24": {
+            "type": "power",
+            "name": "Battalion Commander",
+            "description": "Increase max allies by one (Total: 4)."
+        },
+        "25": {
+            "type": "stats",
+            "name": "Protocol Training XII",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "26": {
+            "type": "power",
+            "name": "Coordinated Assault",
+            "description": "When you hit an enemy, your allies gain +5 damage against that enemy for 5 seconds."
+        },
+        "27": {
+            "type": "stats",
+            "name": "Protocol Training XIII",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "28": {
+            "type": "power",
+            "name": "Command: All-Out Assault",
+            "description": "1/combat - For 20 seconds, all allies have their cooldowns reduced by 50% and are immune to fear."
+        },
+        "29": {
+            "type": "stats",
+            "name": "Protocol Training XIV",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "30": {
+            "type": "power",
+            "name": "Master Rallying Cry",
+            "description": "Rallying Cry now grants +3 to hit, +3 damage, and 10 temporary HP."
+        },
+        "31": {
+            "type": "stats",
+            "name": "Protocol Training XV",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "32": {
+            "type": "power",
+            "name": "Bodyguards",
+            "description": "Two of your allies will prioritize attacking any enemy that attacks you."
+        },
+        "33": {
+            "type": "stats",
+            "name": "Protocol Training XVI",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "34": {
+            "type": "power",
+            "name": "General of the Army",
+            "description": "Increase max allies by one (Total: 5)."
+        },
+        "35": {
+            "type": "stats",
+            "name": "Protocol Training XVII",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "36": {
+            "type": "power",
+        "name": "Command: Orbital Strike",
+            "description": "1/day - Designate an area for a devastating orbital strike."
+        },
+        "37": {
+            "type": "stats",
+            "name": "Protocol Training XVIII",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "38": {
+            "type": "power",
+            "name": "Brothers in Arms",
+            "description": "Allies gain +2 to all stats for each other ally within 15ft."
+        },
+        "39": {
+            "type": "stats",
+            "name": "Protocol Training XIX",
+            "description": "+1 to CHA (auto), +1 to any other stat (player choice), +2 skill points"
+        },
+        "40": {
+            "type": "power",
+            "name": "Living Legend",
+            "description": "Ultimate Protocol - Max allies becomes 8. All allies gain +5 to all stats and regenerate health over time. You can recruit any non-boss NPC."
+        }
+    },
+    "allyScaling": {
+        "baseMaxAllies": 1,
+        "xpMultiplier": 0.5,
+        "canExceedGonkLevel": true,
+        "maxLevelAboveGonk": 0,
+        "recruitmentPenalty": 0,
+        "maxPossibleAllies": 8
+    }
+}

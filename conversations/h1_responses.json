@@ -1,0 +1,12 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/conversations/h1_responses.json. Good Outcomes.",
+  "phrases": [
+    { "text": "Very well. You may pass.", "type": ["response"], "attitude": "h1", "topic": "none", "from_faction": ["imperials", "clones"], "to_faction": ["any"] },
+    { "text": "Glad to see friendly faces. Stay safe.", "type": ["response"], "attitude": "h1", "topic": "none", "from_faction": ["rebels", "aliens"], "to_faction": ["any"] },
+    { "text": "I like your style. Go on.", "type": ["response"], "attitude": "h1", "topic": "none", "from_faction": ["mandalorians", "takers"], "to_faction": ["any"] },
+    { "text": "Documentation accepted. Proceed.", "type": ["response"], "attitude": "h1", "topic": "none", "from_faction": ["droids", "imperials"], "to_faction": ["any"] },
+    { "text": "You're alright. Get out of here before I change my mind.", "type": ["response"], "attitude": "h1", "topic": "none", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "The Force is with you. Go.", "type": ["response"], "attitude": "h1", "topic": "none", "from_faction": ["rebels"], "to_faction": ["any"] },
+    { "text": "Here, take this. We found it earlier.", "type": ["response"], "attitude": "h2", "topic": "none", "from_faction": ["any"], "to_faction": ["any"] }
+  ]
+}

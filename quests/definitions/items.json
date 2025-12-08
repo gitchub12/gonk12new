@@ -1,0 +1,49 @@
+{
+    "key_red_card": {
+        "type": "key",
+        "name": "Red Keycard",
+        "icon": "key_red.png",
+        "description": "Opens high-security doors."
+    },
+    "r2_thruster": {
+        "type": "quest_only",
+        "name": "R2's Thruster",
+        "icon": "thruster.png",
+        "description": "A beat-up thruster component."
+    },
+    "core_stabilizer": {
+        "type": "quest_only",
+        "name": "Core Stabilizer",
+        "icon": "stabilizer.png",
+        "description": "Prevents the reactor from exploding."
+    },
+    "amulet_sith": {
+        "type": "equipment",
+        "slot": "charm",
+        "name": "Ancient Sith Amulet",
+        "stats": {
+            "force_power": 10
+        },
+        "description": "It hums with dark energy."
+    },
+    "gold_key_card": {
+        "type": "key",
+        "name": "Gold Key Card",
+        "icon": "powersmall.png",
+        "description": "Access to the factory loading dock."
+    },
+    "security_datapad": {
+        "type": "quest_only",
+        "name": "Security Datapad",
+        "icon": "datapad.png",
+        "description": "Contains coordinates to a hidden stash.",
+        "startsQuest": "MQ_21_THE_DATAPAD"
+    },
+    "cryo_scrambler": {
+        "type": "quest_only",
+        "name": "Cryo-Scrambler",
+        "icon": "scrambler.png",
+        "description": "A device used to bypass cryogenic security systems.",
+        "startsQuest": "MQ_22_CRYO_SCRAMBLER"
+    }
+}

@@ -1,0 +1,17 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/conversations/i1_responses.json. Neutral Gauge Outcomes.",
+  "phrases": [
+    { "text": "Fine. Move along.", "type": ["response"], "attitude": "i1", "topic": "none", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "I suppose that makes sense. Go.", "type": ["response"], "attitude": "i1", "topic": "none", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "Keep your heads down.", "type": ["response"], "attitude": "i1", "topic": "none", "from_faction": ["clones", "rebels"], "to_faction": ["any"] },
+    { "text": "Hmph. Don't cause trouble.", "type": ["response"], "attitude": "i1", "topic": "none", "from_faction": ["imperials", "mandalorians"], "to_faction": ["any"] },
+    { "text": "Just don't block the corridor.", "type": ["response"], "attitude": "i1", "topic": "none", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "I'll be watching you.", "type": ["response"], "attitude": "i1", "topic": "none", "from_faction": ["imperials", "sith"], "to_faction": ["any"] },
+    { "text": "Whatever. Just go.", "type": ["response"], "attitude": "i1", "topic": "none", "from_faction": ["takers"], "to_faction": ["any"] },
+    { "text": "Your story holds up... for now.", "type": ["response"], "attitude": "i1", "topic": "none", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "Clear the area.", "type": ["response"], "attitude": "i1", "topic": "none", "from_faction": ["clones"], "to_faction": ["any"] },
+    { "text": "Proceed.", "type": ["response"], "attitude": "i1", "topic": "none", "from_faction": ["droids"], "to_faction": ["any"] },
+    { "text": "Okay. Safe travels.", "type": ["response"], "attitude": "i1", "topic": "none", "from_faction": ["rebels", "aliens"], "to_faction": ["any"] },
+    { "text": "Don't make me regret this.", "type": ["response"], "attitude": "i1", "topic": "none", "from_faction": ["mandalorians"], "to_faction": ["any"] }
+  ]
+}

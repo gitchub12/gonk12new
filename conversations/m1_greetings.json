@@ -1,0 +1,15 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/conversations/m1_greetings.json. Hostile openers.",
+  "phrases": [
+    { "text": "Halt! You look like trouble.", "type": ["greeting"], "attitude": "m1", "topic": "suspicion", "from_faction": ["imperials", "clones"], "to_faction": ["any"] },
+    { "text": "Get back! This area is restricted.", "type": ["greeting"], "attitude": "m1", "topic": "security", "from_faction": ["imperials", "sith"], "to_faction": ["any"] },
+    { "text": "You! Give me one reason not to blast you.", "type": ["greeting"], "attitude": "m1", "topic": "suspicion", "from_faction": ["mandalorians", "takers"], "to_faction": ["any"] },
+    { "text": "Rebel scum. I can smell you from here.", "type": ["greeting"], "attitude": "m1", "topic": "suspicion", "from_faction": ["imperials", "sith"], "to_faction": ["rebels"] },
+    { "text": "Clankers. I hate clankers.", "type": ["greeting"], "attitude": "m1", "topic": "suspicion", "from_faction": ["clones"], "to_faction": ["droids", "player_droid"] },
+    { "text": "Imperial dogs. Get out of our sector.", "type": ["greeting"], "attitude": "m1", "topic": "suspicion", "from_faction": ["rebels"], "to_faction": ["imperials"] },
+    { "text": "Fresh meat for the grinder.", "type": ["greeting"], "attitude": "m1", "topic": "suspicion", "from_faction": ["takers"], "to_faction": ["any"] },
+    { "text": "Stop! Hands where I can see them!", "type": ["greeting"], "attitude": "m1", "topic": "security", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "I don't know you. And I don't like you.", "type": ["greeting"], "attitude": "m1", "topic": "suspicion", "from_faction": ["any"], "to_faction": ["any"] },
+    { "text": "You are not welcome here.", "type": ["greeting"], "attitude": "m1", "topic": "purpose", "from_faction": ["mandalorians", "aliens"], "to_faction": ["any"] }
+  ]
+}

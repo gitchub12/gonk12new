@@ -1,0 +1,16 @@
+{
+  "_comment": "BROWSERFIREFOXHIDE data/conversations/appraisals.json. Phrases for Ally Pre-Conversation Appraisal.",
+  "descriptors": {
+    "1-15": ["dear friends", "great allies", "super chill", "trusted partners", "family"],
+    "16-30": ["friendly", "allies", "cool", "good people", "safe"],
+    "31-50": ["known to us", "neutrals", "on the fence", "unknowns", "civilians"],
+    "51-70": ["not friendly", "dangerous", "known killers", "risky", "trouble"],
+    "71+": ["murderous scum", "hostile", "deadly", "enemies", "targets"]
+  },
+  "templates": [
+    "A(n) {faction}, they are {descriptor}, I'll handle it.",
+    "{faction} ahead. They are {descriptor}. Let me talk.",
+    "Heads up, {faction}. They're {descriptor}. Watch my back.",
+    "Target identified: {faction}. Status: {descriptor}. I'm on it."
+  ]
+}

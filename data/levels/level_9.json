@@ -1,0 +1,156 @@
+{
+  "settings": {
+    "width": 64,
+    "height": 128,
+    "defaults": {
+      "skybox": {
+        "key": "hyper"
+      },
+      "music": {
+        "type": "category",
+        "value": "orchestral"
+      },
+      "subfloor": {
+        "key": null
+      }
+    }
+  },
+  "layers": {
+    "npcs": [
+      [
+        "3,2",
+        {
+          "type": "random_npc",
+          "key": "R1_imperial_officer",
+          "properties": {
+            "threat": 1,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ],
+      [
+        "1,2",
+        {
+          "type": "random_npc",
+          "key": "R5_imperial_officer",
+          "properties": {
+            "threat": 5,
+            "macroCategory": "Imperials",
+            "subgroup": "imperial_officer",
+            "name": "XF XL"
+          },
+          "rotation": 0
+        }
+      ]
+    ],
+    "wall": [
+      [
+        "H_6_1",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/wallaroundspawner.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_5_1",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/doublewall.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ],
+      [
+        "H_7_1",
+        {
+          "type": "texture",
+          "key": "/data/pngs/wall/doublewall.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png"
+          }
+        }
+      ]
+    ],
+    "dock": [
+      [
+        "H_8_1",
+        {
+          "type": "texture",
+          "key": "/data/pngs/dock/dock_2_green.png",
+          "properties": {
+            "level2": "/data/pngs/wall/wall2/w2_default.png",
+            "level3": "/data/pngs/wall/wall3/wall3_default.png",
+            "target": "TO LEVEL 10A",
+            "autoSpawnFor": "8,2"
+          }
+        }
+      ]
+    ],
+    "panel": [
+      [
+        "H_6_1",
+        {
+          "type": "texture",
+          "key": "/data/pngs/panel/wallaroundspawner.png",
+          "properties": {
+            "direction": -1
+          }
+        }
+      ]
+    ],
+    "spawns": [
+      [
+        "7,6",
+        {
+          "id": "L09-SP-A",
+          "rotation": 0,
+          "key": "/data/pngs/icons for UI/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ],
+      [
+        "8,2",
+        {
+          "id": "FROM LEVEL 10",
+          "rotation": 2,
+          "key": "/data/pngs/icons for UI/spawn/hologonk_1.png",
+          "properties": {}
+        }
+      ]
+    ],
+    "enemy_spawn_points": [
+      [
+        "6,2",
+        {
+          "type": "enemy_spawn_point",
+          "key": "/data/pngs/enemyspawns/spawnenemy_04.png",
+          "rotation": 0,
+          "properties": {
+            "attitude": "enemy",
+            "faction": null,
+            "subgroup": null,
+            "max_individual_threat": 5,
+            "threat_per_minute": 11,
+            "min_time_between_spawns": 20,
+            "max_time_between_spawns": 20,
+            "total_max_threat": 10,
+            "health": 250,
+            "max_health": 250,
+            "spawner_level": 4,
+            "spawner_type": "spawnenemy"
+          }
+        }
+      ]
+    ]
+  }
+}

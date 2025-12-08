@@ -1,0 +1,17 @@
+{
+    "default_fire_rate": 3.0,
+    "weapons": {
+        "rifle_e11.png": {
+            "fire_rate": 0.5,
+            "damage": 10
+        },
+        "rifle_dc15a.png": {
+            "fire_rate": 0.4,
+            "damage": 12
+        },
+        "rifle_bowcaster.png": {
+            "fire_rate": 1.5,
+            "damage": 25
+        }
+    }
+}

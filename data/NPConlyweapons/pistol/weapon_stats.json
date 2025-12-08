@@ -1,0 +1,13 @@
+{
+    "default_fire_rate": 2.0,
+    "weapons": {
+        "pistol_dh17_rebel.png": {
+            "fire_rate": 0.4,
+            "damage": 8
+        },
+        "pistol_dl44_han.png": {
+            "fire_rate": 0.6,
+            "damage": 15
+        }
+    }
+}
