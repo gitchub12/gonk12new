@@ -34,11 +34,8 @@ class ModuleManager {
             return false;
         }
 
-        if (this.activeModules.includes(moduleId)) {
-            console.warn(`[ModuleManager] Module already granted: ${moduleId}`);
-            return false;
-        }
-
+        // NEW: Check if this is a duplicate - if so, just add it again to increase level
+        // The character_upgrades.js will handle counting and displaying the level
         this.activeModules.push(moduleId);
         console.log(`[ModuleManager] Granted module: ${moduleId}`);
 
@@ -47,9 +44,8 @@ class ModuleManager {
             if (!window.game.state.modules) {
                 window.game.state.modules = [];
             }
-            if (!window.game.state.modules.includes(moduleId)) {
-                window.game.state.modules.push(moduleId);
-            }
+            // Always push, even if duplicate (this allows level stacking)
+            window.game.state.modules.push(moduleId);
         }
 
         // Apply immediate effects

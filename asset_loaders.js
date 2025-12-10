@@ -54,6 +54,7 @@ class AssetManager {
     async loadEssentialData() {
         this.discoverPamphletTextures();
         this.discoverPickupTextures();
+        this.discoverNumberTextures();
         await Promise.all([
             this.loadWeaponData(),
             this.loadFactionData(),
@@ -64,7 +65,8 @@ class AssetManager {
             this.preloadPlayerWeaponAssets(), // Preload zapper/pamphlet textures
             this.loadPlayerStats(),
             this.loadNPCClasses(),
-            this.loadSpeciesData() // NEW: Load Species data
+            this.loadSpeciesData(), // NEW: Load Species data
+            this.preloadNumberTextures() // NEW: Preload number badge textures
         ]);
         this.buildSkinPathMap();
     }
@@ -280,6 +282,14 @@ class AssetManager {
         this.pickupTexturePaths = pickupKeys.map(key => `data/pngs/PICKUPS/${key}.png`);
     }
 
+    // ADDED: Discover number badge textures (n1-n9 for module levels)
+    discoverNumberTextures() {
+        this.numberTexturePaths = [];
+        for (let i = 1; i <= 9; i++) {
+            this.numberTexturePaths.push(`data/pngs/HUD/numbers/n${i}.png`);
+        }
+    }
+
     async discoverPlayerWeapons() {
         const weaponRoot = '/data/gonkonlyweapons/';
         // FIX: Use the new directory structure. Hilts are weapons, blades are not.
@@ -305,6 +315,12 @@ class AssetManager {
         if (this.pamphletTextureNames.length === 0) return 'pamphlet_0001'; // Fallback
         const randomIndex = Math.floor(Math.random() * this.pamphletTextureNames.length);
         return this.pamphletTextureNames[randomIndex];
+    }
+
+    async preloadNumberTextures() {
+        const promises = this.numberTexturePaths.map(path => this.loadTexture(path));
+        await Promise.all(promises);
+        console.log(`[AssetManager] Preloaded ${this.numberTexturePaths.length} number badge textures`);
     }
 
     async preloadPlayerWeaponAssets() {

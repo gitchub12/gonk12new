@@ -266,6 +266,9 @@ class TabControls {
             </div>
             <div class="tab-buttons">${weaponCatTabs}</div>`;
 
+        // Generate character sheet controls HTML
+        const charSheetHTML = window.characterSheetTabControls ? window.characterSheetTabControls.createTabContent() : '<p style="color: #f00;">CharacterSheetTabControls not loaded</p>';
+
         const leftPanelHTML = `
             <div class="editor-main-content">
                 <div id="tab-pane-combat" class="tab-pane">${combatHTML}</div>
@@ -278,6 +281,7 @@ class TabControls {
                 <div id="tab-pane-player-weapon" class="tab-pane">${playerWeaponHTML}</div>
                 <div id="tab-pane-label" class="tab-pane active">${labelHTML}</div>
                 <div id="tab-pane-ui" class="tab-pane">${uiPositionHTML}</div>
+                <div id="tab-pane-charsheet" class="tab-pane">${charSheetHTML}</div>
                 <div class="global-controls">
                     <hr><h4>Global NPC Controls</h4>
                     <button id="npcCycleAnim">Cycle Anim (<span id="npcAnimState">idle</span>)</button>
@@ -294,7 +298,10 @@ class TabControls {
                 <button class="editor-tab-btn" data-tab="tab-pane-player-weapon">Player Weapon</button>
                 <button class="editor-tab-btn" data-tab="tab-pane-label">Label</button>
                 <button class="editor-tab-btn active" data-tab="tab-pane-ui">UI</button>
+                <button class="editor-tab-btn" data-tab="tab-pane-charsheet">CharSht</button>
             </div>`;
+
+        this.gonkWeaponControls = new TabGonkWeaponControls(window.playerWeaponSystem);
 
         const globalControlsHTML = `
             <div class="editor-main-content">
@@ -383,7 +390,10 @@ class TabControls {
             if (valSpan) valSpan.textContent = e.target.value;
             this.updateRangeFromUI(e);
         }));
-        document.querySelectorAll('.player-weapon-slider').forEach(el => el.addEventListener('input', () => this.updatePlayerWeaponFromUI()));
+
+        // DELEGATE TO NEW CLASS
+        if (this.gonkWeaponControls) this.gonkWeaponControls.addEventListeners();
+
         document.querySelectorAll('.npc-weapon-slider').forEach(el => el.addEventListener('input', () => this.updateNpcWeaponsFromUI()));
         document.querySelectorAll('.npc-pose-slider').forEach(el => el.addEventListener('input', () => this.updateNpcPoseFromUI()));
         document.querySelectorAll('.ui-slider').forEach(el => el.addEventListener('input', () => this.updateUIFromUI()));
@@ -396,6 +406,11 @@ class TabControls {
                 if (pane) pane.classList.add('active');
             });
         });
+
+        // Setup character sheet tab controls event listeners
+        if (window.characterSheetTabControls) {
+            window.characterSheetTabControls.setupEventListeners();
+        }
     }
 
     initialHide() {
@@ -527,6 +542,111 @@ class TabControls {
     }
 
     // Other functions are omitted but assumed to be here from the original file
+    updateSpeedConstantsFromUI() {
+        const GGC = GAME_GLOBAL_CONSTANTS;
+
+        // Player & Movement
+        if (GGC.PLAYER) GGC.PLAYER.SPEED = parseFloat(document.getElementById('speed_player').value);
+        if (GGC.MOVEMENT) GGC.MOVEMENT.NPC_BASE_SPEED = parseFloat(document.getElementById('speed_npc_base').value);
+        if (GGC.PLAYER) GGC.PLAYER.JUMP_STRENGTH = parseFloat(document.getElementById('speed_jump').value);
+        if (GGC.ELEVATION) GGC.ELEVATION.GRAVITY = parseFloat(document.getElementById('speed_gravity').value); // Already divided in logic or tiny value
+        if (GGC.ELEVATION) GGC.ELEVATION.NPC_GRAVITY = parseFloat(document.getElementById('speed_npc_gravity').value);
+        if (GGC.PLAYER) GGC.PLAYER.CLIMB_HEIGHT = parseFloat(document.getElementById('speed_climb_height').value);
+
+        // Projectiles
+        if (GGC.WEAPONS) {
+            GGC.WEAPONS.PAMPHLET_SPEED = parseFloat(document.getElementById('speed_pamphlet').value);
+            GGC.WEAPONS.BLASTER_BOLT_SPEED = parseFloat(document.getElementById('speed_blaster').value);
+            GGC.WEAPONS.BLASTER_BOLT_RADIUS = parseFloat(document.getElementById('speed_blaster_radius').value);
+            GGC.WEAPONS.BLASTER_BOLT_OPACITY = parseFloat(document.getElementById('speed_blaster_opacity').value);
+        }
+
+        // Combat
+        if (GGC.COMBAT) GGC.COMBAT.NPC_ATTACK_COOLDOWN = parseFloat(document.getElementById('speed_npc_cooldown').value);
+
+        // Update display values
+        const ids = [
+            'speed_player', 'speed_npc_base', 'speed_jump', 'speed_gravity',
+            'speed_npc_gravity', 'speed_climb_height', 'speed_pamphlet',
+            'speed_blaster', 'speed_blaster_radius', 'speed_blaster_opacity',
+            'speed_npc_cooldown'
+        ];
+
+        ids.forEach(id => {
+            const valSpan = document.getElementById(`${id}_val`);
+            const input = document.getElementById(id);
+            if (valSpan && input) {
+                if (id === 'speed_gravity') valSpan.textContent = (parseFloat(input.value) * 1000).toFixed(3);
+                else valSpan.textContent = parseFloat(input.value).toFixed(4);
+            }
+        });
+    }
+
+    updateNpcWeaponsFromUI() {
+        const posX = parseFloat(document.getElementById('npc_weapon_posX').value);
+        const posY = parseFloat(document.getElementById('npc_weapon_posY').value);
+        const posZ = parseFloat(document.getElementById('npc_weapon_posZ').value);
+        const rotX = parseFloat(document.getElementById('npc_weapon_rotX').value);
+        const rotY = parseFloat(document.getElementById('npc_weapon_rotY').value);
+        const rotZ = parseFloat(document.getElementById('npc_weapon_rotZ').value);
+        const scale = parseFloat(document.getElementById('npc_weapon_scale').value);
+
+        // Update display values
+        document.getElementById('npc_weapon_posX_val').textContent = posX.toFixed(3);
+        document.getElementById('npc_weapon_posY_val').textContent = posY.toFixed(3);
+        document.getElementById('npc_weapon_posZ_val').textContent = posZ.toFixed(3);
+        document.getElementById('npc_weapon_rotX_val').textContent = rotX.toFixed(3);
+        document.getElementById('npc_weapon_rotY_val').textContent = rotY.toFixed(3);
+        document.getElementById('npc_weapon_rotZ_val').textContent = rotZ.toFixed(3);
+        document.getElementById('npc_weapon_scale_val').textContent = scale.toFixed(3);
+
+        const GGC = GAME_GLOBAL_CONSTANTS;
+        if (GGC.WEAPON_OFFSETS) {
+            GGC.WEAPON_OFFSETS.NPC_RIFLE.position.set(posX, posY, posZ);
+            GGC.WEAPON_OFFSETS.NPC_RIFLE.rotation.set(rotX, rotY, rotZ);
+            GGC.WEAPON_OFFSETS.NPC_RIFLE.scale.set(scale, scale, scale);
+        }
+
+        // Live update active NPCs
+        window.game.entities.npcs.forEach(npc => {
+            if (npc.weaponMesh) {
+                npc.weaponMesh.position.set(posX, posY, posZ);
+                npc.weaponMesh.rotation.set(rotX, rotY, rotZ);
+                npc.weaponMesh.scale.set(scale, scale, scale);
+            }
+        });
+    }
+
+    updateEffectsFromUI() {
+        const GGC = GAME_GLOBAL_CONSTANTS;
+        if (GGC.LIGHTING) {
+            GGC.LIGHTING.AMBIENT_INTENSITY = parseFloat(document.getElementById('fx_ambient_intensity').value);
+            GGC.LIGHTING.LIGHT_FADE_SPEED = parseFloat(document.getElementById('fx_light_fade').value);
+        }
+        if (GGC.WEAPONS) {
+            GGC.WEAPONS.BLASTER_GLOW_SIZE = parseFloat(document.getElementById('fx_glow_size').value);
+            GGC.WEAPONS.BLASTER_BOLT_OPACITY = parseFloat(document.getElementById('fx_glow_opacity').value);
+        }
+
+        if (window.game.ambientLight) {
+            window.game.ambientLight.intensity = GGC.LIGHTING.AMBIENT_INTENSITY;
+        }
+    }
+
+    updateGlowSpriteFromUI() {
+        // This is largely handled by updateEffectsFromUI updating the constants
+        // but if we need to force update existing sprites:
+        /*
+        window.game.entities.projectiles.forEach(p => {
+            if (p.glowSprite) {
+                const scale = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_GLOW_SIZE;
+                p.glowSprite.scale.set(scale, scale, scale);
+                p.glowSprite.material.opacity = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_BOLT_OPACITY;
+            }
+        });
+        */
+    }
+
     snapshotVisuals() { }
     snapshotUI() {
         console.log('=== UI POSITIONING SNAPSHOT ===');

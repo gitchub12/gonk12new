@@ -18,7 +18,8 @@ class BlasterBolt {
         this.lifetime = config.lifetime || 120; // frames
 
         const radius = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_BOLT_RADIUS * (this.ownerType === 'player' ? 0.5 : 1.0);
-        const geo = new THREE.CylinderGeometry(radius, radius, 0.5, 8);
+        // Reduced length from 0.5 to 0.2 based on user feedback (bolts looked "2-3m long")
+        const geo = new THREE.CylinderGeometry(radius, radius, 0.2, 8);
         const mat = new THREE.MeshStandardMaterial({
             color: 0xff0000,
             emissive: 0xff0000,
@@ -686,13 +687,13 @@ class PlayerWeaponSystem {
         }
 
         // Add Relby pistol to pistol slot (index 1)
-        const relby = this.weapons.find(w => w.config.key.includes('gpistol_relby'));
+        const relby = this.weapons.find(w => w.config.key.includes('gpistol_slugthrower'));
         if (relby) {
             this.slots[1].push(relby);
         }
 
         // Add EE-3 Boba rifle to rifle slot (index 2)
-        const ee3Boba = this.weapons.find(w => w.config.key.includes('grifle_ee3_boba'));
+        const ee3Boba = this.weapons.find(w => w.config.key.includes('grifle_slugthrower_adventurer'));
         if (ee3Boba) {
             this.slots[2].push(ee3Boba);
         }
@@ -862,6 +863,10 @@ class PlayerWeaponSystem {
     // performMeleeHitDetection, handlePrimaryAttack, handleSecondaryAttack, handleForcePush remain the same...
     performMeleeHitDetection() {
         if (!this.activeWeapon || !(this.activeWeapon instanceof MeleeWeapon) || this.activeWeapon.state !== 'attacking') return;
+
+        // CRITICAL FIX: Ensure RangedWeapons NEVER trigger this melee logic
+        if (this.activeWeapon instanceof RangedWeapon) return;
+
         this.camera.updateWorldMatrix(true, true);
         let attackConfig = { ...this.activeWeapon.config };
         if (this.activeWeapon.config.category === 'melee' && game.state.playerStats.melee_damage_bonus) {

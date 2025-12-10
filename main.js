@@ -82,7 +82,7 @@ class InputHandler {
             e.preventDefault();
             // Check for character sheet
             const wrapper = document.getElementById('character-page-wrapper');
-            if (wrapper && wrapper.style.display === 'flex') {
+            if (wrapper && wrapper.style.display === 'grid') {
                 game.toggleCharacterSheet();
                 return;
             }
@@ -1052,14 +1052,15 @@ class Game {
     }
 
     toggleCharacterSheet() {
-        // Don't allow opening C menu if any E interaction menu is open
-        if (this.isAnyInteractionMenuOpen()) {
+        const wrapper = document.getElementById('character-page-wrapper');
+        const isVisible = wrapper.style.display === 'grid';
+
+        // Don't allow OPENING C menu if any E interaction menu is open (but always allow closing)
+        if (!isVisible && this.isAnyInteractionMenuOpen()) {
             console.log('Cannot open character sheet while interaction menu is open');
             return;
         }
 
-        const wrapper = document.getElementById('character-page-wrapper');
-        const isVisible = wrapper.style.display === 'grid';
         const closeBtn = document.getElementById('upgrade-close-btn');
         const actionButtons = document.getElementById('upgrade-action-buttons');
 
@@ -1292,6 +1293,11 @@ class Game {
 
         this.updateHUD();
         if (!this.state.isPaused) {
+            // CRITICAL: Update Physics (moves projectiles, handles collisions)
+            if (window.physics) {
+                window.physics.update(this.deltaTime, window.inputHandler, this.camera);
+            }
+
             // Update Conversation Logic (Live timers and choices)
             if (window.conversationController) {
                 window.conversationController.update(deltaTime);

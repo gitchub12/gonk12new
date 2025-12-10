@@ -347,32 +347,71 @@ class CharacterUpgrades {
         // Combine ALL: class skills + run modules + acquired
         const allModules = [...classStartingModules, ...runModules, ...acquiredModules];
 
-        // Remove duplicates
-        const uniqueModules = [...new Set(allModules)];
+        // Parse module names and accumulate levels
+        // Format: "Jump 3" → { baseName: "Jump", level: 3 }
+        // Or: "Intimidate" → { baseName: "Intimidate", level: 1 }
+        const moduleLevels = {}; // { baseName: totalLevel }
+
+        allModules.forEach(moduleId => {
+            if (!moduleId || moduleId.includes('extra_memory_core')) return;
+
+            // Parse module name to extract base name and level
+            const match = moduleId.match(/^(.+?)\s+(\d+)$/);
+            const baseName = match ? match[1] : moduleId;
+            const level = match ? parseInt(match[2]) : 1;
+
+            // Accumulate levels
+            if (!moduleLevels[baseName]) {
+                moduleLevels[baseName] = 0;
+            }
+            moduleLevels[baseName] += level;
+        });
+
+        // Convert back to array of { name, level } for rendering
+        const uniqueModules = Object.keys(moduleLevels).map(baseName => ({
+            baseName,
+            level: moduleLevels[baseName]
+        }));
 
         // Show first 24 modules (6×4), rest in overflow
-        const visibleModules = uniqueModules.filter(m => m && !m.includes('extra_memory_core')).slice(0, 24);
-        const overflowModules = uniqueModules.filter(m => m && !m.includes('extra_memory_core')).slice(24);
+        const visibleModules = uniqueModules.slice(0, 24);
+        const overflowModules = uniqueModules.slice(24);
 
         // Update grid layout (managed by CSS in index.html, but ensure inline styles on slots match)
         moduleGrid.style.gridTemplateColumns = 'repeat(6, 130px)';
         moduleGrid.style.gridTemplateRows = 'repeat(4, 145px)';
 
+        // Get badge scale and position from character sheet tab controls
+        const badgeScale = window.characterSheetTabControls?.moduleBadgeScale || 0.25;
+        const badgePos = window.characterSheetTabControls?.moduleBadgePosition || { x: 0, y: 0 };
+
         // Generate 24 grid slots (130px × 145px each: 130px image + 15px name label)
         let gridHTML = '';
         for (let i = 0; i < 24; i++) {
-            const moduleId = visibleModules[i];
-            if (moduleId) {
-                // Get module data from moduleManager
-                const moduleData = window.moduleManager?.modules?.[moduleId];
-                const moduleName = moduleData?.name || moduleId;
+            const moduleEntry = visibleModules[i];
+            if (moduleEntry) {
+                const { baseName, level } = moduleEntry;
+
+                // Get module data from moduleManager (try base name or exact match)
+                const moduleData = window.moduleManager?.modules?.[baseName];
+                const moduleName = moduleData?.name || baseName;
 
                 // Module exists - show with IMAGE (130x130) and name area (bottom 15px)
+                let badgeHTML = '';
+                if (level > 1 && level <= 9) {
+                    // Add number badge with configurable position
+                    const badgeSize = 130 * badgeScale; // Scale relative to module icon
+                    const badgeRight = -badgePos.x; // Convert X offset to right position (negative = move left)
+                    const badgeTop = badgePos.y;
+                    badgeHTML = `<img src="/data/pngs/HUD/numbers/n${level}.png" style="position: absolute; top: ${badgeTop}px; right: ${badgeRight}px; width: ${badgeSize}px; height: ${badgeSize}px; object-fit: contain; pointer-events: none; z-index: 10;" />`;
+                }
+
                 gridHTML += `
-                    <div class="module-slot" data-module-id="${moduleId}" style="width: 130px; height: 145px; border: 2px solid #0ff; background: rgba(0,255,255,0.05); display: flex; flex-direction: column; cursor: pointer; box-sizing: border-box; position: relative;">
-                        <div style="width: 100%; height: 130px; background: #111; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                            <img src="/data/pngs/MODULES/${moduleId}.png" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
-                            <div style="color: #f00; font-size: 10px; font-weight: bold; text-align: center; padding: 5px; display: none;">MISSING<br>${moduleId}</div>
+                    <div class="module-slot" data-module-id="${baseName}" style="width: 130px; height: 145px; border: 2px solid #0ff; background: rgba(0,255,255,0.05); display: flex; flex-direction: column; cursor: pointer; box-sizing: border-box; position: relative;">
+                        <div style="width: 100%; height: 130px; background: #111; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+                            <img src="/data/pngs/MODULES/${baseName}.png" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                            <div style="color: #f00; font-size: 10px; font-weight: bold; text-align: center; padding: 5px; display: none;">MISSING<br>${baseName}</div>
+                            ${badgeHTML}
                         </div>
                         <div style="width: 100%; height: 15px; background: rgba(0,0,0,0.8); color: #fff; font-size: 10px; text-align: center; line-height: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 2px; box-sizing: border-box;">${moduleName}</div>
                     </div>
