@@ -1,0 +1,25 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "DEX",
+        "silver": "CON",
+        "bronze": "STR"
+    },
+    "health_bonus_per_level": 8,
+    "default_weapon": "rifle_e11.png",
+    "accuracy_modifier": 0.7,
+    "force_sensitivity": false,
+    "technical_understanding": 30,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.6,
+    "speed": 0.028,
+    "soundSet": "imperials",
+    "lie_attack": 30,
+    "lie_defense": 30,
+    "charm_attack": 30,
+    "charm_defense": 30,
+    "armor": {
+        "base": 2
+    },
+    "resistances": {}
+}

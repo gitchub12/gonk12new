@@ -8,9 +8,15 @@
       "icon": "data/pngs/MODULES/extra_memory_core_1.png",
       "tier": 1,
       "effects": {
-        "immediate": { "memory_cores": 1 },
-        "level_20": { "memory_cores": 1 },
-        "level_40": { "memory_cores": 1 }
+        "immediate": {
+          "memory_cores": 1
+        },
+        "level_20": {
+          "memory_cores": 1
+        },
+        "level_40": {
+          "memory_cores": 1
+        }
       }
     },
     {
@@ -20,10 +26,18 @@
       "icon": "data/pngs/MODULES/extra_memory_core_2.png",
       "tier": 2,
       "effects": {
-        "immediate": { "memory_cores": 1 },
-        "level_13": { "memory_cores": 1 },
-        "level_26": { "memory_cores": 1 },
-        "level_40": { "memory_cores": 1 }
+        "immediate": {
+          "memory_cores": 1
+        },
+        "level_13": {
+          "memory_cores": 1
+        },
+        "level_26": {
+          "memory_cores": 1
+        },
+        "level_40": {
+          "memory_cores": 1
+        }
       }
     },
     {
@@ -33,11 +47,21 @@
       "icon": "data/pngs/MODULES/extra_memory_core_3.png",
       "tier": 3,
       "effects": {
-        "immediate": { "memory_cores": 1 },
-        "level_10": { "memory_cores": 1 },
-        "level_20": { "memory_cores": 1 },
-        "level_30": { "memory_cores": 1 },
-        "level_40": { "memory_cores": 1 }
+        "immediate": {
+          "memory_cores": 1
+        },
+        "level_10": {
+          "memory_cores": 1
+        },
+        "level_20": {
+          "memory_cores": 1
+        },
+        "level_30": {
+          "memory_cores": 1
+        },
+        "level_40": {
+          "memory_cores": 1
+        }
       }
     },
     {
@@ -47,11 +71,21 @@
       "icon": "data/pngs/MODULES/extra_memory_core_5.png",
       "tier": 5,
       "effects": {
-        "immediate": { "memory_cores": 2 },
-        "level_10": { "memory_cores": 1 },
-        "level_20": { "memory_cores": 1 },
-        "level_30": { "memory_cores": 1 },
-        "level_40": { "memory_cores": 1 }
+        "immediate": {
+          "memory_cores": 2
+        },
+        "level_10": {
+          "memory_cores": 1
+        },
+        "level_20": {
+          "memory_cores": 1
+        },
+        "level_30": {
+          "memory_cores": 1
+        },
+        "level_40": {
+          "memory_cores": 1
+        }
       }
     },
     {
@@ -512,6 +546,60 @@
       "icon": "data/pngs/MODULES/copy_machine.png",
       "effects": {
         "droid_duplicate_chance": 0.25
+      }
+    },
+    {
+      "id": "Intimidate",
+      "name": "Intimidate",
+      "description": "Skill: Coerce others through fear.",
+      "icon": "data/pngs/MODULES/intimidation.png",
+      "effects": {
+        "intimidate_bonus": 1
+      }
+    },
+    {
+      "id": "Repair",
+      "name": "Repair",
+      "description": "Skill: Fix mechanical objects and droids.",
+      "icon": "data/pngs/MODULES/repair.png",
+      "effects": {
+        "repair_bonus": 1
+      }
+    },
+    {
+      "id": "Running",
+      "name": "Running",
+      "description": "Skill: Move faster on foot.",
+      "icon": "data/pngs/MODULES/movement_speed.png",
+      "effects": {
+        "movement_speed_bonus": 0.05
+      }
+    },
+    {
+      "id": "Climb",
+      "name": "Climb",
+      "description": "Skill: Scale vertical surfaces.",
+      "icon": "data/pngs/MODULES/climb.png",
+      "effects": {
+        "climb_speed_bonus": 0.1
+      }
+    },
+    {
+      "id": "Scavenge",
+      "name": "Scavenge",
+      "description": "Skill: Find useful items in junk.",
+      "icon": "data/pngs/MODULES/scavenge.png",
+      "effects": {
+        "scavenge_chance_bonus": 0.1
+      }
+    },
+    {
+      "id": "Pamphlet Toss",
+      "name": "Pamphlet Toss",
+      "description": "Ability: Throw propaganda pamphlets.",
+      "icon": "data/pngs/MODULES/pamphlet.png",
+      "effects": {
+        "pamphlet_range_multiplier": 1.0
       }
     }
   ]

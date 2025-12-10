@@ -205,7 +205,7 @@ Each ship (level) comes with an objective. Upon completion, the player receives 
 - ⏳ **TODO: Add Overload to HK, Haggle to Protocol/Techie, Running to all classes**
 - ⏳ **TODO: Implement bonus class skill selection system** (allow picking 1-2 non-class skills as class skills)
 - ⏳ **TODO: Mark certain skills as CLASS ONLY** (cannot be selected as bonus skills)
-- ⏳ **TODO: Level cap extension system** (powerup to reach level 30, only affects stats + HP)
+- ⏳ **TODO: Level cap extension system** (powerup to reach level 30 or 40, only affects stats + HP)
 
 ### 📋 FUTURE: Additional Class Powers (Fixed Bonuses)
 
@@ -335,7 +335,7 @@ Designed complete D20 SRD-based class progression for Gonk.
 - **`data/ClassesAndSkills/gonk_class_*.json`** - Individual class JSON files (Protocol, HK, Tech, Adept)
 
 **Quick Summary**:
-- **Protocol** (CHA/WIS): Recruiter, 2 skills/lvl, early 2nd ally at L3, max 12 allies at L40
+- **Protocol** (CHA/WIS): Recruiter, 2 skills/lvl, early 2nd ally at L3, max 12 allies at L20
 - **HK** (DEX/STR): Solo killer, 1 skill/lvl, progressive damage scaling, max 2 allies
 - **Tech** (INT/DEX): Hacker, 3 skills/lvl, droid control (1→unlimited), stackable weapon mods
 - **Adept** (WIS/CHA): Force user, 2 skills/lvl + 5 FP/lvl, Light/Dark choice at L15
@@ -403,7 +403,7 @@ Complete skill list per class from user-provided image:
 ### ✅ COMPLETED: Slicing System Overhaul
 
 **New Slicing Difficulty Calculation:**
-The difficulty of a slicing check now scales dynamically with the Player to ensure consistent challenge throughout the game (Level 1 to 40).
+The difficulty of a slicing check now scales dynamically with the Player to ensure consistent challenge throughout the game (Level 1 to 20).
 - **Formula**: `DC = 20 + NPC Level`
 - **NPC Level Determination**: Based on Player Level modified by Spawner Threat (1-5).
   - **Threat 1**: 50% Player Level (Round Down, Min 1).
@@ -411,7 +411,7 @@ The difficulty of a slicing check now scales dynamically with the Player to ensu
   - **Threat 3**: 100% Player Level.
   - **Threat 4**: Min(`Player + 5`, `120% Player Level`).
   - **Threat 5**: Min(`Player + 5`, `140% Player Level`).
-- **Cap Rule**: Weakest foes scale to at least 50% of player (e.g., Level 20 vs Level 40 Player). Strongest foes cap at Player Level + 5 (e.g., Level 45 vs Level 40 Player).
+- **Cap Rule**: Weakest foes scale to at least 50% of player (e.g., Level 10 vs Level 20 Player). Strongest foes cap at Player Level + 5 (e.g., Level 25 vs Level 20 Player).
 
 **Skill System Updates:**
 - ❌ **Athletics Removed**: The umbrella "Athletics" skill has been removed from all game files.
@@ -423,8 +423,8 @@ The difficulty of a slicing check now scales dynamically with the Player to ensu
 
 ### ℹ️ Level Cap Policy
 - **Level Cap Policy**:
-- **Player Max Level**: **40**. Players cannot exceed level 40.
-- **NPC Max Level**: **Uncapped**. NPCs can exceed level 40 (e.g., Threat 5 spawners against a max-level player will spawn Level 45 enemies).
+- **Player Max Level**: **20**. Players cannot exceed level 20.
+- **NPC Max Level**: **Uncapped**. NPCs can exceed level 20 (e.g., Threat 5 spawners against a max-level player will spawn Level 25 enemies).
 
 ### 📝 PENDING: Skill System Design Updates (To Be Implemented)
 

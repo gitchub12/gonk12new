@@ -174,7 +174,6 @@ class EditorAssetManager {
                 this.skyboxStaticFiles = serverItems.filter(item => !item.endsWith('/')).map(f => `${skyboxPath}${f}`);
                 // Store folder names (without trailing slash) for animated/random folders
                 this.skyboxAnimationFolders = serverItems.filter(item => item.endsWith('/')).map(item => item.slice(0, -1));
-                continue;
             }
 
             // Layers that have style/theme subdirectories need recursive scanning
@@ -948,7 +947,7 @@ class EditorUI {
                     <select id="npc-interaction">
                         <option value="">None</option>
                         <option value="the_guide" ${interactionScreen === 'the_guide' ? 'selected' : ''}>The Guide</option>
-                        <option value="droidsmith" ${interactionScreen === 'droidsmith' ? 'selected' : ''}>Droidsmith</option>
+                        <option value="droidsmith" ${interactionScreen === 'droidsmith' ? 'selected' : ''}>Item Trader</option>
                         <option value="weapon_vendor" ${interactionScreen === 'weapon_vendor' ? 'selected' : ''}>Weapon Vendor</option>
                         <option value="armorer" ${interactionScreen === 'armorer' ? 'selected' : ''}>Armorer</option>
                     </select>
@@ -1086,7 +1085,7 @@ class EditorUI {
                     <label for="asset-interaction">Interaction Screen:</label>
                     <select id="asset-interaction">
                         <option value="">None</option>
-                        <option value="droidsmith" ${interactionScreen === 'droidsmith' ? 'selected' : ''}>Droidsmith</option>
+                        <option value="droidsmith" ${interactionScreen === 'droidsmith' ? 'selected' : ''}>Item Trader</option>
                         <option value="weapon_vendor" ${interactionScreen === 'weapon_vendor' ? 'selected' : ''}>Weapon Vendor</option>
                         <option value="armorer" ${interactionScreen === 'armorer' ? 'selected' : ''}>Armorer</option>
                     </select>

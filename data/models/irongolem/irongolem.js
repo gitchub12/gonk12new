@@ -94,7 +94,7 @@ window.IronGolemModel = {
     // For a box with pixel size [width, height, depth] at uvOffset [u, v]:
     // Layout on texture (horizontally): left | front | right | back
     // Layout on texture (vertically): top/bottom above front/right
-    getUVMap: function(partName, isOverlay = false) {
+    getUVMap: function (partName, isOverlay = false) {
         // Iron Golem has no overlay layer
         if (isOverlay) return null;
 
@@ -108,17 +108,17 @@ window.IronGolemModel = {
         // Standard Minecraft box UV layout formula
         // Maps pixel coordinates [x, y, w, h] for each face
         return {
-            left:   [u, v + depth, depth, height],                         // -X face
-            right:  [u + depth + width, v + depth, depth, height],         // +X face
-            top:    [u + depth, v, width, depth],                          // +Y face
+            left: [u, v + depth, depth, height],                         // -X face
+            right: [u + depth + width, v + depth, depth, height],         // +X face
+            top: [u + depth, v, width, depth],                          // +Y face
             bottom: [u + depth + width, v, width, depth],                  // -Y face
-            front:  [u + depth, v + depth, width, height],                 // +Z face
-            back:   [u + depth + width + depth, v + depth, width, height]  // -Z face
+            front: [u + depth, v + depth, width, height],                 // +Z face
+            back: [u + depth + width + depth, v + depth, width, height]  // -Z face
         };
     },
 
     // Calculate ground offset (how high model stands)
-    getGroundOffset: function(scaleY, modelScale, universalScale) {
+    getGroundOffset: function (scaleY, modelScale, universalScale) {
         // CALCULATION: Trace from character.group origin to feet bottom
         // Body partGroup at Y=25, waist partGroup at 25-5.5=19.5
         // Leg partGroup at 19.5-4.5=15, leg mesh offset by -8, so leg center at 15-8=7
@@ -128,7 +128,7 @@ window.IronGolemModel = {
     },
 
     // Custom animation for iron golem (slower, heavier movement)
-    applyAnimation: function(character, animState, time, options) {
+    applyAnimation: function (character, animState, time, options) {
         const parts = character.parts;
 
         switch (animState) {
@@ -160,4 +160,4 @@ window.IronGolemModel = {
     }
 };
 
-console.log('Iron Golem model definition loaded');
+// console.log('Iron Golem model definition loaded');

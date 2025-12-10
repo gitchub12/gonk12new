@@ -1,0 +1,24 @@
+﻿On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	deleted:    data/NPConlyweapons/LOCAL.ahk
+	deleted:    data/furniture/textures/items/LOCAL FILE SNAPSHOT.ahk
+	deleted:    data/gonkonlyweapons/LOCAL.ahk
+	deleted:    data/pngs/LOCAL FILE SNAPSHOT.ahk
+	deleted:    data/pngs/factions/LOCAL.ahk
+	deleted:    data/pngs/skybox/LOCAL.ahk
+	deleted:    data/skins/LOCAL FILE SNAPSHOT.ahk
+	deleted:    data/skins/clones/LOCAL FILE SNAPSHOT.ahk
+	deleted:    data/skins/humans/LOCAL FILE SNAPSHOT.ahk
+	deleted:    data/speech/conversation/LOCAL FILE SNAPSHOT.ahk
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	gitignore_log.txt
+	gitignore_log_utf8.txt
+	status_ahk.txt
+	status_log.txt
+	status_log_utf8.txt
+

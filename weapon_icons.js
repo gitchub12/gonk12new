@@ -21,15 +21,15 @@ class WeaponIconSystem {
                 }
             });
         }
-        
+
         this.activeWeaponMeshes.forEach(weaponMesh => {
             if (!persistentAllyWeapons.includes(weaponMesh)) {
-                 // The weapon mesh is removed from the scene when its parent NPC group is removed.
-                 // We just need to dispose of its geometry and materials here.
-                 this._disposeOfMesh(weaponMesh);
+                // The weapon mesh is removed from the scene when its parent NPC group is removed.
+                // We just need to dispose of its geometry and materials here.
+                this._disposeOfMesh(weaponMesh);
             }
         });
-        
+
         this.activeWeaponMeshes = persistentAllyWeapons; // FIX: Corrected typo from persistentAllyWehes
     }
 
@@ -66,9 +66,9 @@ class WeaponIconSystem {
 
         const promises = [];
         for (const path of weaponPaths) {
-            if(!path || path === "") continue;
+            if (!path || path === "") continue;
             const name = path.split('/').pop().replace('.png', ''); // e.g., 'pistol_dh17_rebel'
-            
+
             // FIX: If the path is just a filename, construct the full path.
             // This handles cases where level data might store only the weapon name.
             let fullPath = path;
@@ -83,7 +83,7 @@ class WeaponIconSystem {
         }
         await Promise.all(promises);
     }
-    
+
     async createWeaponFromPNG(weaponName, pngPath) {
         if (this.loadedWeapons.has(weaponName)) {
             return this.loadedWeapons.get(weaponName);
@@ -111,10 +111,10 @@ class WeaponIconSystem {
             height = 0.5;
             width = height * aspect;
         }
-        
-        const thickness = 0.001; 
-        const layers = 3; 
-        
+
+        const thickness = 0.001;
+        const layers = 3;
+
         let mat;
         if (texture) {
             mat = new THREE.MeshStandardMaterial({
@@ -136,7 +136,7 @@ class WeaponIconSystem {
                 side: THREE.DoubleSide
             });
         }
-        
+
         const geo = new THREE.PlaneGeometry(width, height);
 
         for (let i = 0; i < layers; i++) {
@@ -144,32 +144,32 @@ class WeaponIconSystem {
             layerMesh.position.z = (i - (layers - 1) / 2) * thickness;
             weaponGroup.add(layerMesh);
         }
-        
+
         this.loadedWeapons.set(weaponName, weaponGroup);
         return weaponGroup;
     }
-    
+
     getCategoryFromName(weaponName) {
         // Map prefixes to folder/inventory category keys. Player weapon names start with 'g'.
         let name = weaponName.toLowerCase();
-        
+
         // Handle names that start with 'g' (player weapons) by stripping the 'g' prefix
         let isPlayerWeapon = name.startsWith('g');
         if (isPlayerWeapon) {
             name = name.slice(1);
         }
-        
+
         const prefixToCategoryMap = {
-            'melee': 'melee', 
+            'melee': 'melee',
             'pistol': 'pistol',
             'rifle': 'rifle',
             'long': 'longarm',
             // Note: 'saberhilt' is player, 'saber' is often NPC
-            'saberhilt': 'saberhiltoverlayer', 
-            'saber': 'saber', 
+            'saberhilt': 'saberhiltoverlayer',
+            'saber': 'saber',
             'unique': 'unique'
         };
-        
+
         const nameParts = name.split('_');
         if (nameParts.length > 1) {
             const prefix = nameParts[0];
@@ -177,13 +177,13 @@ class WeaponIconSystem {
 
             // FIX: If it's an NPC weapon and the name starts with 'saber', assume the folder name is simply 'saber'
             if (!isPlayerWeapon && category === 'saber') {
-                 return 'saber';
+                return 'saber';
             }
-            
+
             if (category === 'long') {
                 return 'longarm';
             }
-            
+
             // Handle the zapper
             if (category === 'melee' && name.includes('zapper')) {
                 return 'melee';
@@ -241,14 +241,14 @@ class WeaponIconSystem {
             weaponMesh.rotation.set(0, Math.PI / 2, 0);
             weaponMesh.scale.setScalar(0.005); // Default scale if no pose data
         }
-        
+
         if (glowData) {
-            const lightOrigin = glowData.origin || {x: 0, y: 0, z: 0};
+            const lightOrigin = glowData.origin || { x: 0, y: 0, z: 0 };
             const light = new THREE.PointLight(glowData.color, glowData.intensity, glowData.distance, glowData.decay || 2);
             light.position.set(lightOrigin.x, lightOrigin.y, lightOrigin.z);
             weaponMesh.add(light);
-            weaponMesh.userData.light = light; 
-            
+            weaponMesh.userData.light = light;
+
             weaponMesh.children.forEach(child => {
                 if (child.isMesh) {
                     child.material.emissive.set(glowData.color);
@@ -299,7 +299,7 @@ class WeaponIconSystem {
         }
 
         if (npc.weaponMesh) this.removeWeapon(npc);
-        
+
         const weaponMesh = weaponTemplate.clone();
         weaponMesh.children.forEach(child => child.material = child.material.clone());
 
@@ -315,7 +315,7 @@ class WeaponIconSystem {
         }
 
         if (category === 'saberhiltoverlayer' || category === 'saber') {
-             glowData = { color: "#ff0000", intensity: 3.3, distance: 1.5, origin: { x: -0.1, y: -0.05, z: -0.15 }, decay: 2, ...(glowData || {}) };
+            glowData = { color: "#ff0000", intensity: 3.3, distance: 1.5, origin: { x: -0.1, y: -0.05, z: -0.15 }, decay: 2, ...(glowData || {}) };
             weaponMesh.children.forEach(child => {
                 if (child.isMesh) {
                     child.material.roughness = 1.0;
@@ -338,17 +338,17 @@ class WeaponIconSystem {
                 plane3.rotation.x = THREE.MathUtils.degToRad(-poseData.planes.pitch);
             }
         } else {
-            weaponMesh.position.set(0.1, -0.25, 0.2); 
+            weaponMesh.position.set(0.1, -0.25, 0.2);
             weaponMesh.rotation.set(0, -Math.PI / 2, 0);
         }
-        
+
         if (glowData) {
-            const lightOrigin = glowData.origin || {x: 0, y: 0, z: 0};
+            const lightOrigin = glowData.origin || { x: 0, y: 0, z: 0 };
             const light = new THREE.PointLight(glowData.color, glowData.intensity, glowData.distance, glowData.decay || 2);
             light.position.set(lightOrigin.x, lightOrigin.y, lightOrigin.z);
             weaponMesh.add(light);
-            weaponMesh.userData.light = light; 
-            
+            weaponMesh.userData.light = light;
+
             weaponMesh.children.forEach(child => {
                 if (child.isMesh) {
                     child.material.emissive.set(glowData.color);
@@ -360,29 +360,32 @@ class WeaponIconSystem {
         npc.weaponMesh = weaponMesh; // Assign directly to the NPC instance
         if (characterMesh.parts && characterMesh.parts.leftArm) {
             characterMesh.parts.leftArm.add(weaponMesh);
+        } else if (characterMesh.parts && characterMesh.parts.arms) {
+            // Support for Villager-style models with a unified 'arms' part
+            characterMesh.parts.arms.add(weaponMesh);
         } else {
-            console.error("Character does not have a leftArm to attach a weapon to.");
+            console.error(`character does not have a leftArm to attach a weapon to. (ID: ${npc.id || 'unknown'})`);
         }
-        
+
         this.activeWeaponMeshes.push(weaponMesh);
     }
 
     removeWeapon(npc) {
         if (npc.weaponMesh && npc.mesh.parts && npc.mesh.parts.leftArm) {
             npc.mesh.parts.leftArm.remove(npc.weaponMesh);
-            
+
             this.activeWeaponMeshes = this.activeWeaponMeshes.filter(mesh => mesh !== npc.weaponMesh);
 
             this._disposeOfMesh(npc.weaponMesh);
-            
+
             npc.weaponMesh = null; // Clear from the NPC instance
         }
     }
-    
+
     setGlobalGlowProperties(color, intensity, distance, origin) {
         const threeColor = new THREE.Color(color);
-        const intensityFactor = intensity; 
-        
+        const intensityFactor = intensity;
+
         this.activeWeaponMeshes.forEach(weaponMesh => {
             // This part is for NPC weapon glows, which still use lights for now.
             const light = weaponMesh.userData.light;
@@ -391,14 +394,14 @@ class WeaponIconSystem {
                 light.intensity = intensityFactor;
                 light.distance = distance;
             }
-            
+
             weaponMesh.children.forEach(child => {
                 if (child.isMesh) {
                     child.material.emissive.copy(threeColor);
                 }
             });
         });
-        
+
         game.entities.projectiles.forEach(projectile => {
             if (projectile instanceof BlasterBolt && projectile.mesh.material.isMeshStandardMaterial) {
                 projectile.mesh.material.color.copy(threeColor);

@@ -1,0 +1,27 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "CON",
+        "silver": "STR",
+        "bronze": "DEX"
+    },
+    "health_bonus_per_level": 16,
+    "default_weapon": "melee_axe_gamorrean.png",
+    "accuracy_modifier": 0.8,
+    "force_sensitivity": false,
+    "technical_understanding": 10,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.8,
+    "speed": 0.025,
+    "soundSet": null,
+    "lie_attack": 10,
+    "lie_defense": 50,
+    "charm_attack": 10,
+    "charm_defense": 50,
+    "armor": {
+        "base": 4
+    },
+    "resistances": {
+        "ballistic": 0.2
+    }
+}

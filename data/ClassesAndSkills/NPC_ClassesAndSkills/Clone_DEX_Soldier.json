@@ -1,0 +1,25 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "DEX",
+        "silver": "CON",
+        "bronze": "INT"
+    },
+    "health_bonus_per_level": 10,
+    "default_weapon": "rifle_dc15a.png",
+    "accuracy_modifier": 1.05,
+    "force_sensitivity": false,
+    "technical_understanding": 40,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.65,
+    "speed": 0.03,
+    "soundSet": "clones",
+    "lie_attack": 30,
+    "lie_defense": 30,
+    "charm_attack": 30,
+    "charm_defense": 30,
+    "armor": {
+        "base": 3
+    },
+    "resistances": {}
+}

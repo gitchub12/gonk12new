@@ -1,0 +1,25 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "CHA",
+        "silver": "DEX",
+        "bronze": "INT"
+    },
+    "health_bonus_per_level": 8,
+    "default_weapon": "pistol_x8_lando.png",
+    "accuracy_modifier": 0.9,
+    "force_sensitivity": false,
+    "technical_understanding": 40,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.4,
+    "speed": 0.03,
+    "soundSet": null,
+    "lie_attack": 60,
+    "lie_defense": 40,
+    "charm_attack": 60,
+    "charm_defense": 40,
+    "armor": {
+        "base": 0
+    },
+    "resistances": {}
+}

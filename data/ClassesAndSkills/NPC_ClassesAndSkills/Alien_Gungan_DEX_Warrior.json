@@ -1,0 +1,25 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "DEX",
+        "silver": "CON",
+        "bronze": "STR"
+    },
+    "health_bonus_per_level": 10,
+    "default_weapon": "unique_gungangrenade.png",
+    "accuracy_modifier": 0.9,
+    "force_sensitivity": false,
+    "technical_understanding": 30,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.6,
+    "speed": 0.03,
+    "soundSet": null,
+    "lie_attack": 40,
+    "lie_defense": 40,
+    "charm_attack": 40,
+    "charm_defense": 40,
+    "armor": {
+        "base": 2
+    },
+    "resistances": {}
+}

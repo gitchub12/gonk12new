@@ -10,14 +10,14 @@ const GAME_GLOBAL_CONSTANTS = {
     JUMP_STRENGTH: 0.0374
   },
   MOVEMENT: {
-    SPEED: 0.0462, 
-    SPRINT_MULTIPLIER: 3, 
+    SPEED: 0.0462,
+    SPRINT_MULTIPLIER: 3,
     FRICTION: 0.85,
     BOB_SPEED: 8,
     BOB_AMOUNT: 0.02
   },
   WEAPONS: {
-    PAMPHLET_SPEED: 0.246, 
+    PAMPHLET_SPEED: 0.246,
     BLASTER_BOLT_SPEED: 0.14,
     BLASTER_BOLT_OPACITY: 0.85,
     BLASTER_BOLT_RADIUS: 0.03,
@@ -28,7 +28,7 @@ const GAME_GLOBAL_CONSTANTS = {
     // ADDED: Player bolt origin offsets
     BOLT_ORIGIN_X: 0.154,
     BOLT_ORIGIN_Y: -0.13,
-    BOLT_ORIGIN_Z: 0.578,
+    BOLT_ORIGIN_Z: 0,  // Set to 0 to prevent shooting through walls in front of player
     DROPPED_WEAPON_SCALE_FACTOR: 0.7, // 30% reduction in size
     DEFAULT_DROPPED_OFFSETS: { // Default offsets for dropped weapons if not specified in weapon config
       planes: {
@@ -59,14 +59,26 @@ const GAME_GLOBAL_CONSTANTS = {
     SIZE: 1
   },
   ALLY_RING: {
-      OPACITY: 0.94,
-      DIAMETER_MULTIPLIER: 0.44,
-      BASE_HEIGHT: 0.033
+    OPACITY: 0.94,
+    DIAMETER_MULTIPLIER: 0.44,
+    BASE_HEIGHT: 0.033
   },
   DROPPED_WEAPON_RING: {
-      OPACITY: 0.7,
-      DIAMETER: 0.5
+    OPACITY: 0.7,
+    DIAMETER: 0.5
   },
+
+  UI: {
+    GAUGE_FRAMES: {
+      HEALTH: 50,
+      POWER: 117
+    },
+    GAUGE_PATHS: {
+      HEALTH: 'data/pngs/HUD/HealthSphereAnimation',
+      POWER: 'data/pngs/HUD/PowerSphereAnimation'
+    }
+  },
+
   FACTIONS: {
     PHYSICS_SPEED: 3,
     ALLIANCE_PULL: 0.13,
@@ -79,22 +91,22 @@ const GAME_GLOBAL_CONSTANTS = {
     ALLIANCE_PULL_MULTIPLIER: 1
   },
   FACTION_HUD: {
-      SCALE: 1.0,
-      OFFSET_X: 0,
-      OFFSET_Y: 0,
-      LINE_WIDTH: 2
+    SCALE: 1.0,
+    OFFSET_X: 0,
+    OFFSET_Y: 0,
+    LINE_WIDTH: 2
   }
 };
 
 const CHARACTER_CONFIG = {}; // This is now obsolete and loaded from JSON files. Kept as an empty object to prevent errors in any lingering references.
 
 GAME_GLOBAL_CONSTANTS.FACTION_COLORS = {
-    rebels: '#d94242',
-    aliens: '#008000',
-    clones: '#ff8c00',
-    imperials: '#444444',
-    droids: '#0066cc',
-    mandalorians: '#FFC72C',
-    sith: '#990000',
-    takers: '#C0C0C0'
+  rebels: '#d94242',
+  aliens: '#008000',
+  clones: '#ff8c00',
+  imperials: '#444444',
+  droids: '#0066cc',
+  mandalorians: '#FFC72C',
+  sith: '#990000',
+  takers: '#C0C0C0'
 };

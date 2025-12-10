@@ -22,6 +22,7 @@ class CharacterStatsManager {
             repair: 0,
             deception: 0,
             medicine: 0,
+            running: 0,
             athletics: 0,
             stealth: 0,
             perception: 0,
@@ -31,7 +32,7 @@ class CharacterStatsManager {
         };
 
         this.level = 1;
-        this.currentClass = null; // "Hunter Killer", "Slicer", "Protocol Droid", "Adept", "Medical", "Sith"
+        this.currentClass = 'Gonk'; // Default starting class - "Hunter Killer", "Slicer", "Protocol Droid", "Adept", "Medical", "Sith", "Gonk"
 
         this.hp = 60; // Starting HP (5×CON + level×hp_per_level, approximately)
         this.maxHp = 60;
@@ -379,9 +380,9 @@ class CharacterStatsManager {
                 // No changes for default chassis
                 break;
         }
-        
-        if(window.game) window.game.updateCharacterSheet();
-        if(window.characterUpgrades) window.characterUpgrades.updateD20Display();
+
+        if (window.game) window.game.updateCharacterSheet();
+        if (window.characterUpgrades) window.characterUpgrades.updateD20Display();
     }
 
     applyArmor(armorName) {
@@ -408,8 +409,8 @@ class CharacterStatsManager {
                 break;
         }
         this.hp = Math.min(this.hp, this.maxHp);
-        if(window.game) window.game.updateCharacterSheet();
-        if(window.characterUpgrades) window.characterUpgrades.updateD20Display();
+        if (window.game) window.game.updateCharacterSheet();
+        if (window.characterUpgrades) window.characterUpgrades.updateD20Display();
     }
 
     // Save state

@@ -1,8 +1,16 @@
 // BROWSERFIREFOXHIDE main.js
-// update: Added Q/E input handling for Conversation Choices in InputHandler.
-// update: Added conversationController.update() to Game.update loop for live timeouts/distance checks.
+// update: Initialized 'Gonk' class on startup and injected D20 scripts
 
-// === INPUT HANDLER ===
+// Inject D20 Scripts dynamically if not in index.html (Safeguard)
+const scripts = ['d20_attributes.js'];
+scripts.forEach(src => {
+    if (!document.querySelector(`script[src="${src}"]`)) {
+        const s = document.createElement('script');
+        s.src = src;
+        document.body.appendChild(s);
+    }
+});
+
 class InputHandler {
     constructor() {
         this.keys = {};
@@ -72,6 +80,12 @@ class InputHandler {
 
         if (e.code === 'Escape') {
             e.preventDefault();
+            // Check for character sheet
+            const wrapper = document.getElementById('character-page-wrapper');
+            if (wrapper && wrapper.style.display === 'flex') {
+                game.toggleCharacterSheet();
+                return;
+            }
             window.tabControls.toggle();
             return;
         }
@@ -84,6 +98,7 @@ class InputHandler {
 
         if (e.code === 'KeyC') {
             e.preventDefault();
+            // if (window.d20Sheet) window.d20Sheet.toggle();
             game.toggleCharacterSheet();
         }
 
@@ -95,6 +110,13 @@ class InputHandler {
         }
 
         if (e.code === 'Digit0') {
+            e.preventDefault();
+            if (window.conversationUIManager) {
+                window.conversationUIManager.toggleFactionDisplay();
+            }
+        }
+
+        if (e.code === 'KeyF') {
             e.preventDefault();
             if (window.conversationUIManager) {
                 window.conversationUIManager.toggleFactionDisplay();
@@ -434,11 +456,59 @@ class Game {
 
     init() {
         this.state.playerStats = window.assetManager.playerStats;
-        this.state.health = this.state.playerStats.max_health; // Initialize current health to max health
-        this.state.energy = this.state.playerStats.base_energy; // Initialize current energy
-        this.state.maxEnergy = this.state.playerStats.max_energy; // Initialize max energy
-        this.state.ammo = this.state.playerStats.pamphlet_start_ammo; // Initialize pamphlet ammo
-        this.state.maxAmmo = this.state.playerStats.pamphlet_max_ammo; // Initialize max pamphlet ammo
+        this.state.health = this.state.playerStats.max_health;
+        this.state.energy = this.state.playerStats.base_energy;
+        this.state.maxEnergy = this.state.playerStats.max_energy;
+        this.state.ammo = this.state.playerStats.pamphlet_start_ammo;
+        this.state.maxAmmo = this.state.playerStats.pamphlet_max_ammo;
+
+        // --- NEW GONK CLASS INIT ---
+        this.playerClass = "Gonk";
+        this.hasSelectedClass = true; // Bypass selection screen using this flag
+        if (window.characterStats) {
+            // Force load our specific Gonk JSON immediately (no timeout) to win race condition against UI
+            fetch('data/ClassesAndSkills/gonk_classes.json')
+                .then(r => r.json())
+                .then(data => {
+                    const gonk = data.classes.find(c => c.className === 'Gonk');
+                    if (gonk && window.characterStats) {
+                        // Set class and DATA first so applyLevelBonuses works
+                        window.characterStats.currentClass = 'Gonk';
+                        window.characterStats.currentClassData = gonk;
+
+                        // Use the manager to apply stats/skills from the progression table
+                        if (window.characterStats.applyLevelBonuses) {
+                            window.characterStats.applyLevelBonuses(1);
+                            // Heal to full just in case
+                            window.characterStats.hp = window.characterStats.maxHp;
+                        } else {
+                            // Fallback
+                            window.characterStats.stats = { ...gonk.baseStats };
+                        }
+
+                        window.characterStats.features = gonk.features;
+                        window.characterStats.startingEquipment = gonk.startingEquipment;
+                        console.log("Gonk Class Initialized from D20 JSON");
+
+                        // Grant starting modules
+                        // Grant starting modules - HANDLED BY CHARACTER STATS MANAGER NOW
+                        // if (gonk.starting_modules && window.moduleManager) {
+                        //     gonk.starting_modules.forEach(mod => {
+                        //         window.moduleManager.grantModule(mod);
+                        //     });
+                        // }
+
+                        if (window.playerWeaponSystem && window.playerWeaponSystem._addStartingGear) {
+                            window.playerWeaponSystem._addStartingGear();
+                        }
+
+                        // Refresh UI to clear "Visit Guide" message if it was rendered
+                        if (window.characterUpgrades && window.characterUpgrades.updateD20Display) {
+                            window.characterUpgrades.updateD20Display();
+                        }
+                    }
+                });
+        }
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -571,6 +641,14 @@ class Game {
 
         const closeWeaponVendorMenuButton = document.getElementById('close-weapon-vendor-menu');
         closeWeaponVendorMenuButton.addEventListener('click', () => { this.toggleWeaponVendorMenu(); });
+
+        // Add listener for Character Sheet close button (Red X)
+        const charSheetCloseBtn = document.getElementById('upgrade-close-btn');
+        if (charSheetCloseBtn) {
+            charSheetCloseBtn.addEventListener('click', () => {
+                this.toggleCharacterSheet();
+            });
+        }
 
         const droidsmithOptions = document.querySelectorAll('.droidsmith-option');
         droidsmithOptions.forEach(button => {
@@ -981,7 +1059,7 @@ class Game {
         }
 
         const wrapper = document.getElementById('character-page-wrapper');
-        const isVisible = wrapper.style.display === 'flex';
+        const isVisible = wrapper.style.display === 'grid';
         const closeBtn = document.getElementById('upgrade-close-btn');
         const actionButtons = document.getElementById('upgrade-action-buttons');
 
@@ -1015,7 +1093,7 @@ class Game {
 
             this.updateCharacterSheet();
             if (window.characterUpgrades) window.characterUpgrades.updateD20Display();
-            wrapper.style.display = 'flex';
+            wrapper.style.display = 'grid';
             this.state.isPaused = true;
             if (this.hudContainer) this.hudContainer.style.display = 'none';
             document.exitPointerLock();
@@ -1025,6 +1103,9 @@ class Game {
             if (window.audioSystem) {
                 window.audioSystem.playSound('charactersheetopen', 0.7);
             }
+
+            // Show close button
+            if (closeBtn) closeBtn.style.display = 'block';
         }
     }
 
@@ -1059,7 +1140,7 @@ class Game {
         } else {
             // Close character sheet if open (mutually exclusive)
             const charSheet = document.getElementById('character-page-wrapper');
-            if (charSheet && charSheet.style.display === 'flex') {
+            if (charSheet && charSheet.style.display === 'grid') {
                 this.toggleCharacterSheet();
             }
 
@@ -1080,7 +1161,7 @@ class Game {
         } else {
             // Close character sheet if open (mutually exclusive)
             const charSheet = document.getElementById('character-page-wrapper');
-            if (charSheet && charSheet.style.display === 'flex') {
+            if (charSheet && charSheet.style.display === 'grid') {
                 this.toggleCharacterSheet();
             }
 
@@ -1101,7 +1182,7 @@ class Game {
         } else {
             // Close character sheet if open (mutually exclusive)
             const charSheet = document.getElementById('character-page-wrapper');
-            if (charSheet && charSheet.style.display === 'flex') {
+            if (charSheet && charSheet.style.display === 'grid') {
                 this.toggleCharacterSheet();
             }
 
@@ -1122,7 +1203,7 @@ class Game {
         } else {
             // Close character sheet if open (mutually exclusive)
             const charSheet = document.getElementById('character-page-wrapper');
-            if (charSheet && charSheet.style.display === 'flex') {
+            if (charSheet && charSheet.style.display === 'grid') {
                 this.toggleCharacterSheet();
             }
 
@@ -1134,33 +1215,9 @@ class Game {
     }
 
     updateCharacterSheet() {
-        // Modules
-        if (this.moduleDisplay) {
-            this.moduleDisplay.innerHTML = '';
-            this.state.modules.forEach(moduleKey => {
-                const img = document.createElement('img');
-                img.className = 'module-icon';
-                img.src = `/data/pngs/MODULES/${moduleKey}.png`;
-                img.title = moduleKey.replace(/_/g, ' ');
-                this.moduleDisplay.appendChild(img);
-            });
-        }
-
-        // Stats
-        if (this.statsDisplay && this.state.playerStats) {
-            this.statsDisplay.innerHTML = '';
-            for (const [key, value] of Object.entries(this.state.playerStats)) {
-                // Skip NPC-only stats and encountered flags
-                if (['threat', 'perception_radius', 'special_moves', 'default_weapon', 'aggro'].includes(key) ||
-                    key.startsWith('encountered_')) {
-                    continue;
-                }
-                const statDiv = document.createElement('div');
-                statDiv.className = 'stat-entry';
-                const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                statDiv.innerHTML = `<span class="stat-label">${label}:</span> <span class="stat-value">${value}</span>`;
-                this.statsDisplay.appendChild(statDiv);
-            }
+        // Use the new D20 display system instead of the old terminal-style display
+        if (window.characterUpgrades && window.characterUpgrades.updateD20Display) {
+            window.characterUpgrades.updateD20Display();
         }
 
         // Wire - update the count span
@@ -1170,20 +1227,16 @@ class Game {
         }
 
         // Spare cores - update the count span
-        const spareCore = document.getElementById('spare-core-count');
-        if (spareCore) {
-            spareCore.textContent = this.state.playerStats?.spare_cores || 0;
+        const spareCoreCount = document.getElementById('spare-core-count');
+        if (spareCoreCount) {
+            spareCoreCount.textContent = this.state.playerStats?.spare_cores || 0;
         }
 
-        // Credits - placeholder (will be implemented later)
+        // Credits - update the count span
         const creditsCount = document.getElementById('credits-count');
         if (creditsCount) {
-            creditsCount.textContent = this.state.credits || 0;
+            creditsCount.textContent = this.state.credits;
         }
-    }
-
-    updateFactionDisplay() {
-        if (this.state.showFactionInfo) { this.updateFactionRelationshipHUD(); }
     }
 
     update(deltaTime, totalTime) {

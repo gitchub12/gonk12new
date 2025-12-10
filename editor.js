@@ -48,7 +48,7 @@ class LevelEditor {
         this.defaultTextures = {
             floor: { key: '/data/pngs/floor/floor_2.png', size: 1 },
             ceiling: { key: '/data/pngs/ceiling/ceiling_1.png', size: 1, wallside: 'cside_default', heightMultiplier: 1 },
-            elevation: { wallside: 'eside_default'},
+            elevation: { wallside: 'eside_default' },
             skybox: { key: 'hyper' }
         };
         this.preloadedImages = new Map();
@@ -131,7 +131,7 @@ class LevelEditor {
                     evalItem.properties.target = evalItem.properties.target.replace('{levelNum+1}', String(levelNum + 1).padStart(2, '0'));
                 }
                 if (evalItem.properties?.linkFrom) {
-                     evalItem.properties.linkFrom = evalItem.properties.linkFrom.replace('{levelNum-1}', String(levelNum - 1).padStart(2, '0'));
+                    evalItem.properties.linkFrom = evalItem.properties.linkFrom.replace('{levelNum-1}', String(levelNum - 1).padStart(2, '0'));
                 }
                 return evalItem;
             });
@@ -219,9 +219,9 @@ class LevelEditor {
         this.modifyState(() => {
             const layer = this.levelData[itemToErase.layer];
             layer.delete(itemToErase.key);
-            if(itemToErase.layer === 'dock' && itemToErase.data.properties?.autoSpawnFor) {
-                 const spawnLayer = this.levelData.spawns;
-                 spawnLayer.delete(itemToErase.data.properties.autoSpawnFor);
+            if (itemToErase.layer === 'dock' && itemToErase.data.properties?.autoSpawnFor) {
+                const spawnLayer = this.levelData.spawns;
+                spawnLayer.delete(itemToErase.data.properties.autoSpawnFor);
             }
         });
         this.statusMsg.textContent = `Erased item.`;
@@ -345,12 +345,12 @@ class LevelEditor {
                 if (!item.properties.name) {
                     item.properties.name = this.generateDefaultNamePlaceholderForNpc(brush.key);
                 }
-                 const opacitySlider = document.getElementById('npc-opacity-slider');
-                 if (opacitySlider && parseInt(opacitySlider.value) < 100) {
-                     item.properties.transparent = true;
-                 } else {
-                     delete item.properties.transparent;
-                 }
+                const opacitySlider = document.getElementById('npc-opacity-slider');
+                if (opacitySlider && parseInt(opacitySlider.value) < 100) {
+                    item.properties.transparent = true;
+                } else {
+                    delete item.properties.transparent;
+                }
             }
 
             // Log furniture placement with selection counter
@@ -361,7 +361,7 @@ class LevelEditor {
             this.levelData[activeLayerName].set(`${gridX},${gridY}`, item);
         };
 
-        if(!layerNameOverride) {
+        if (!layerNameOverride) {
             this.modifyState(modification);
             this.statusMsg.textContent = `Placed ${actualBrush.key.split('/').pop()}`;
         } else {
@@ -457,17 +457,17 @@ class LevelEditor {
         }
 
         if (this.lineLayers.includes(activeLayerName) && this.wallDrawMode === 'vector') {
-            const {x: vX, y: vY} = this.getVertexCoordsFromEvent(e);
+            const { x: vX, y: vY } = this.getVertexCoordsFromEvent(e);
             this.placeVectorWallVertex(vX, vY);
         } else if (this.lineLayers.includes(activeLayerName) && this.wallDrawMode === 'grid') {
-             if (!this.hoveredDrawableLine) return;
-             if(this.dragPaintAxis && this.hoveredDrawableLine.type !== this.dragPaintAxis) return;
+            if (!this.hoveredDrawableLine) return;
+            if (this.dragPaintAxis && this.hoveredDrawableLine.type !== this.dragPaintAxis) return;
 
-             const {type, x, y} = this.hoveredDrawableLine;
-             this.modifyState(() => {
+            const { type, x, y } = this.hoveredDrawableLine;
+            this.modifyState(() => {
                 let p1, p2;
-                if (type === 'H') { p1 = {x:x, y:y+1}; p2 = {x:x+1, y:y+1}; }
-                else { p1 = {x:x+1, y:y}; p2 = {x:x+1, y:y+1}; }
+                if (type === 'H') { p1 = { x: x, y: y + 1 }; p2 = { x: x + 1, y: y + 1 }; }
+                else { p1 = { x: x + 1, y: y }; p2 = { x: x + 1, y: y + 1 }; }
                 this.deleteIntersectingLines(p1, p2);
 
                 const currentCoord = `${type}_${x}_${y}`;
@@ -478,11 +478,11 @@ class LevelEditor {
                 };
                 this.levelData[activeLayerName].set(currentCoord, itemData);
 
-                if(activeLayerName === 'dock') {
-                     itemData.properties.target = `TO LEVEL ${String(this.currentLevel+1).padStart(2,'0')}A`;
-                     this.placeAutoSpawnForDock(this.hoveredDrawableLine, currentCoord);
-                 }
-             });
+                if (activeLayerName === 'dock') {
+                    itemData.properties.target = `TO LEVEL ${String(this.currentLevel + 1).padStart(2, '0')}A`;
+                    this.placeAutoSpawnForDock(this.hoveredDrawableLine, currentCoord);
+                }
+            });
         } else {
             const { x: gridX, y: gridY } = this.getGridCoordsFromEvent(e);
             this.placeItem(gridX, gridY);
@@ -508,7 +508,7 @@ class LevelEditor {
         if (spawnLayer.has(spawnKey)) return;
 
         const dockData = this.levelData['dock'].get(dockKey);
-        if(dockData && dockData.properties) {
+        if (dockData && dockData.properties) {
             dockData.properties.autoSpawnFor = spawnKey;
         }
 
@@ -542,12 +542,12 @@ class LevelEditor {
 
                 this.levelData[this.activeLayerName].set(itemKey, itemData);
 
-                if(this.activeLayerName === 'dock') {
-                    itemData.properties.target = `TO LEVEL ${String(this.currentLevel+1).padStart(2,'0')}A`;
+                if (this.activeLayerName === 'dock') {
+                    itemData.properties.target = `TO LEVEL ${String(this.currentLevel + 1).padStart(2, '0')}A`;
                     const midX = Math.round((p1.x + p2.x) / 2);
                     const midY = Math.round((p1.y + p2.y) / 2);
                     const isHorizontal = Math.abs(p2.x - p1.x) > Math.abs(p2.y - p1.y);
-                    const spawnLine = isHorizontal ? {type: 'H', x: midX, y: midY} : {type: 'V', x: midX, y: midY};
+                    const spawnLine = isHorizontal ? { type: 'H', x: midX, y: midY } : { type: 'V', x: midX, y: midY };
                     this.placeAutoSpawnForDock(spawnLine, itemKey);
                 }
 
@@ -574,9 +574,9 @@ class LevelEditor {
         const lineLayers = [...this.lineLayers, ...this.overlayLayers];
         const sides = [
             { key: `H_${gridX}_${gridY - 1}`, relX: 0, relY: -1, type: 'H' },
-            { key: `H_${gridX}_${gridY}`,     relX: 0, relY: 0,  type: 'H' },
+            { key: `H_${gridX}_${gridY}`, relX: 0, relY: 0, type: 'H' },
             { key: `V_${gridX - 1}_${gridY}`, relX: -1, relY: 0, type: 'V' },
-            { key: `V_${gridX}_${gridY}`,     relX: 0, relY: 0,  type: 'V' }
+            { key: `V_${gridX}_${gridY}`, relX: 0, relY: 0, type: 'V' }
         ];
 
         for (const layer of lineLayers) {
@@ -726,15 +726,15 @@ class LevelEditor {
 
         if (e.button === 0) {
             this.isPainting = true;
-            if(this.lineLayers.includes(this.activeLayerName) && this.wallDrawMode === 'grid' && this.hoveredDrawableLine) {
+            if (this.lineLayers.includes(this.activeLayerName) && this.wallDrawMode === 'grid' && this.hoveredDrawableLine) {
                 this.dragPaintAxis = this.hoveredDrawableLine.type;
             }
 
             const { x: gridX, y: gridY } = this.getGridCoordsFromEvent(e);
-            switch(this.activeTool) {
+            switch (this.activeTool) {
                 case 'paint': this.handlePaintAction(e); break;
                 case 'template': this.handleTemplateToolClick(gridX, gridY); break;
-                case 'erase': const itemToErase = this.findHoveredItem(e); if(itemToErase) this.eraseItem(itemToErase); break;
+                case 'erase': const itemToErase = this.findHoveredItem(e); if (itemToErase) this.eraseItem(itemToErase); break;
                 case 'rotate': this.rotateItem(gridX, gridY); break;
                 case 'spawn': this.placeSpawn(gridX, gridY); break;
                 case 'fill': this.bucketFill(gridX, gridY); break;
@@ -826,11 +826,11 @@ class LevelEditor {
 
         if (needsRender) this.render();
 
-        if(this.isPainting) {
+        if (this.isPainting) {
             if (gridX !== this.lastPlacedGrid.x || gridY !== this.lastPlacedGrid.y) {
-                 switch(this.activeTool) {
+                switch (this.activeTool) {
                     case 'paint': if (!this.overlayLayers.includes(this.activeLayerName)) this.handlePaintAction(e); break;
-                    case 'erase': const itemToErase = this.findHoveredItem(e); if(itemToErase) this.eraseItem(itemToErase); break;
+                    case 'erase': const itemToErase = this.findHoveredItem(e); if (itemToErase) this.eraseItem(itemToErase); break;
                     case 'template': this.placeTemplate(gridX, gridY); break;
                 }
                 this.lastPlacedGrid = { x: gridX, y: gridY };
@@ -913,28 +913,33 @@ class LevelEditor {
 
             // Layer transparency rules:
             // - Active layer: full opacity (or 0.6 for water)
-            // - Walls/doors/docks: never below 50% opacity
-            // - NPCs: never below 70% opacity
-            // - Ceilings/floors: max 10% when not active
+            // - Walls: 90% opacity when inactive
+            // - Doors/docks: 100% opacity always
+            // - Assets: 25% opacity when inactive (increased from 15%)
+            // - Ceilings: 5% opacity when not active to reduce clutter
+            // - Floor/Subfloor: 10% when not active
             // - Other layers: max 15% when not active
             let layerOpacity;
             if (isActiveLayer) {
                 layerOpacity = (layerName === 'water') ? 0.6 : 1.0;
             } else {
                 // Calculate inactive layer opacity
-                if (this.lineLayers.includes(layerName)) {
-                    // Walls, doors, docks: minimum 50%
-                    layerOpacity = 0.5;
-                } else if (layerName === 'npcs') {
-                    // NPCs: minimum 70%
-                    layerOpacity = 0.7;
-                } else if (layerName === 'ceiling' || layerName === 'floor' || layerName === 'subfloor') {
-                    // Ceilings and floors: max 10% when not viewing
+                if (layerName === 'wall') {
+                    layerOpacity = 0.9;
+                } else if (layerName === 'door' || layerName === 'dock') {
+                    layerOpacity = 1.0;
+                } else if (layerName === 'assets') {
+                    layerOpacity = 0.25;
+                } else if (layerName === 'ceiling') {
+                    layerOpacity = 0.05;
+                } else if (layerName === 'floor' || layerName === 'subfloor') {
                     layerOpacity = 0.10;
+                } else if (layerName === 'npcs') {
+                    layerOpacity = 0.7;
                 } else {
-                    // All other layers: max 15%
                     layerOpacity = 0.15;
                 }
+
                 // Apply water's natural 0.6 base if applicable
                 if (layerName === 'water') {
                     layerOpacity = Math.min(layerOpacity, 0.6);
@@ -1004,7 +1009,7 @@ class LevelEditor {
         this.ctx.globalAlpha = 0.5;
         this.ctx.strokeStyle = '#61afef';
         this.ctx.lineWidth = 4 / this.zoom;
-        this.ctx.strokeRect(gridX * gs, gridY*gs, gs * this.activeBrushSize, gs * this.activeBrushSize);
+        this.ctx.strokeRect(gridX * gs, gridY * gs, gs * this.activeBrushSize, gs * this.activeBrushSize);
         this.ctx.restore();
     }
 
@@ -1054,7 +1059,7 @@ class LevelEditor {
         if (this.lineLayers.includes(this.activeLayerName) && this.wallDrawMode === 'vector') {
             this.ctx.fillStyle = 'rgba(255, 255, 255, 0.25)'; const pixelSize = 2 / this.zoom;
             for (let y = 0; y <= this.gridHeight; y++) for (let x = 0; x <= this.gridWidth; x++) this.ctx.fillRect(x * gs - pixelSize / 2, y * gs - pixelSize / 2, pixelSize, pixelSize);
-            if (this.vectorWallStart) { const mousePos = this.getVertexCoordsFromEvent({clientX: this.lastMouse.x, clientY: this.lastMouse.y}); this.ctx.strokeStyle = 'rgba(100, 180, 255, 0.7)'; this.ctx.lineWidth = 4 / this.zoom; this.ctx.setLineDash([5 / this.zoom, 5 / this.zoom]); this.ctx.beginPath(); this.ctx.moveTo(this.vectorWallStart.x * gs, this.vectorWallStart.y * gs); this.ctx.lineTo(mousePos.x * gs, mousePos.y * gs); this.ctx.stroke(); this.ctx.setLineDash([]); }
+            if (this.vectorWallStart) { const mousePos = this.getVertexCoordsFromEvent({ clientX: this.lastMouse.x, clientY: this.lastMouse.y }); this.ctx.strokeStyle = 'rgba(100, 180, 255, 0.7)'; this.ctx.lineWidth = 4 / this.zoom; this.ctx.setLineDash([5 / this.zoom, 5 / this.zoom]); this.ctx.beginPath(); this.ctx.moveTo(this.vectorWallStart.x * gs, this.vectorWallStart.y * gs); this.ctx.lineTo(mousePos.x * gs, mousePos.y * gs); this.ctx.stroke(); this.ctx.setLineDash([]); }
         }
 
         if (this.placementPreview) this.drawOverlayPreview(this.placementPreview);
@@ -1116,7 +1121,7 @@ class LevelEditor {
         const gs = this.gridSize;
         const wallThickness = Math.max(2, gs * 0.1);
 
-        for(const [key, item] of items.entries()) {
+        for (const [key, item] of items.entries()) {
             if (key.startsWith('VEC_')) {
                 this.renderVectorWall(item);
             } else {
@@ -1164,21 +1169,24 @@ class LevelEditor {
         }
         this.ctx.restore();
 
-        const colorMap = { 'wall': 'rgba(255, 0, 0, 0.8)', 'door': 'rgba(255, 255, 0, 0.8)', 'dock': 'rgba(0, 150, 255, 0.9)'};
+        const colorMap = { 'wall': 'rgba(255, 0, 0, 1.0)', 'door': 'rgba(0, 255, 0, 1.0)', 'dock': 'rgba(0, 150, 255, 1.0)' };
         this.ctx.strokeStyle = colorMap[layerName] || 'rgba(255,255,255,0.5)';
         if (!this.overlayLayers.includes(layerName)) {
-             this.ctx.lineWidth = 1 / this.zoom;
-             this.ctx.beginPath();
-             if (type === 'V') { this.ctx.moveTo((x + 1) * gs, z * gs); this.ctx.lineTo((x + 1) * gs, (z + 1) * gs); } else { this.ctx.moveTo(x * gs, (z + 1) * gs); this.ctx.lineTo((x + 1) * gs, (z + 1) * gs); }
-             this.ctx.stroke();
+            this.ctx.lineWidth = 3 / this.zoom;
+            this.ctx.beginPath();
+            if (type === 'V') { this.ctx.moveTo((x + 1) * gs, z * gs); this.ctx.lineTo((x + 1) * gs, (z + 1) * gs); } else { this.ctx.moveTo(x * gs, (z + 1) * gs); this.ctx.lineTo((x + 1) * gs, (z + 1) * gs); }
+            this.ctx.stroke();
         }
 
         const hasScreen = this.levelData['screen']?.has(key);
         const hasPanel = this.levelData['panel']?.has(key);
         let nubbinColor = null;
-        if(hasScreen && hasPanel) { nubbinColor = '#00FFFF';
-        } else if (hasScreen) { nubbinColor = '#FFFF00';
-        } else if (hasPanel) { nubbinColor = '#00FF00';
+        if (hasScreen && hasPanel) {
+            nubbinColor = '#00FFFF';
+        } else if (hasScreen) {
+            nubbinColor = '#FFFF00';
+        } else if (hasPanel) {
+            nubbinColor = '#00FF00';
         }
         if (nubbinColor) {
             const overlayItem = this.levelData[hasScreen ? 'screen' : 'panel'].get(key);
@@ -1210,12 +1218,12 @@ class LevelEditor {
         if (!items) return;
         const gs = this.gridSize;
         const occupied = new Set();
-        for(const [key, item] of items.entries()){
+        for (const [key, item] of items.entries()) {
             const [x, y] = key.split(',').map(Number);
             const size = item.size < 1 ? 1 : (item.size || 1);
-            for(let yo=0; yo<size; yo++){
-                for(let xo=0; xo<size; xo++){
-                    occupied.add(`${x+xo},${y+yo}`);
+            for (let yo = 0; yo < size; yo++) {
+                for (let xo = 0; xo < size; xo++) {
+                    occupied.add(`${x + xo},${y + yo}`);
                 }
             }
         }
@@ -1227,8 +1235,8 @@ class LevelEditor {
                 const size = defaultTexInfo.size || 1;
                 for (let y = 0; y < this.gridHeight; y += size) {
                     for (let x = 0; x < this.gridWidth; x += size) {
-                         if (!occupied.has(`${x},${y}`)) {
-                           this.ctx.drawImage(img, x * gs, y * gs, gs * size, gs * size);
+                        if (!occupied.has(`${x},${y}`)) {
+                            this.ctx.drawImage(img, x * gs, y * gs, gs * size, gs * size);
                         }
                     }
                 }
@@ -1280,7 +1288,7 @@ class LevelEditor {
             } else if (item.type === 'random_npc') {
                 const factionColors = { Aliens: '#008000', Takers: '#C0C0C0', Droids: '#0066cc', Humans: '#b05c00', Mandalorians: '#FFC72C', Sith: '#990000', Imperials: '#444444', Clones: '#ff8c00' };
                 const color = factionColors[item.properties.macroCategory] || '#555';
-                
+
                 this.ctx.fillStyle = color;
                 this.ctx.fillRect(x * gs, y * gs, gs, gs);
                 this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
@@ -1321,8 +1329,8 @@ class LevelEditor {
                     let centerY = drawSize / 2;
                     if (layerName === 'npcs') {
                         drawSize *= 0.75;
-                         centerX = (gs * size) / 2;
-                         centerY = (gs * size) - (drawSize / 2);
+                        centerX = (gs * size) / 2;
+                        centerY = (gs * size) - (drawSize / 2);
                     }
                     this.ctx.translate(centerX, centerY);
                     if (item.rotation) this.ctx.rotate(item.rotation * Math.PI / 2);
@@ -1362,34 +1370,34 @@ class LevelEditor {
             if (elevationImg) {
                 this.ctx.drawImage(elevationImg, x * gs, y * gs, gs * size, gs * size);
             } else {
-                 this.ctx.fillStyle = '#404';
-                 this.ctx.fillRect(x * gs, y * gs, gs * size, gs * size);
+                this.ctx.fillStyle = '#404';
+                this.ctx.fillRect(x * gs, y * gs, gs * size, gs * size);
             }
 
             if (wallImg) {
-                 const neighborOffsets = [
-                     { x: size, z: 0, dir: 'right', rot: Math.PI / 2 },
-                     { x: -1, z: 0, dir: 'left', rot: -Math.PI / 2 },
-                     { x: 0, z: size, dir: 'down', rot: Math.PI },
-                     { x: 0, z: -1, dir: 'up', rot: 0 },
-                 ];
+                const neighborOffsets = [
+                    { x: size, z: 0, dir: 'right', rot: Math.PI / 2 },
+                    { x: -1, z: 0, dir: 'left', rot: -Math.PI / 2 },
+                    { x: 0, z: size, dir: 'down', rot: Math.PI },
+                    { x: 0, z: -1, dir: 'up', rot: 0 },
+                ];
 
-                 for(const offset of neighborOffsets) {
-                     let neighborElevation = 0;
-                     const neighbor = this.levelData.elevation.get(`${x + offset.x},${y + offset.z}`);
-                     if (neighbor && neighbor.properties && neighbor.properties.elevation) {
-                         neighborElevation = neighbor.properties.elevation;
-                     }
-                     if (neighborElevation < elevationLevel) {
-                         const wallHeight = (elevationLevel - neighborElevation) * gs * 0.25;
-                         this.ctx.save();
-                         this.ctx.globalAlpha *= 0.8;
-                         this.ctx.translate(x * gs + gs/2, y * gs + gs/2);
-                         this.ctx.rotate(offset.rot);
-                         this.ctx.drawImage(wallImg, -gs/2, 0, gs, wallHeight);
-                         this.ctx.restore();
-                     }
-                 }
+                for (const offset of neighborOffsets) {
+                    let neighborElevation = 0;
+                    const neighbor = this.levelData.elevation.get(`${x + offset.x},${y + offset.z}`);
+                    if (neighbor && neighbor.properties && neighbor.properties.elevation) {
+                        neighborElevation = neighbor.properties.elevation;
+                    }
+                    if (neighborElevation < elevationLevel) {
+                        const wallHeight = (elevationLevel - neighborElevation) * gs * 0.25;
+                        this.ctx.save();
+                        this.ctx.globalAlpha *= 0.8;
+                        this.ctx.translate(x * gs + gs / 2, y * gs + gs / 2);
+                        this.ctx.rotate(offset.rot);
+                        this.ctx.drawImage(wallImg, -gs / 2, 0, gs, wallHeight);
+                        this.ctx.restore();
+                    }
+                }
             }
         }
     }
@@ -1530,14 +1538,14 @@ class LevelEditor {
                 }
             }
         } else if (this.lineLayers.includes(layerName) || this.overlayLayers.includes(layerName)) {
-             const { x: worldX, y: worldY } = this.getMouseWorldCoords({ clientX: this.lastMouse.x, clientY: this.lastMouse.y });
-             const hoveredGridLine = this.getHoveredGridLine(worldX, worldY);
-             if (hoveredGridLine) {
-                 const lineKey = `${hoveredGridLine.line.type}_${hoveredGridLine.line.x}_${hoveredGridLine.line.y}`;
-                 if (layer.has(lineKey)) {
-                     return { layer: layerName, key: lineKey, data: layer.get(lineKey), line: hoveredGridLine.line };
-                 }
-             }
+            const { x: worldX, y: worldY } = this.getMouseWorldCoords({ clientX: this.lastMouse.x, clientY: this.lastMouse.y });
+            const hoveredGridLine = this.getHoveredGridLine(worldX, worldY);
+            if (hoveredGridLine) {
+                const lineKey = `${hoveredGridLine.line.type}_${hoveredGridLine.line.x}_${hoveredGridLine.line.y}`;
+                if (layer.has(lineKey)) {
+                    return { layer: layerName, key: lineKey, data: layer.get(lineKey), line: hoveredGridLine.line };
+                }
+            }
         }
         return null;
     }
@@ -1552,7 +1560,7 @@ class LevelEditor {
             { dist: 1 - fracY, line: { type: 'H', x: gridX, y: gridY } },
             { dist: fracX, line: { type: 'V', x: gridX - 1, y: gridY } },
             { dist: 1 - fracX, line: { type: 'V', x: gridX, y: gridY } }
-        ].filter(d => d.dist < tolerance).sort((a,b) => a.dist - b.dist);
+        ].filter(d => d.dist < tolerance).sort((a, b) => a.dist - b.dist);
         return dists.length > 0 ? dists[0] : null;
     }
 
@@ -1576,12 +1584,12 @@ class LevelEditor {
                     if (nx < 0 || nx >= this.gridWidth || ny < 0 || ny >= this.gridHeight || visited.has(key) || this.hasWallBetween(x, y, nx, ny)) continue;
 
                     let isOccupied = false;
-                    for(const [itemKey, item] of layer.entries()){
+                    for (const [itemKey, item] of layer.entries()) {
                         const [ix, iy] = itemKey.split(',').map(Number);
                         const isize = item.size || 1;
-                        if(nx >= ix && nx < ix+isize && ny >= iy && ny < iy+isize){ isOccupied = true; break;}
+                        if (nx >= ix && nx < ix + isize && ny >= iy && ny < iy + isize) { isOccupied = true; break; }
                     }
-                    if(isOccupied) continue;
+                    if (isOccupied) continue;
 
                     visited.add(key);
                     q.push([nx, ny]);
@@ -1597,21 +1605,21 @@ class LevelEditor {
                 let canPlaceFullSize = true;
                 const blockCoords = [];
                 if (size > 1) {
-                    for(let yo=0; yo < size; yo++) {
-                        for(let xo=0; xo < size; xo++){
-                            const curCoord = `${x+xo},${y+yo}`;
-                            if(!visited.has(curCoord) || this.levelData[this.activeLayerName].has(curCoord)) {
+                    for (let yo = 0; yo < size; yo++) {
+                        for (let xo = 0; xo < size; xo++) {
+                            const curCoord = `${x + xo},${y + yo}`;
+                            if (!visited.has(curCoord) || this.levelData[this.activeLayerName].has(curCoord)) {
                                 canPlaceFullSize = false; break;
                             }
                             blockCoords.push(curCoord);
                         }
-                        if(!canPlaceFullSize) break;
+                        if (!canPlaceFullSize) break;
                     }
                 } else {
                     blockCoords.push(coord);
                 }
 
-                if(canPlaceFullSize){
+                if (canPlaceFullSize) {
                     this.placeItem(x, y, size);
                     blockCoords.forEach(c => placedCoords.add(c));
                 } else {
@@ -1624,7 +1632,7 @@ class LevelEditor {
 
     segmentsOverlap(p1, p2, p3, p4) { const EPS = 1e-9; const o = (p, q, r) => { const v = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y); return Math.abs(v) < EPS ? 0 : (v > 0 ? 1 : 2); }; if (o(p1, p2, p3) === 0 && o(p1, p2, p4) === 0) { return Math.max(p1.x, p3.x) < Math.min(p2.x, p4.x) - EPS || Math.max(p1.y, p3.y) < Math.min(p2.y, p4.y) - EPS; } return false; }
     lineSegmentsIntersect(x1, y1, x2, y2, x3, y3, x4, y4) { const den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4); if (den === 0) return false; const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den; const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den; return t > 0 && t < 1 && u > 0 && u < 1; }
-    pointToSegmentDistance(px, py, x1, y1, x2, y2) { const l2 = (x2 - x1)**2 + (y2 - y1)**2; if (l2 === 0) return Math.hypot(px-x1, py-y1); let t = ((px - x1) * (x2 - x1) + (py - y1) * (y2 - y1)) / l2; t = Math.max(0, Math.min(1, t)); const projX = x1 + t * (x2 - x1); const projY = y1 + t * (y2 - y1); return Math.hypot(px-projX, py-y1); }
+    pointToSegmentDistance(px, py, x1, y1, x2, y2) { const l2 = (x2 - x1) ** 2 + (y2 - y1) ** 2; if (l2 === 0) return Math.hypot(px - x1, py - y1); let t = ((px - x1) * (x2 - x1) + (py - y1) * (y2 - y1)) / l2; t = Math.max(0, Math.min(1, t)); const projX = x1 + t * (x2 - x1); const projY = y1 + t * (y2 - y1); return Math.hypot(px - projX, py - y1); }
 
     getLevelDataObject() {
         const levelObject = { settings: { width: this.gridWidth, height: this.gridHeight, defaults: this.defaultTextures }, layers: {} };

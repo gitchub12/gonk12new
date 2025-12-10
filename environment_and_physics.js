@@ -352,6 +352,7 @@ class LevelRenderer {
 
         let rotation = 0;
         let positionOffset = this.gridSize / 2;
+        let posX, posZ, rotY;
         if (direction === 'up') { posX = x * this.gridSize + this.gridSize / 2; posZ = z * this.gridSize; rotY = 0; }
         else if (direction === 'down') { posX = x * this.gridSize + this.gridSize / 2; posZ = (z + 1) * this.gridSize; rotY = Math.PI; }
         else if (direction === 'left') { posX = x * this.gridSize; posZ = z * this.gridSize + this.gridSize / 2; rotY = Math.PI / 2; }
@@ -769,7 +770,7 @@ class LevelRenderer {
         if (skyboxType === 'static' && skyboxInfo.type === 'folder') {
             // If it's a folder, default to animation (numbered frames)
             skyboxType = 'animation';
-            console.log(`Skybox '${skyboxKey}' is a folder, auto-detecting as animation.`);
+            // console.log(`Skybox '${skyboxKey}' is a folder, auto-detecting as animation.`);
         }
 
         if (skyboxType === 'animation') {
@@ -780,7 +781,7 @@ class LevelRenderer {
                     await window.game.skyboxAnimator.initialize(window.game.renderer);
                 }
             } else {
-                console.warn(`Failed to load animated skybox '${skyboxKey}'. Using fallback color.`);
+                // console.warn(`Failed to load animated skybox '${skyboxKey}'. Using fallback color.`);
                 window.game.scene.background = new THREE.Color(0x000011);
             }
         } else if (skyboxType === 'random_static') {
@@ -1544,7 +1545,7 @@ class PhysicsSystem {
             let nearestFurniture = null;
             let nearestFurnitureDist = interactDist;
             for (const furniture of window.game.entities.furniture) {
-                if(furniture.userData.isQuestVendor) {
+                if (furniture.userData.isQuestVendor) {
                     const dist = playerPos.distanceTo(furniture.position);
                     if (dist < nearestFurnitureDist) {
                         nearestFurnitureDist = dist;

@@ -1,0 +1,27 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "STR",
+        "silver": "CON",
+        "bronze": "DEX"
+    },
+    "health_bonus_per_level": 12,
+    "default_weapon": "melee_vibroax_aplek.png",
+    "accuracy_modifier": 0.9,
+    "force_sensitivity": false,
+    "technical_understanding": 30,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.7,
+    "speed": 0.028,
+    "soundSet": null,
+    "lie_attack": 30,
+    "lie_defense": 30,
+    "charm_attack": 30,
+    "charm_defense": 30,
+    "armor": {
+        "base": 2
+    },
+    "resistances": {
+        "ballistic": 0.1
+    }
+}

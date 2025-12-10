@@ -59,79 +59,79 @@ window.PigModel = {
 
     // UV mapping for Pig texture (64x32)
     // Standard Minecraft pig layout
-    getUVMap: function(partName, isOverlay = false) {
+    getUVMap: function (partName, isOverlay = false) {
         if (isOverlay) return null;
 
         const uvMaps = {
             head: {
-                right:  [0, 8, 8, 8],
-                left:   [16, 8, 8, 8],
-                top:    [8, 0, 8, 8],
+                right: [0, 8, 8, 8],
+                left: [16, 8, 8, 8],
+                top: [8, 0, 8, 8],
                 bottom: [16, 0, 8, 8],
-                front:  [8, 8, 8, 8],
-                back:   [24, 8, 8, 8]
+                front: [8, 8, 8, 8],
+                back: [24, 8, 8, 8]
             },
             snout: {
                 // Snout UV on pig texture
-                right:  [16, 17, 1, 3],
-                left:   [21, 17, 1, 3],
-                top:    [17, 16, 4, 1],
+                right: [16, 17, 1, 3],
+                left: [21, 17, 1, 3],
+                top: [17, 16, 4, 1],
                 bottom: [21, 16, 4, 1],
-                front:  [17, 17, 4, 3],
-                back:   [22, 17, 4, 3]
+                front: [17, 17, 4, 3],
+                back: [22, 17, 4, 3]
             },
             body: {
                 // Body is rotated 90 degrees in model space
-                right:  [28, 8, 8, 16],
-                left:   [52, 8, 8, 16],
-                top:    [36, 8, 10, 8],   // Actually back when rotated
+                right: [28, 8, 8, 16],
+                left: [52, 8, 8, 16],
+                top: [36, 8, 10, 8],   // Actually back when rotated
                 bottom: [46, 8, 10, 8],   // Actually belly when rotated
-                front:  [36, 16, 10, 8],
-                back:   [56, 16, 10, 8]
+                front: [36, 16, 10, 8],
+                back: [56, 16, 10, 8]
             },
             rightFrontLeg: {
-                right:  [0, 20, 4, 6],
-                left:   [8, 20, 4, 6],
-                top:    [4, 16, 4, 4],
+                right: [0, 20, 4, 6],
+                left: [8, 20, 4, 6],
+                top: [4, 16, 4, 4],
                 bottom: [8, 16, 4, 4],
-                front:  [4, 20, 4, 6],
-                back:   [12, 20, 4, 6]
+                front: [4, 20, 4, 6],
+                back: [12, 20, 4, 6]
             },
             leftFrontLeg: {
                 // Same UV as right (mirrored in geometry)
-                right:  [0, 20, 4, 6],
-                left:   [8, 20, 4, 6],
-                top:    [4, 16, 4, 4],
+                right: [0, 20, 4, 6],
+                left: [8, 20, 4, 6],
+                top: [4, 16, 4, 4],
                 bottom: [8, 16, 4, 4],
-                front:  [4, 20, 4, 6],
-                back:   [12, 20, 4, 6]
+                front: [4, 20, 4, 6],
+                back: [12, 20, 4, 6]
             },
             rightBackLeg: {
-                right:  [0, 20, 4, 6],
-                left:   [8, 20, 4, 6],
-                top:    [4, 16, 4, 4],
+                right: [0, 20, 4, 6],
+                left: [8, 20, 4, 6],
+                top: [4, 16, 4, 4],
                 bottom: [8, 16, 4, 4],
-                front:  [4, 20, 4, 6],
-                back:   [12, 20, 4, 6]
+                front: [4, 20, 4, 6],
+                back: [12, 20, 4, 6]
             },
             leftBackLeg: {
-                right:  [0, 20, 4, 6],
-                left:   [8, 20, 4, 6],
-                top:    [4, 16, 4, 4],
+                right: [0, 20, 4, 6],
+                left: [8, 20, 4, 6],
+                top: [4, 16, 4, 4],
                 bottom: [8, 16, 4, 4],
-                front:  [4, 20, 4, 6],
-                back:   [12, 20, 4, 6]
+                front: [4, 20, 4, 6],
+                back: [12, 20, 4, 6]
             }
         };
 
         return uvMaps[partName] || null;
     },
 
-    getGroundOffset: function(scaleY, modelScale, universalScale) {
+    getGroundOffset: function (scaleY, modelScale, universalScale) {
         return 6 * scaleY * modelScale * universalScale;
     },
 
-    applyAnimation: function(character, animState, time, options) {
+    applyAnimation: function (character, animState, time, options) {
         const parts = character.parts;
 
         switch (animState) {
@@ -157,4 +157,4 @@ window.PigModel = {
     }
 };
 
-console.log('Pig model definition loaded');
+// console.log('Pig model definition loaded');

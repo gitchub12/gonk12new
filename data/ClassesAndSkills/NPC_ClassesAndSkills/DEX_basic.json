@@ -1,0 +1,25 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "DEX",
+        "silver": "INT",
+        "bronze": "CON"
+    },
+    "health_bonus_per_level": 8,
+    "default_weapon": "pistol_dl44_han.png",
+    "accuracy_modifier": 1.0,
+    "force_sensitivity": false,
+    "technical_understanding": 40,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.6,
+    "speed": 0.032,
+    "soundSet": null,
+    "lie_attack": 40,
+    "lie_defense": 40,
+    "charm_attack": 40,
+    "charm_defense": 40,
+    "armor": {
+        "base": 1
+    },
+    "resistances": {}
+}

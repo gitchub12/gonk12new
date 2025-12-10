@@ -1,0 +1,4 @@
+﻿cd0c502 Remove deprecated files
+6b83ab9 Remove deleted .ahk files
+d3e82ad Remove unused bat files
+f56c226 Initial setup

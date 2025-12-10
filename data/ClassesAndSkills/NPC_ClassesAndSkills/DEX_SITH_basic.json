@@ -1,0 +1,27 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "DEX",
+        "silver": "STR",
+        "bronze": "CON"
+    },
+    "health_bonus_per_level": 10,
+    "default_weapon": "saber_red.png",
+    "accuracy_modifier": 0.95,
+    "force_sensitivity": true,
+    "technical_understanding": 30,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.75,
+    "speed": 0.033,
+    "soundSet": null,
+    "lie_attack": 50,
+    "lie_defense": 50,
+    "charm_attack": 50,
+    "charm_defense": 50,
+    "armor": {
+        "base": 1
+    },
+    "resistances": {
+        "energy": 0.1
+    }
+}

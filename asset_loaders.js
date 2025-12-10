@@ -189,6 +189,7 @@ class AssetManager {
             for (const textureEntry of group.textures) {
                 const textureFile = typeof textureEntry === 'string' ? textureEntry : textureEntry.file;
                 const skinName = textureFile.replace('.png', '');
+
                 const config = {
                     ...this.npcGroups._globals,
                     ...(this.npcGroups._base_type_defaults[groupKey] || {}),

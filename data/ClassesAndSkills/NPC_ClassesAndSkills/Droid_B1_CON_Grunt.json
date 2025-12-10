@@ -1,0 +1,28 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "CON",
+        "silver": "DEX",
+        "bronze": "INT"
+    },
+    "health_bonus_per_level": 5,
+    "default_weapon": "rifle_e11.png",
+    "accuracy_modifier": 0.8,
+    "force_sensitivity": false,
+    "technical_understanding": 10,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.5,
+    "speed": 0.028,
+    "soundSet": "droids",
+    "lie_attack": 0,
+    "lie_defense": 0,
+    "charm_attack": 0,
+    "charm_defense": 0,
+    "armor": {
+        "base": 1
+    },
+    "resistances": {
+        "ion": 0.5,
+        "ballistic": -0.2
+    }
+}

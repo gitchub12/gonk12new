@@ -136,21 +136,24 @@ class CharacterUpgrades {
         }
 
         // Update Base Stats (left panel)
-        document.getElementById('base-str-val').textContent = currentLevelData.str;
-        document.getElementById('base-dex-val').textContent = currentLevelData.dex;
-        document.getElementById('base-con-val').textContent = currentLevelData.con;
-        document.getElementById('base-int-val').textContent = currentLevelData.int;
-        document.getElementById('base-wis-val').textContent = currentLevelData.wis;
-        document.getElementById('base-cha-val').textContent = currentLevelData.cha;
+        // Update Base Stats (left panel)
+        const updateStat = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+        updateStat('base-str-val', currentLevelData.str);
+        updateStat('base-dex-val', currentLevelData.dex);
+        updateStat('base-con-val', currentLevelData.con);
+        updateStat('base-int-val', currentLevelData.int);
+        updateStat('base-wis-val', currentLevelData.wis);
+        updateStat('base-cha-val', currentLevelData.cha);
 
         // Calculate derived stats
         const maxHp = (5 * currentLevelData.con) + (data.level * classData.base_stats.hp_per_level);
         const maxEnergy = 100; // TODO: Get from class data if available
         const powerPerSec = 8.2; // TODO: Calculate from stats
 
-        document.getElementById('base-max-hp-val').textContent = maxHp;
-        document.getElementById('base-max-energy-val').textContent = maxEnergy;
-        document.getElementById('base-power-sec-val').textContent = powerPerSec.toFixed(1);
+        updateStat('base-max-hp-val', maxHp);
+        updateStat('base-max-energy-val', maxEnergy);
+        updateStat('base-power-sec-val', powerPerSec.toFixed(1));
 
         // Update Skills Display (top center, above level rows)
         if (skillsDisplay) {
@@ -268,8 +271,12 @@ class CharacterUpgrades {
         }
 
         // Update Wire and Credits
-        document.getElementById('wire-amount').textContent = window.game?.state?.wire || 0;
-        document.getElementById('credits-amount').textContent = window.game?.state?.credits || 2001;
+        // Update Wire and Credits
+        const wireEl = document.getElementById('wire-amount');
+        if (wireEl) wireEl.textContent = window.game?.state?.wire || 0;
+
+        const creditsEl = document.getElementById('credits-amount');
+        if (creditsEl) creditsEl.textContent = window.game?.state?.credits || 2001;
 
         // Update Module Grid
         this.updateModuleGrid(data, classData);
@@ -329,7 +336,7 @@ class CharacterUpgrades {
         if (!moduleGrid) return;
 
         // Get class starting modules (skills like Intimidate, Jump, etc.)
-        const classStartingModules = this.getClassStartingModules(data.currentClass);
+        const classStartingModules = this.getClassStartingModules(window.characterStats?.currentClass);
 
         // Get run modules from module manager (like extra_memory_core_1)
         const runModules = window.game?.state?.modules || [];
@@ -343,11 +350,15 @@ class CharacterUpgrades {
         // Remove duplicates
         const uniqueModules = [...new Set(allModules)];
 
-        // Show first 24 modules (8×3), rest in overflow
-        const visibleModules = uniqueModules.slice(0, 24);
-        const overflowModules = uniqueModules.slice(24);
+        // Show first 24 modules (6×4), rest in overflow
+        const visibleModules = uniqueModules.filter(m => m && !m.includes('extra_memory_core')).slice(0, 24);
+        const overflowModules = uniqueModules.filter(m => m && !m.includes('extra_memory_core')).slice(24);
 
-        // Generate 24 grid slots (200px × 215px each: 200px image + 15px name label, 4px spacing)
+        // Update grid layout (managed by CSS in index.html, but ensure inline styles on slots match)
+        moduleGrid.style.gridTemplateColumns = 'repeat(6, 130px)';
+        moduleGrid.style.gridTemplateRows = 'repeat(4, 145px)';
+
+        // Generate 24 grid slots (130px × 145px each: 130px image + 15px name label)
         let gridHTML = '';
         for (let i = 0; i < 24; i++) {
             const moduleId = visibleModules[i];
@@ -356,12 +367,12 @@ class CharacterUpgrades {
                 const moduleData = window.moduleManager?.modules?.[moduleId];
                 const moduleName = moduleData?.name || moduleId;
 
-                // Module exists - show with IMAGE (200x200) and name area (bottom 15px)
+                // Module exists - show with IMAGE (130x130) and name area (bottom 15px)
                 gridHTML += `
-                    <div class="module-slot" data-module-id="${moduleId}" style="width: 200px; height: 215px; border: 2px solid #0ff; background: rgba(0,255,255,0.05); display: flex; flex-direction: column; cursor: pointer; box-sizing: border-box; position: relative;">
-                        <div style="width: 100%; height: 200px; background: #111; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                    <div class="module-slot" data-module-id="${moduleId}" style="width: 130px; height: 145px; border: 2px solid #0ff; background: rgba(0,255,255,0.05); display: flex; flex-direction: column; cursor: pointer; box-sizing: border-box; position: relative;">
+                        <div style="width: 100%; height: 130px; background: #111; display: flex; align-items: center; justify-content: center; overflow: hidden;">
                             <img src="/data/pngs/MODULES/${moduleId}.png" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
-                            <div style="color: #f00; font-size: 12px; font-weight: bold; text-align: center; padding: 10px; display: none;">MISSING<br>${moduleId}</div>
+                            <div style="color: #f00; font-size: 10px; font-weight: bold; text-align: center; padding: 5px; display: none;">MISSING<br>${moduleId}</div>
                         </div>
                         <div style="width: 100%; height: 15px; background: rgba(0,0,0,0.8); color: #fff; font-size: 10px; text-align: center; line-height: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 2px; box-sizing: border-box;">${moduleName}</div>
                     </div>
@@ -369,7 +380,7 @@ class CharacterUpgrades {
             } else {
                 // Empty slot
                 gridHTML += `
-                    <div class="module-slot" style="width: 200px; height: 215px; border: 2px solid #333; background: rgba(0,0,0,0.3); box-sizing: border-box;"></div>
+                    <div class="module-slot" style="width: 130px; height: 145px; border: 2px solid #333; background: rgba(0,0,0,0.3); box-sizing: border-box;"></div>
                 `;
             }
         }
@@ -382,7 +393,7 @@ class CharacterUpgrades {
         // Show/hide overflow button
         if (overflowModules.length > 0) {
             overflowBtn.style.display = 'block';
-            overflowBtn.textContent = `VIEW OVERFLOW MODULES (${overflowModules.length} more)`;
+            overflowBtn.textContent = `> (${overflowModules.length})`; // Arrow style
         } else {
             overflowBtn.style.display = 'none';
         }
@@ -391,16 +402,27 @@ class CharacterUpgrades {
     getClassStartingModules(className) {
         // All skills are now blue droid modules + class-specific power modules
         const startingModules = {
+            'Gonk': ['Intimidate', 'Repair', 'Running', 'Climb', 'Pamphlet Toss', 'Scavenge'],
+            'gonk': ['Intimidate', 'Repair', 'Running', 'Climb', 'Pamphlet Toss', 'Scavenge'],
+            'Bonk': ['Intimidate', 'Repair', 'Running', 'Climb', 'Pamphlet Toss', 'Scavenge'],
+            'bonk': ['Intimidate', 'Repair', 'Running', 'Climb', 'Pamphlet Toss', 'Scavenge'],
             'Hunter Killer': ['Intimidate', 'Jump 3', 'Repair', 'Running 3', 'HK Quickcharge 5'],
+            'hunter killer': ['Intimidate', 'Jump 3', 'Repair', 'Running 3', 'HK Quickcharge 5'],
             'HK': ['Intimidate', 'Jump 3', 'Repair', 'Running 3', 'HK Quickcharge 5'],
+            'hk': ['Intimidate', 'Jump 3', 'Repair', 'Running 3', 'HK Quickcharge 5'],
             'Protocol': ['Jump 3', 'Persuasion', 'Perception', 'Medicine', 'Repair', 'Slicing', 'Speak Languages', 'Pamphlet Toss'],
+            'protocol': ['Jump 3', 'Persuasion', 'Perception', 'Medicine', 'Repair', 'Slicing', 'Speak Languages', 'Pamphlet Toss'],
             'Protocol Droid': ['Jump 3', 'Persuasion', 'Perception', 'Medicine', 'Repair', 'Slicing', 'Speak Languages', 'Pamphlet Toss'],
+            'protocol droid': ['Jump 3', 'Persuasion', 'Perception', 'Medicine', 'Repair', 'Slicing', 'Speak Languages', 'Pamphlet Toss'],
             'Techie': ['Climb', 'Medicine', 'Repair', 'Slicing', 'Insight', 'Craft', 'Scavenge'],
+            'techie': ['Climb', 'Medicine', 'Repair', 'Slicing', 'Insight', 'Craft', 'Scavenge'],
             'Slicer': ['Climb', 'Medicine', 'Repair', 'Slicing', 'Insight', 'Craft', 'Scavenge'],
-            'Adept': ['Perception', 'Jump 3', 'Persuasion', 'Medicine', 'Force Heal']
+            'slicer': ['Climb', 'Medicine', 'Repair', 'Slicing', 'Insight', 'Craft', 'Scavenge'],
+            'Adept': ['Perception', 'Jump 3', 'Persuasion', 'Medicine', 'Force Heal'],
+            'adept': ['Perception', 'Jump 3', 'Persuasion', 'Medicine', 'Force Heal']
         };
 
-        return startingModules[className] || [];
+        return startingModules[className] || startingModules[className.replace(/\b\w/g, l => l.toUpperCase())] || [];
     }
 
     updateModuleIcons(data, classData) {
@@ -540,31 +562,22 @@ class CharacterUpgrades {
             return;
         }
 
-        // If no class selected, show message to visit The Guide
+        // If no class selected, show message to visit The Guide (reusing header for message)
+        const headerTitle = document.getElementById('char-sheet-title');
+
         if (!window.characterStats.currentClass) {
+            if (headerTitle) headerTitle.textContent = "NO CLASS SELECTED";
             const statsDisplay = document.getElementById('stats-display');
-            const moduleDisplay = document.getElementById('module-display');
+            const moduleGrid = document.getElementById('module-grid');
 
             if (statsDisplay) {
                 statsDisplay.innerHTML = `
-                    <div style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; font-family: 'Courier New', monospace;">
-                        <div style="color: #ff0; font-size: 20px; margin-bottom: 20px;">NO CLASS SELECTED</div>
-                        <div style="color: #0ff; font-size: 14px; line-height: 1.6;">
-                            Visit The Guide to select your class.
-                            <br><br>
-                            Look for The Guide NPC in the level.
-                        </div>
+                    <div style="color: #0ff; font-size: 14px; line-height: 1.6; text-align: center;">
+                        Visit The Guide to select your class.
                     </div>
                 `;
             }
-
-            if (moduleDisplay) {
-                moduleDisplay.innerHTML = `
-                    <div style="height: 100%; display: flex; justify-content: center; align-items: center; padding: 20px; font-family: 'Courier New', monospace; color: #666; font-size: 14px; text-align: center;">
-                        Class progression table will appear here after you select a class.
-                    </div>
-                `;
-            }
+            if (moduleGrid) moduleGrid.innerHTML = '';
             return;
         }
 
@@ -577,145 +590,69 @@ class CharacterUpgrades {
         const data = window.characterStats.getDisplayData();
         const classData = window.characterStats.currentClassData;
 
-        // Get character name from game state
-        const characterName = window.game?.playerName || "Gonk Pope";
-
         // Rename Tech to Slicer
         let displayClassName = data.currentClass;
         if (displayClassName === "Techie") displayClassName = "Slicer";
 
-        // Calculate HP correctly: 5×CON + (level × HP_per_level)
+        // 1. UPDATE HEADER - Format: "[CLASS] GONK"
+        if (headerTitle) {
+            headerTitle.textContent = `${displayClassName.toUpperCase()} GONK`;
+        }
+
+        // Calculate HP
         const correctMaxHp = (5 * data.stats.CON) + (data.level * (classData?.base_stats?.hp_per_level || 10));
 
-        // LEFT SIDE: Compact info in narrow black area
+        // 2. UPDATE SIDEBAR (Stats & Resources)
         const statsDisplay = document.getElementById('stats-display');
         if (statsDisplay) {
             statsDisplay.innerHTML = `
-                <div style="height: 100%; font-family: 'Courier New', monospace; font-size: 24px; color: #0f0; padding: 20px;">
-                    <div style="margin-bottom: 30px; text-align: center;">
-                        <div style="color: #0ff; font-size: 20px; margin-bottom: 8px;">${characterName}</div>
-                        <div style="color: #ff0; font-size: 32px; font-weight: bold;">${displayClassName}</div>
-                        <div style="color: #0ff; font-size: 28px; font-weight: bold; margin-top: 8px;">LEVEL ${data.level}</div>
+                <!-- STATS BLOCK -->
+                <div style="margin-bottom: 30px; width: 100%;">
+                    <div style="font-size: 24px; line-height: 1.8; font-weight: bold;">
+                        <div style="display: flex; justify-content: space-between;"><span style="color: #0ff;">STR</span> <span style="color: #fff;">${data.stats.STR}</span></div>
+                        <div style="display: flex; justify-content: space-between;"><span style="color: #0ff;">DEX</span> <span style="color: #fff;">${data.stats.DEX}</span></div>
+                        <div style="display: flex; justify-content: space-between;"><span style="color: #0ff;">CON</span> <span style="color: #fff;">${data.stats.CON}</span></div>
+                        <div style="display: flex; justify-content: space-between;"><span style="color: #0ff;">INT</span> <span style="color: #fff;">${data.stats.INT}</span></div>
+                        <div style="display: flex; justify-content: space-between;"><span style="color: #0ff;">WIS</span> <span style="color: #fff;">${data.stats.WIS}</span></div>
+                        <div style="display: flex; justify-content: space-between;"><span style="color: #0ff;">CHA</span> <span style="color: #fff;">${data.stats.CHA}</span></div>
                     </div>
+                </div>
 
-                    <div style="margin-bottom: 25px;">
-                        <div style="color: #f00; font-size: 26px; font-weight: bold;">HP: ${data.hp}/${correctMaxHp}</div>
+                <!-- VITALS BLOCK -->
+                <div style="margin-bottom: 30px; width: 100%;">
+                    <div style="color: #f00; font-size: 20px; font-weight: bold; margin-bottom: 5px;">HP: <span style="color: #fff; float: right;">${data.hp}/${correctMaxHp}</span></div>
+                    <div style="color: #0ff; font-size: 20px; font-weight: bold; margin-bottom: 5px;">ENERGY: <span style="color: #fff; float: right;">${data.maxEnergy}</span></div>
+                    <div style="color: #0f0; font-size: 16px; font-weight: bold;">POWER/SEC: <span style="color: #fff; float: right;">${data.energyRegenBonusPct}%</span></div>
+                </div>
+
+                 <!-- LEVEL INFO -->
+                <div style="margin-bottom: 30px; width: 100%; text-align: center;">
+                    <div style="color: #ff0; font-size: 24px; font-weight: bold;">LEVEL ${data.level}</div>
+                </div>
+
+                <!-- RESOURCES BLOCK (Moved from absolute) -->
+                <div style="margin-top: auto; width: 100%; border-top: 2px solid #333; padding-top: 20px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <img src="data/pngs/HUD/CharacterSheet/scrapsymbol.png" style="width: 40px; height: 40px; margin-right: 15px;">
+                        <span style="font-size: 32px; color: #fff; font-weight: bold;">${window.game?.state?.wire || 0}</span>
                     </div>
-
-                    <div style="margin-bottom: 25px;">
-                        <div style="font-size: 24px; line-height: 1.8;">
-                            <div><span style="color: #0ff;">STR</span> <span style="color: #ff0;">${data.stats.STR}</span></div>
-                            <div><span style="color: #0ff;">DEX</span> <span style="color: #ff0;">${data.stats.DEX}</span></div>
-                            <div><span style="color: #0ff;">CON</span> <span style="color: #ff0;">${data.stats.CON}</span></div>
-                            <div><span style="color: #0ff;">INT</span> <span style="color: #ff0;">${data.stats.INT}</span></div>
-                            <div><span style="color: #0ff;">WIS</span> <span style="color: #ff0;">${data.stats.WIS}</span></div>
-                            <div><span style="color: #0ff;">CHA</span> <span style="color: #ff0;">${data.stats.CHA}</span></div>
-                        </div>
-                    </div>
-
-                    <div style="font-size: 22px; line-height: 1.6; margin-bottom: 25px;">
-                        <div style="color: #0ff;">Armor: ${data.armor}%</div>
-                        <div style="color: #ff0;">Damage Bonus: +${data.damageBonusPct}%</div>
-                        <div style="color: #08f;">Energy Max: +${data.energyMaxBonusPct}%</div>
-                        <div style="color: #0ff;">Energy Regen: +${data.energyRegenBonusPct}%</div>
-                        <div style="color: #0f0;">Weapon Slots: ${data.weaponSlots}</div>
-                        <div style="color: #0f0;">Max Allies: ${data.maxAllies}</div>
-                    </div>
-
-                    <div style="font-size: 24px; margin-top: 30px; padding-top: 20px; border-top: 3px solid #0f0;">
-                        <div style="color: #61afef; font-weight: bold; margin-bottom: 10px;">Wire: ${window.game?.state?.wire || 0}</div>
-                        <div style="color: #ffa500; font-weight: bold;">Credits: ${window.game?.state?.credits || 0}</div>
+                    <div style="display: flex; align-items: center;">
+                        <img src="data/pngs/HUD/CharacterSheet/creditssymbol.png" style="width: 40px; height: 40px; margin-right: 15px;">
+                        <span style="font-size: 32px; color: #ff0; font-weight: bold;">${window.game?.state?.credits || 0}</span>
                     </div>
                 </div>
             `;
         }
+        console.log('[updateD20Display] About to update module grid with powers:', data.powers);
 
-        // RIGHT SIDE: Current + Next Level, Skills, Modules
-        const moduleDisplay = document.getElementById('module-display');
-        if (moduleDisplay && classData) {
-            const progression = classData.progression;
-            const currentLevelData = progression[data.level - 1];
-            const nextLevelData = data.level < 20 ? progression[data.level] : null;
+        // 3. UPDATE MODULE GRID
+        // Using data.powers which comes from getDisplayData()
+        this.updateModuleGrid(data.powers || [], classData);
 
-            // Get class-relevant skills only
-            const allSkills = classData.skills_learned || [];
-            const relevantSkills = {};
-
-            // Map skills to display names based on class
-            const skillDisplayMap = {
-                'intimidate': 'Intimidate',
-                'jump': 'Jump',
-                'repair': 'Repair',
-                'diplomacy': 'Persuasion',
-                'persuasion': 'Persuasion',
-                'insight': 'Gather Info',
-                'medicine': 'Medicine',
-                'slicing': 'Slicing',
-                'craft': 'Craft',
-                'scavenge': 'Scavenge',
-                'telepathy': 'Telepathy'
-            };
-
-            // Only show skills that have non-zero values
-            allSkills.forEach(skill => {
-                const skillLower = skill.toLowerCase();
-                if (currentLevelData[skillLower] && currentLevelData[skillLower] > 0) {
-                    relevantSkills[skillDisplayMap[skillLower] || skill] = currentLevelData[skillLower];
-                }
-            });
-
-            const currentHp = (5 * currentLevelData.con) + (data.level * classData.base_stats.hp_per_level);
-            const nextHp = nextLevelData ? (5 * nextLevelData.con) + ((data.level + 1) * classData.base_stats.hp_per_level) : null;
-
-            let displayHTML = `
-                <div style="height: 100%; overflow-y: auto; overflow-x: hidden; font-family: 'Courier New', monospace; padding: 20px;">
-
-                    <!-- CURRENT LEVEL -->
-                    <div style="background: rgba(255,255,0,0.15); border: 3px solid #ff0; padding: 20px; margin-bottom: 30px;">
-                        <h2 style="color: #ff0; font-size: 32px; margin-bottom: 20px;">LEVEL ${data.level}</h2>
-                        <div style="font-size: 24px; line-height: 2; color: #0f0;">
-                            <div><strong style="color: #0ff;">HP:</strong> ${currentHp}</div>
-                            <div><strong style="color: #0ff;">STR:</strong> ${currentLevelData.str} <strong style="color: #0ff;">DEX:</strong> ${currentLevelData.dex} <strong style="color: #0ff;">CON:</strong> ${currentLevelData.con}</div>
-                            <div><strong style="color: #0ff;">INT:</strong> ${currentLevelData.int} <strong style="color: #0ff;">WIS:</strong> ${currentLevelData.wis} <strong style="color: #0ff;">CHA:</strong> ${currentLevelData.cha}</div>
-                            <div style="margin-top: 15px; border-top: 2px solid #0ff; padding-top: 15px;">
-                                ${Object.keys(relevantSkills).map(skill =>
-                `<div><strong style="color: #0ff;">${skill}:</strong> ${relevantSkills[skill]}</div>`
-            ).join('')}
-                            </div>
-                            ${currentLevelData.special ? `<div style="margin-top: 15px; color: #ff0;"><strong>Special:</strong> ${currentLevelData.special}</div>` : ''}
-                        </div>
-                    </div>
-
-                    ${nextLevelData ? `
-                    <!-- NEXT LEVEL -->
-                    <div style="background: rgba(0,255,255,0.1); border: 3px solid #0ff; padding: 20px; margin-bottom: 30px;">
-                        <h2 style="color: #0ff; font-size: 28px; margin-bottom: 20px;">LEVEL ${data.level + 1}</h2>
-                        <div style="font-size: 22px; line-height: 1.8; color: #0f0;">
-                            <div><strong style="color: #0ff;">HP:</strong> ${nextHp}</div>
-                            <div><strong style="color: #0ff;">STR:</strong> ${nextLevelData.str} <strong style="color: #0ff;">DEX:</strong> ${nextLevelData.dex} <strong style="color: #0ff;">CON:</strong> ${nextLevelData.con}</div>
-                            <div><strong style="color: #0ff;">INT:</strong> ${nextLevelData.int} <strong style="color: #0ff;">WIS:</strong> ${nextLevelData.wis} <strong style="color: #0ff;">CHA:</strong> ${nextLevelData.cha}</div>
-                            ${nextLevelData.special ? `<div style="margin-top: 10px; color: #0ff;"><strong>Special:</strong> ${nextLevelData.special}</div>` : ''}
-                        </div>
-                    </div>
-                    ` : ''}
-
-                    <!-- MODULES -->
-                    <div style="border: 3px solid #f0f; padding: 20px;">
-                        <h2 style="color: #f0f; font-size: 28px; margin-bottom: 20px;">ACTIVE MODULES</h2>
-                        <div style="font-size: 20px; color: #0f0;">
-                            ${data.powers && data.powers.length > 0 ?
-                    data.powers.map(power => `<div style="margin-bottom: 10px; color: #ff0;">• ${power}</div>`).join('') :
-                    '<div style="color: #666;">No modules acquired yet. Complete ship objectives to earn modules.</div>'
-                }
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            moduleDisplay.innerHTML = displayHTML;
-        }
+        console.log('[updateD20Display] COMPLETE - Character sheet should now be populated');
     }
 
+    // Function to handle showing the power choice UI
     showPowerChoiceUI() {
         const data = window.characterStats.getDisplayData();
         const choice = data.pendingPowerChoice;

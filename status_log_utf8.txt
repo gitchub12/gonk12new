@@ -1,0 +1,19 @@
+﻿On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	deleted:    .vscode/ALL GONK TO GONKTEST TOONS.bat
+	deleted:    .vscode/ALL TEST TO GONK TOONS TO JSON.bat
+	deleted:    data/pngs/HUD/MapShips/imperials/RENAMERFINAL.bat
+	deleted:    data/pngs/HUD/PowerSphereAnimation/RENAMERFINAL.bat
+	deleted:    data/speech/l4mp/rename_audio.bat
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	gitignore_log.txt
+	status_log.txt
+	status_log_utf8.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")

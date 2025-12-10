@@ -15,7 +15,7 @@ class GonkModelSystem {
         debug: console.log, info: console.info, warn: console.warn, error: console.error
       };
     }
-    Logger.debug('Gonk Model System initialized.');
+    // Logger.debug('Gonk Model System initialized.');
   }
 
   // Register an external model definition

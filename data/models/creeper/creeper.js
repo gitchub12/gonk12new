@@ -12,7 +12,7 @@ window.CreeperModel = {
         backLeftLeg: { size: [4, 6, 4], uvOffset: [0, 16], position: [2, 0, 2], pivot: [2, 6, 2], parent: 'body' }
     },
     scale: 0.0625, animationSpeed: 1.0,
-    getUVMap: function(partName, isOverlay = false) {
+    getUVMap: function (partName, isOverlay = false) {
         if (isOverlay) return null;
         const part = this.parts[partName];
         if (!part || !part.uvOffset) return null;
@@ -24,8 +24,8 @@ window.CreeperModel = {
             front: [u + depth, v + depth, width, height], back: [u + depth + width + depth, v + depth, width, height]
         };
     },
-    getGroundOffset: function(scaleY, modelScale, universalScale) { return 18 * scaleY * modelScale * universalScale; },
-    applyAnimation: function(character, animState, time, options) {
+    getGroundOffset: function (scaleY, modelScale, universalScale) { return 18 * scaleY * modelScale * universalScale; },
+    applyAnimation: function (character, animState, time, options) {
         const parts = character.parts;
         switch (animState) {
             case 'walk':
@@ -45,4 +45,4 @@ window.CreeperModel = {
         }
     }
 };
-console.log('Creeper model definition loaded');
+// console.log('Creeper model definition loaded');

@@ -217,15 +217,14 @@ class TabControls {
 
         const uiPositionHTML = `
             <h4>Health/Energy Overlay</h4>
-            <div class="control-group"><label>X: <span id="ui_health_energy_overlay_x_val">20</span></label><input type="range" class="ui-slider" id="ui_health_energy_overlay_x" min="-2000" max="2000" value="20" step="1"></div>
-            <div class="control-group"><label>Y: <span id="ui_health_energy_overlay_y_val">14</span></label><input type="range" class="ui-slider" id="ui_health_energy_overlay_y" min="-2000" max="2000" value="14" step="1"></div>
-            <div class="control-group"><label>Scale X: <span id="ui_health_energy_overlay_scaleX_val">1</span></label><input type="range" class="ui-slider" id="ui_health_energy_overlay_scaleX" min="0.1" max="5" value="1" step="0.05"></div>
-            <div class="control-group"><label>Scale Y: <span id="ui_health_energy_overlay_scaleY_val">1</span></label><input type="range" class="ui-slider" id="ui_health_energy_overlay_scaleY" min="0.1" max="5" value="1" step="0.05"></div>
+            <div class="control-group"><label>X: <span id="ui_health_energy_overlay_x_val">-17.2</span></label><input type="range" class="ui-slider" id="ui_health_energy_overlay_x" min="-60" max="40" value="-17.2" step="0.1"></div>
+            <div class="control-group"><label>Y: <span id="ui_health_energy_overlay_y_val">-32.4</span></label><input type="range" class="ui-slider" id="ui_health_energy_overlay_y" min="-88.2" max="11.8" value="-32.4" step="0.1"></div>
+            <div class="control-group"><label>Scale: <span id="ui_health_energy_overlay_scale_val">0.51</span></label><input type="range" class="ui-slider" id="ui_health_energy_overlay_scale" min="0.01" max="1.01" value="0.51" step="0.01"></div>
             <hr><h4>Gauge Group (entire assembly)</h4>
-            <div class="control-group"><label>X: <span id="ui_conv_gauge_main_offsetX_val">-248</span></label><input type="range" class="ui-slider" id="ui_conv_gauge_main_offsetX" min="-2000" max="2000" value="-248" step="1"></div>
-            <div class="control-group"><label>Y: <span id="ui_conv_gauge_main_offsetY_val">-54</span></label><input type="range" class="ui-slider" id="ui_conv_gauge_main_offsetY" min="-2000" max="2000" value="-54" step="1"></div>
-            <div class="control-group"><label>Scale X: <span id="ui_conv_gauge_main_scaleX_val">0.7</span></label><input type="range" class="ui-slider" id="ui_conv_gauge_main_scaleX" min="0.1" max="5" value="0.7" step="0.05"></div>
-            <div class="control-group"><label>Scale Y: <span id="ui_conv_gauge_main_scaleY_val">0.6</span></label><input type="range" class="ui-slider" id="ui_conv_gauge_main_scaleY" min="0.1" max="5" value="0.6" step="0.05"></div>
+            <div class="control-group"><label>X: <span id="ui_conv_gauge_main_offsetX_val">-248</span></label><input type="range" class="ui-slider" id="ui_conv_gauge_main_offsetX" min="-2000" max="2000" value="-248" step="0.1"></div>
+            <div class="control-group"><label>Y: <span id="ui_conv_gauge_main_offsetY_val">-54</span></label><input type="range" class="ui-slider" id="ui_conv_gauge_main_offsetY" min="-2000" max="2000" value="-54" step="0.1"></div>
+            <div class="control-group"><label>Scale X: <span id="ui_conv_gauge_main_scaleX_val">0.7</span></label><input type="range" class="ui-slider" id="ui_conv_gauge_main_scaleX" min="0.1" max="5" value="0.7" step="0.01"></div>
+            <div class="control-group"><label>Scale Y: <span id="ui_conv_gauge_main_scaleY_val">0.6</span></label><input type="range" class="ui-slider" id="ui_conv_gauge_main_scaleY" min="0.1" max="5" value="0.6" step="0.01"></div>
             <hr><h4>Gauge (dial only)</h4>
             <div class="control-group"><label>X: <span id="ui_conv_gauge_dial_offsetX_val">0</span></label><input type="range" class="ui-slider" id="ui_conv_gauge_dial_offsetX" min="-500" max="500" value="0" step="1"></div>
             <div class="control-group"><label>Y: <span id="ui_conv_gauge_dial_offsetY_val">0</span></label><input type="range" class="ui-slider" id="ui_conv_gauge_dial_offsetY" min="-500" max="500" value="0" step="1"></div>
@@ -237,7 +236,7 @@ class TabControls {
             <div class="control-group"><label>Speech Box Scale: <span id="ui_conv_speech_scale_val">1</span></label><input type="range" class="ui-slider" id="ui_conv_speech_scale" min="0.1" max="3" value="1" step="0.05"></div>
             <button id="ui_snapshotBtn">Snapshot UI</button>
         `;
-        
+
         const npcWeaponSliderHTML = `
             <div class="control-group"><label>X-Offset: <span id="npc_posX_val">0.1</span></label><input type="range" class="npc-weapon-slider" id="npc_weapon_posX" min="-10" max="10" value="0.1" step="0.01"></div>
             <div class="control-group"><label>Y-Offset: <span id="npc_posY_val">-0.25</span></label><input type="range" class="npc-weapon-slider" id="npc_weapon_posY" min="-50" max="50" value="-0.25" step="0.01"></div>
@@ -313,7 +312,7 @@ class TabControls {
         const styleEl = document.createElement('style');
         styleEl.innerHTML = panelStyle;
         document.head.appendChild(styleEl);
-        
+
         this.leftPanel = document.createElement('div');
         this.leftPanel.id = 'leftEditorPanel';
         this.leftPanel.className = 'editorPanel';
@@ -394,7 +393,7 @@ class TabControls {
                 document.querySelectorAll('#leftEditorPanel .editor-tab-btn, #leftEditorPanel .tab-pane').forEach(t => t.classList.remove('active'));
                 btn.classList.add('active');
                 const pane = document.getElementById(btn.dataset.tab);
-                if(pane) pane.classList.add('active');
+                if (pane) pane.classList.add('active');
             });
         });
     }
@@ -415,15 +414,15 @@ class TabControls {
         if (this.globalControlsPanel) this.globalControlsPanel.style.display = 'flex';
         document.exitPointerLock();
     }
-    
+
     toggle() { this.isVisible ? this.hide() : this.show(); }
-    
+
     hide() {
         this.isVisible = false;
         this.game.state.isPaused = false;
-        if(this.leftPanel) this.leftPanel.style.display = 'none';
-        if(this.rightPanel) this.rightPanel.style.display = 'none';
-        if(this.globalControlsPanel) this.globalControlsPanel.style.display = 'none';
+        if (this.leftPanel) this.leftPanel.style.display = 'none';
+        if (this.rightPanel) this.rightPanel.style.display = 'none';
+        if (this.globalControlsPanel) this.globalControlsPanel.style.display = 'none';
         if (game.canvas) game.canvas.requestPointerLock();
     }
 
@@ -497,46 +496,46 @@ class TabControls {
             if (slider && label) {
                 let value = slider.value;
                 if (isFloat) {
-                    try { value = parseFloat(value).toFixed(toFixed); } catch(e) { console.warn(e) }
+                    try { value = parseFloat(value).toFixed(toFixed); } catch (e) { console.warn(e) }
                 }
                 label.textContent = value;
             }
         };
 
         const newSliders = [
-            'ui_health_energy_overlay_x', 'ui_health_energy_overlay_y', 'ui_health_energy_overlay_scaleX', 'ui_health_energy_overlay_scaleY',
+            'ui_health_energy_overlay_x', 'ui_health_energy_overlay_y', 'ui_health_energy_overlay_scale',
             'ui_conv_gauge_main_offsetX', 'ui_conv_gauge_main_offsetY', 'ui_conv_gauge_main_scaleX', 'ui_conv_gauge_main_scaleY',
             'ui_conv_gauge_dial_offsetX', 'ui_conv_gauge_dial_offsetY', 'ui_conv_gauge_dial_scaleX', 'ui_conv_gauge_dial_scaleY',
             'ui_conv_speech_x', 'ui_conv_speech_y', 'ui_conv_speech_scale'
         ];
         newSliders.forEach(id => {
-            if(document.getElementById(id)) {
+            if (document.getElementById(id)) {
                 updateLabel(id, id.includes('scale') ? 2 : 0, id.includes('scale'));
             }
         });
 
-        // Apply transform to health-energy-overlay
+        // Apply CSS properties to health-energy-overlay
         const overlay = document.getElementById('health-energy-overlay');
         if (overlay) {
-            const x = parseFloat(document.getElementById('ui_health_energy_overlay_x')?.value || 0);
-            const y = parseFloat(document.getElementById('ui_health_energy_overlay_y')?.value || 0);
-            const scaleX = parseFloat(document.getElementById('ui_health_energy_overlay_scaleX')?.value || 1);
-            const scaleY = parseFloat(document.getElementById('ui_health_energy_overlay_scaleY')?.value || 1);
-            overlay.style.transform = `translate(${x}px, ${y}px) scale(${scaleX}, ${scaleY})`;
+            const x = parseFloat(document.getElementById('ui_health_energy_overlay_x')?.value || -11.1);
+            const y = parseFloat(document.getElementById('ui_health_energy_overlay_y')?.value || -30.6);
+            const scale = parseFloat(document.getElementById('ui_health_energy_overlay_scale')?.value || 0.5);
+            overlay.style.left = `${x}px`;
+            overlay.style.bottom = `${y}px`;
+            overlay.style.transform = `scale(${scale})`;
         }
     }
 
     // Other functions are omitted but assumed to be here from the original file
-    snapshotVisuals() {}
+    snapshotVisuals() { }
     snapshotUI() {
         console.log('=== UI POSITIONING SNAPSHOT ===');
 
         // Health/Energy Overlay
         const overlayX = document.getElementById('ui_health_energy_overlay_x')?.value;
         const overlayY = document.getElementById('ui_health_energy_overlay_y')?.value;
-        const overlayScaleX = document.getElementById('ui_health_energy_overlay_scaleX')?.value;
-        const overlayScaleY = document.getElementById('ui_health_energy_overlay_scaleY')?.value;
-        console.log(`Health/Energy Overlay: X=${overlayX}, Y=${overlayY}, ScaleX=${overlayScaleX}, ScaleY=${overlayScaleY}`);
+        const overlayScale = document.getElementById('ui_health_energy_overlay_scale')?.value;
+        console.log(`Health/Energy Overlay: X=${overlayX}, Y=${overlayY}, Scale=${overlayScale}`);
 
         // Conversation Gauge Main
         const gaugeMainX = document.getElementById('ui_conv_gauge_main_offsetX')?.value;
@@ -563,12 +562,12 @@ class TabControls {
     updateMuzzleHelpersFromUI() {
         // Stub function to prevent errors - muzzle helpers are visual debug aids
     }
-    snapshotRange() {}
-    snapshotSpeedConstants() {}
-    snapshotEffects() {}
-    snapshotDamageFx() {}
-    snapshotMuzzleOffset() {}
-    snapshotPlayerToConsole() {}
-    snapshotNpcToConsole() {}
-    snapshotNpcPoseToConsole() {}
+    snapshotRange() { }
+    snapshotSpeedConstants() { }
+    snapshotEffects() { }
+    snapshotDamageFx() { }
+    snapshotMuzzleOffset() { }
+    snapshotPlayerToConsole() { }
+    snapshotNpcToConsole() { }
+    snapshotNpcPoseToConsole() { }
 }

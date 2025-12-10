@@ -1,0 +1,25 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "STR",
+        "silver": "CON",
+        "bronze": "DEX"
+    },
+    "health_bonus_per_level": 14,
+    "default_weapon": "melee_ryyk_curved.png",
+    "accuracy_modifier": 0.85,
+    "force_sensitivity": false,
+    "technical_understanding": 20,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.9,
+    "speed": 0.04,
+    "soundSet": null,
+    "lie_attack": 20,
+    "lie_defense": 40,
+    "charm_attack": 20,
+    "charm_defense": 40,
+    "armor": {
+        "base": 0
+    },
+    "resistances": {}
+}

@@ -1,0 +1,27 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "STR",
+        "silver": "DEX",
+        "bronze": "CON"
+    },
+    "health_bonus_per_level": 10,
+    "default_weapon": "melee_spear.png",
+    "accuracy_modifier": 0.9,
+    "force_sensitivity": false,
+    "technical_understanding": 10,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.7,
+    "speed": 0.033,
+    "soundSet": null,
+    "lie_attack": 30,
+    "lie_defense": 30,
+    "charm_attack": 30,
+    "charm_defense": 30,
+    "armor": {
+        "base": 1
+    },
+    "resistances": {
+        "ballistic": 0.1
+    }
+}

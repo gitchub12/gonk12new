@@ -18,7 +18,7 @@ class AudioSystem {
         this.currentCategoryIndex = 0;
         this.currentTrackIndex = 0;
         this.isMusicPlaying = false;
-        this.musicVolume = 0.432; // Decreased by 40% from 0.72 (0.72 * 0.6 = 0.432)
+        this.musicVolume = 0.05; // Set to 5% as requested
         this.voiceVolume = 1.1; // Increased by 10% from default 1.0
         this.songTitleElement = null;
         this.songCategoryElement = null;
@@ -65,37 +65,37 @@ class AudioSystem {
         this.soundCategories['wookconvert'] = '/data/sounds/wookiee/';
 
         this.staticSoundDefs = {
-             'dooropen': '/data/sounds/dooropen.wav',
-             'dooropen2': '/data/sounds/dooropen2.wav',
-             'doorclose2': '/data/sounds/doorclose2.wav',
-             'triviacorrect': '/data/sounds/trivia/triviacorrect.wav',
-             'triviawrong': '/data/sounds/trivia/triviawrong.wav',
-             // ADDED: Pickup sound
-             'pickup': '/data/sounds/pickup.wav',
-             'NPCpickup': '/data/sounds/UIsoundeffects/NPCpickup.wav',
-             'NPCcannotpickup': '/data/sounds/UIsoundeffects/NPCcannotpickup.wav',
-             // ADDED: Spawner explosion sound
-             'spawnerexplosion': '/data/sounds/MapSoundEffects/spawnerexplosion.wav',
-             // ADDED: Force power sounds
-             'forceheal': '/data/sounds/force/forceheal.wav',
-             'forcechoke': '/data/sounds/force/forcechoke.wav',
-             'forcelightning': '/data/sounds/force/forcelightning.wav',
-             'forcepush': '/data/sounds/force/forcepush.wav',
-             'mindtrick': '/data/sounds/force/mindtrick.wav',
-             // ADDED: UI sounds
-             'newnodeSelected': '/data/sounds/UIsoundeffects/newnodeSelected.wav',
-             'nodeCannotbeselected': '/data/sounds/UIsoundeffects/nodeCannotbeselected.wav',
-             'nodeDeselected': '/data/sounds/UIsoundeffects/nodeDeselected.wav',
-             'charactersheetclose': '/data/sounds/UIsoundeffects/charactersheetclose.wav',
-             'charactersheetopen': '/data/sounds/UIsoundeffects/charactersheetopen.wav',
-             'moduleacquired': '/data/sounds/UIsoundeffects/moduleacquired.wav',
-             // ADDED: Out of ammo sound
-             'noammo': '/data/sounds/uniqueshot/outofammo/noammo.mp3',
-             // ADDED: DroidSlayer activation scream
-             'droidslayerscream': '/data/sounds/beasts/droidslayer/droidslayeryellsno.wav'
+            'dooropen': '/data/sounds/dooropen.wav',
+            'dooropen2': '/data/sounds/dooropen2.wav',
+            'doorclose2': '/data/sounds/doorclose2.wav',
+            'triviacorrect': '/data/sounds/trivia/triviacorrect.wav',
+            'triviawrong': '/data/sounds/trivia/triviawrong.wav',
+            // ADDED: Pickup sound
+            'pickup': '/data/sounds/pickup.wav',
+            'NPCpickup': '/data/sounds/UIsoundeffects/NPCpickup.wav',
+            'NPCcannotpickup': '/data/sounds/UIsoundeffects/NPCcannotpickup.wav',
+            // ADDED: Spawner explosion sound
+            'spawnerexplosion': '/data/sounds/MapSoundEffects/spawnerexplosion.wav',
+            // ADDED: Force power sounds
+            'forceheal': '/data/sounds/force/forceheal.wav',
+            'forcechoke': '/data/sounds/force/forcechoke.wav',
+            'forcelightning': '/data/sounds/force/forcelightning.wav',
+            'forcepush': '/data/sounds/force/forcepush.wav',
+            'mindtrick': '/data/sounds/force/mindtrick.wav',
+            // ADDED: UI sounds
+            'newnodeSelected': '/data/sounds/UIsoundeffects/newnodeSelected.wav',
+            'nodeCannotbeselected': '/data/sounds/UIsoundeffects/nodeCannotbeselected.wav',
+            'nodeDeselected': '/data/sounds/UIsoundeffects/nodeDeselected.wav',
+            'charactersheetclose': '/data/sounds/UIsoundeffects/charactersheetclose.wav',
+            'charactersheetopen': '/data/sounds/UIsoundeffects/charactersheetopen.wav',
+            'moduleacquired': '/data/sounds/UIsoundeffects/moduleacquired.wav',
+            // ADDED: Out of ammo sound
+            'noammo': '/data/sounds/uniqueshot/outofammo/noammo.mp3',
+            // ADDED: DroidSlayer activation scream
+            'droidslayerscream': '/data/sounds/beasts/droidslayer/droidslayeryellsno.wav'
         };
     }
-    
+
     init(camera) {
         if (this.isInitialized) return;
         this.listener = new THREE.AudioListener();
@@ -178,7 +178,7 @@ class AudioSystem {
         if (this.musicCategories.length === 0) return;
         const category = this.musicCategories[this.currentCategoryIndex];
         const trackPath = this.musicLibrary[category][this.currentTrackIndex];
-        
+
         this.playMusic(trackPath, () => this.nextMusicTrack(true));
         this.isMusicPlaying = true;
         this.showSongTitle();
@@ -365,7 +365,7 @@ class AudioSystem {
         this.volumeFadeTimeout = setTimeout(() => {
             this.musicVolumeElement.style.opacity = '0';
             // After fade out, set display to none so it doesn't hold space
-            setTimeout(() => { if(this.musicVolumeElement.style.opacity === '0') this.musicVolumeElement.style.display = 'none'; }, 500);
+            setTimeout(() => { if (this.musicVolumeElement.style.opacity === '0') this.musicVolumeElement.style.display = 'none'; }, 500);
         }, 4000);
     }
 
@@ -473,9 +473,9 @@ class AudioSystem {
     playWeaponFireSound(weaponName, position) {
         const category = window.weaponIcons.getCategoryFromName(weaponName);
         let listName;
-        switch(category) {
+        switch (category) {
             case 'pistol': listName = 'pistolshot'; break;
-            case 'rifle': listName = 'rifleshot'; break; 
+            case 'rifle': listName = 'rifleshot'; break;
             case 'longarm':
                 // Check for weapon-specific sound overrides first
                 const weaponModel = weaponName.split('_')[1]; // e.g., 'glong_ee3_mando' -> 'ee3'
@@ -493,7 +493,7 @@ class AudioSystem {
 
     playPlayerWeaponFireSound(weaponName, category) {
         let listName;
-        switch(category) {
+        switch (category) {
             case 'pistol': listName = 'pistolshot'; break;
             case 'rifle': listName = 'rifleshot'; break;
             case 'longarm':
@@ -540,7 +540,7 @@ class AudioSystem {
         if (soundSet === 'female') {
             soundListName = 'femalehurt';
         } else {
-             switch (npc.config.baseType) {
+            switch (npc.config.baseType) {
                 case 'gamorrean':
                     soundListName = 'gamorreanhit';
                     break;
@@ -558,7 +558,7 @@ class AudioSystem {
                     break;
             }
         }
-        
+
         this.playPositionalSoundFromList(soundListName, npc.mesh.group.position, finalVolume);
     }
 

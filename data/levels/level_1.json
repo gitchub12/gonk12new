@@ -1371,12 +1371,13 @@
         "18,10",
         {
           "type": "npc",
-          "key": "protocol_black",
+          "key": "Star-Wars-Triple-Zero",
           "properties": {
             "name": "The Guide",
             "immovable": true,
             "invincible": true,
-            "interactionScreen": "the_guide"
+            "interactionScreen": "the_guide",
+            "promptText": "Consult The Guide"
           },
           "rotation": 2
         }

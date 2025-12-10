@@ -1,0 +1,28 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "CON",
+        "silver": "STR",
+        "bronze": "WIS"
+    },
+    "health_bonus_per_level": 15,
+    "default_weapon": "melee_warclub_ushar.png",
+    "accuracy_modifier": 0.85,
+    "force_sensitivity": false,
+    "technical_understanding": 20,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.8,
+    "speed": 0.025,
+    "soundSet": null,
+    "lie_attack": 20,
+    "lie_defense": 50,
+    "charm_attack": 20,
+    "charm_defense": 50,
+    "armor": {
+        "base": 3
+    },
+    "resistances": {
+        "ballistic": 0.2,
+        "energy": 0.1
+    }
+}

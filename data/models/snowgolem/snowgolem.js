@@ -49,25 +49,25 @@ window.SnowGolemModel = {
     },
     scale: 1.0,  // Already in game units
     animationSpeed: 1.2,
-    getUVMap: function(partName, isOverlay = false) {
+    getUVMap: function (partName, isOverlay = false) {
         if (isOverlay) return null;
         const part = this.parts[partName];
         if (!part || !part.uvOffset || !part.pixelSize) return null;
         const [width, height, depth] = part.pixelSize;  // Use pixel dimensions
         const [u, v] = part.uvOffset;
         return {
-            left:   [u, v + depth, depth, height],
-            right:  [u + depth + width, v + depth, depth, height],
-            top:    [u + depth, v, width, depth],
+            left: [u, v + depth, depth, height],
+            right: [u + depth + width, v + depth, depth, height],
+            top: [u + depth, v, width, depth],
             bottom: [u + depth + width, v, width, depth],
-            front:  [u + depth, v + depth, width, height],
-            back:   [u + depth + width + depth, v + depth, width, height]
+            front: [u + depth, v + depth, width, height],
+            back: [u + depth + width + depth, v + depth, width, height]
         };
     },
-    getGroundOffset: function(scaleY, modelScale, universalScale) {
+    getGroundOffset: function (scaleY, modelScale, universalScale) {
         return 0.0;  // Position already accounts for ground placement
     },
-    applyAnimation: function(character, animState, time, options) {
+    applyAnimation: function (character, animState, time, options) {
         const parts = character.parts;
         switch (animState) {
             case 'walk':
@@ -92,4 +92,4 @@ window.SnowGolemModel = {
         }
     }
 };
-console.log('Snow Golem model definition loaded');
+// console.log('Snow Golem model definition loaded');

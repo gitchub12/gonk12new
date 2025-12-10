@@ -1,0 +1,25 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "STR",
+        "silver": "CON",
+        "bronze": "WIS"
+    },
+    "health_bonus_per_level": 12,
+    "default_weapon": "rifle_dlt19.png",
+    "accuracy_modifier": 0.9,
+    "force_sensitivity": false,
+    "technical_understanding": 50,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.75,
+    "speed": 0.03,
+    "soundSet": null,
+    "lie_attack": 40,
+    "lie_defense": 50,
+    "charm_attack": 40,
+    "charm_defense": 50,
+    "armor": {
+        "base": 2
+    },
+    "resistances": {}
+}

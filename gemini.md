@@ -1,5 +1,7 @@
 ## 1. CRITICAL OS & SHELL RULES
-* **OS:** Windows 10. You MUST use double backslashes (`\\`) for all file paths. NEVER use forward slashes (`/`).
+* **OS:** Windows 10. User provides paths with backslashes (`\`).
+* **Source of Truth:** ALWAYS check the local workspace first. Git is for updates/saves only.
+* **Internal Handling:** Silently convert Windows paths to Git-compatible paths (forward slashes) when running Git commands. Do not complain to user.
 * **Forbidden:** NEVER use the `ECHO` command. It fails on this system. To speak, just write text in the chat.
 * **User:** Non-coder. Never ask the user to paste code snippets. You must write/rewrite full files or use your tools to apply edits.
 

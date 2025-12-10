@@ -1,0 +1,27 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "INT",
+        "silver": "DEX",
+        "bronze": "WIS"
+    },
+    "health_bonus_per_level": 6,
+    "default_weapon": "rifle_ionblaster_jawa.png",
+    "accuracy_modifier": 0.9,
+    "force_sensitivity": false,
+    "technical_understanding": 70,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.4,
+    "speed": 0.033,
+    "soundSet": null,
+    "lie_attack": 60,
+    "lie_defense": 40,
+    "charm_attack": 50,
+    "charm_defense": 40,
+    "armor": {
+        "base": 0
+    },
+    "resistances": {
+        "ion": 0.3
+    }
+}

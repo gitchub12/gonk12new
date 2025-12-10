@@ -13,7 +13,7 @@ window.BatModel = {
     },
     scale: 0.03,
     animationSpeed: 1.0,
-    getUVMap: function(partName, isOverlay = false) {
+    getUVMap: function (partName, isOverlay = false) {
         if (isOverlay) return null;
         const part = this.parts[partName];
         if (!part || !part.uvOffset) return null;
@@ -25,10 +25,10 @@ window.BatModel = {
             front: [u + depth, v + depth, width, height], back: [u + depth + width + depth, v + depth, width, height]
         };
     },
-    getGroundOffset: function(scaleY, modelScale, universalScale) {
+    getGroundOffset: function (scaleY, modelScale, universalScale) {
         return 5 * scaleY * modelScale * universalScale;
     },
-    applyAnimation: function(character, animState, time, options) {
+    applyAnimation: function (character, animState, time, options) {
         const parts = character.parts;
         if (!parts.leftWing || !parts.rightWing) return;
 
@@ -39,4 +39,4 @@ window.BatModel = {
         parts.rightWingTip.rotation.z = wingflap * 0.5;
     }
 };
-console.log('Bat model definition loaded');
+// console.log('Bat model definition loaded');

@@ -1,0 +1,25 @@
+{
+    "GoldSilverBronzeStats": {
+        "gold": "WIS",
+        "silver": "INT",
+        "bronze": "CON"
+    },
+    "health_bonus_per_level": 8,
+    "default_weapon": "pistol_c96_SWTOR.png",
+    "accuracy_modifier": 0.9,
+    "force_sensitivity": false,
+    "technical_understanding": 40,
+    "special_moves": null,
+    "special_class_power": null,
+    "aggro": 0.5,
+    "speed": 0.028,
+    "soundSet": null,
+    "lie_attack": 40,
+    "lie_defense": 60,
+    "charm_attack": 40,
+    "charm_defense": 60,
+    "armor": {
+        "base": 0
+    },
+    "resistances": {}
+}

@@ -13,7 +13,7 @@ window.LlamaModel = {
     },
     scale: 0.04,
     animationSpeed: 1.0,
-    getUVMap: function(partName, isOverlay = false) {
+    getUVMap: function (partName, isOverlay = false) {
         if (isOverlay) return null;
         const part = this.parts[partName];
         if (!part || !part.uvOffset) return null;
@@ -25,10 +25,10 @@ window.LlamaModel = {
             front: [u + depth, v + depth, width, height], back: [u + depth + width + depth, v + depth, width, height]
         };
     },
-    getGroundOffset: function(scaleY, modelScale, universalScale) {
+    getGroundOffset: function (scaleY, modelScale, universalScale) {
         return 6 * scaleY * modelScale * universalScale;
     },
-    applyAnimation: function(character, animState, time, options) {
+    applyAnimation: function (character, animState, time, options) {
         const parts = character.parts;
         if (!parts.leg0 || !parts.leg1 || !parts.leg2 || !parts.leg3) return;
 
@@ -47,4 +47,4 @@ window.LlamaModel = {
         }
     }
 };
-console.log('Llama model definition loaded');
+// console.log('Llama model definition loaded');

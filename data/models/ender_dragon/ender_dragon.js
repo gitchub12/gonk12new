@@ -16,13 +16,13 @@ window.EnderDragonModel = {
     },
     scale: 0.02,
     animationSpeed: 1.0,
-    getUVMap: function(partName, isOverlay = false) {
+    getUVMap: function (partName, isOverlay = false) {
         if (isOverlay) return null;
         const part = this.parts[partName];
         if (!part || !part.uvOffset) return null;
         const [width, height, depth] = part.size;
         const [u, v] = part.uvOffset;
-        
+
         let uvs = {
             left: [u, v + depth, depth, height], right: [u + depth + width, v + depth, depth, height],
             top: [u + depth, v, width, depth], bottom: [u + depth + width, v, width, depth],
@@ -37,10 +37,10 @@ window.EnderDragonModel = {
 
         return uvs;
     },
-    getGroundOffset: function(scaleY, modelScale, universalScale) {
+    getGroundOffset: function (scaleY, modelScale, universalScale) {
         return 16 * scaleY * modelScale * universalScale;
     },
-    applyAnimation: function(character, animState, time, options) {
+    applyAnimation: function (character, animState, time, options) {
         const parts = character.parts;
         if (!parts.wing_left || !parts.wing_right) return;
 
@@ -56,4 +56,4 @@ window.EnderDragonModel = {
         parts.tail_segment_3.rotation.y = tailSway * 2.0;
     }
 };
-console.log('EnderDragon model definition loaded');
+// console.log('EnderDragon model definition loaded');

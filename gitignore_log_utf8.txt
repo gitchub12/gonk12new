@@ -1,0 +1,9 @@
+﻿# Ignore media files
+*.png
+*.wav
+*.mp3
+*.jpg
+
+# Ignore temp files
+temp*.txt
+*.tmp

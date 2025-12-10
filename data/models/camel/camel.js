@@ -15,7 +15,7 @@ window.CamelModel = {
     },
     scale: 0.04,
     animationSpeed: 1.0,
-    getUVMap: function(partName, isOverlay = false) {
+    getUVMap: function (partName, isOverlay = false) {
         if (isOverlay) return null;
         const part = this.parts[partName];
         if (!part || !part.uvOffset) return null;
@@ -27,10 +27,10 @@ window.CamelModel = {
             front: [u + depth, v + depth, width, height], back: [u + depth + width + depth, v + depth, width, height]
         };
     },
-    getGroundOffset: function(scaleY, modelScale, universalScale) {
+    getGroundOffset: function (scaleY, modelScale, universalScale) {
         return 12 * scaleY * modelScale * universalScale;
     },
-    applyAnimation: function(character, animState, time, options) {
+    applyAnimation: function (character, animState, time, options) {
         const parts = character.parts;
         if (!parts.leg_front_left || !parts.leg_front_right || !parts.leg_back_left || !parts.leg_back_right) return;
 
@@ -50,4 +50,4 @@ window.CamelModel = {
         }
     }
 };
-console.log('Camel model definition loaded');
+// console.log('Camel model definition loaded');

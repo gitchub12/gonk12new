@@ -298,6 +298,23 @@ class ModuleManager {
                 }
                 break;
 
+            case 'repair_bonus':
+            case 'climb_speed_bonus':
+            case 'scavenge_chance_bonus':
+                if (window.characterStats) {
+                    const skillName = effectKey.replace('_bonus', '').replace('_speed', '').replace('_chance', '');
+                    // Map to skill names if needed, or simple add to generic boosts
+                    // For now, assume these map to skill values if they exist
+                    if (window.characterStats.skills) {
+                        // Check for matching skill name regardless of case
+                        const targetSkill = Object.keys(window.characterStats.skills).find(k => k.toLowerCase() === skillName);
+                        if (targetSkill) {
+                            window.characterStats.skills[targetSkill] = (window.characterStats.skills[targetSkill] || 0) + effectValue;
+                        }
+                    }
+                }
+                break;
+
             default:
                 console.warn(`[ModuleManager] Unknown effect type: ${effectKey}`);
                 break;
