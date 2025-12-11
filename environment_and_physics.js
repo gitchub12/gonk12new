@@ -828,12 +828,12 @@ class LevelRenderer {
         for (const [pos, item] of items) {
             const [x, z] = pos.split(',').map(Number);
             const position = new THREE.Vector3(x * this.gridSize + this.gridSize / 2, 0, z * this.gridSize + this.gridSize / 2)
-            await this.spawnNpc(item.key, position, item.properties, item.rotation);
+            await this.spawnNpc(item.key, position, item.properties, item.rotation, item.size);
         }
     }
 
-    async spawnNpc(skinName, position, properties = {}, rotation = 0) {
-        const iconInfo = assetManager.npcIcons.get(skinName);
+    async spawnNpc(skinName, position, properties = {}, rotation = 0, size = 1) {
+        const iconInfo = window.assetManager.npcIcons.get(skinName);
 
         if (!iconInfo || !iconInfo.config) {
             console.warn(`No config found for NPC skin '${skinName}'. Cannot spawn.`);
@@ -844,7 +844,7 @@ class LevelRenderer {
         const groundHeight = window.physics.getGroundHeight(position.x, position.z);
 
         // Check for editor-specified scale overrides first, then fall back to config defaults
-        const finalSize = properties?.size || npcConfig.scale || 1.0;
+        const finalSize = size !== 1 ? size : (properties?.size || npcConfig.scale || 1.0);
         const finalScaleX = properties?.scale_x || npcConfig.scale_x;
         const finalScaleY = properties?.scale_y || npcConfig.scale_y;
         const finalScaleZ = properties?.scale_z || npcConfig.scale_z;
@@ -873,13 +873,29 @@ class LevelRenderer {
         if (charMesh) {
             const npcInstance = new NPC(charMesh, itemData, npcConfig);
 
-            if (properties?.weapon && properties.weapon !== "" && properties.weapon !== "none") {
-                const weaponName = properties.weapon.split('/').pop().replace('.png', '');
+            const propWeapon = properties?.weapon;
+            if (propWeapon && propWeapon !== "" && propWeapon !== "none") {
+                const weaponName = propWeapon.split('/').pop().replace('.png', '');
                 await window.weaponIcons.attachToCharacter(npcInstance, weaponName);
+
+                // Assign weapon data from master list
+                if (window.assetManager.npcWeaponData) {
+                    const fullWeaponName = propWeapon.split('/').pop(); // "long_crossbow.png"
+                    npcInstance.weaponData = window.assetManager.npcWeaponData[fullWeaponName] || window.assetManager.npcWeaponData[weaponName] || {};
+                }
+            } else if (propWeapon === "none") {
+                // Explicitly requested no weapon - do nothing
+                npcInstance.weaponData = {};
             } else if (npcConfig.default_weapon && npcConfig.default_weapon !== "") {
                 const weaponName = npcConfig.default_weapon.split('/').pop().replace('.png', '');
                 npcInstance.itemData.properties.weapon = npcConfig.default_weapon;
                 await window.weaponIcons.attachToCharacter(npcInstance, weaponName);
+
+                // Assign weapon data from master list
+                if (window.assetManager.npcWeaponData) {
+                    const fullWeaponName = npcConfig.default_weapon.split('/').pop();
+                    npcInstance.weaponData = window.assetManager.npcWeaponData[fullWeaponName] || window.assetManager.npcWeaponData[weaponName] || {};
+                }
             }
 
             charMesh.group.rotation.y = (rotation || 0) * -Math.PI / 2;

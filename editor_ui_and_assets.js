@@ -104,10 +104,11 @@ class EditorAssetManager {
         // Load config first
         await this.loadEditorConfig();
 
-        // Load Prerequisites (Species, Classes)
+        // Load Prerequisites (Species, Classes, Weapons)
         await Promise.all([
             this.loadSpeciesData(),
-            this.loadNPCClasses()
+            this.loadNPCClasses(),
+            this.loadNpcWeaponMasterList()
         ]);
 
         this.npcGroups = {
@@ -551,6 +552,27 @@ class EditorAssetManager {
         } catch (error) {
             console.error("Failed to load NPC classes:", error);
             this.npcClasses = this.npcClasses || {};
+        }
+    }
+    async loadNpcWeaponMasterList() {
+        try {
+            const response = await fetch('/data/NPConlyweapons/npc_weapons_master.json');
+            const data = await response.json();
+            // Data is an array. Convert to object keyed by weaponname (including .png) for easy lookup.
+            this.npcWeaponData = {};
+            data.forEach(weapon => {
+                if (weapon.weaponname) {
+                    this.npcWeaponData[weapon.weaponname] = weapon;
+                    // Also store by name without extension for fallback lookup
+                    const shortName = weapon.weaponname.replace('.png', '');
+                    if (!this.npcWeaponData[shortName]) {
+                        this.npcWeaponData[shortName] = weapon;
+                    }
+                }
+            });
+            console.log(`[EditorAssetManager] Loaded ${data.length} weapon definitions from master list.`);
+        } catch (e) {
+            console.error("Failed to load npc_weapons_master.json:", e);
         }
     }
 }
@@ -1275,6 +1297,8 @@ class EditorUI {
                             if (propKey === 'weapon') {
                                 if (val === 'default') {
                                     delete itemToModify.properties[propKey];
+                                } else if (val === 'none') {
+                                    itemToModify.properties[propKey] = 'none';
                                 } else {
                                     itemToModify.properties[propKey] = val;
                                 }

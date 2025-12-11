@@ -17,13 +17,22 @@ class BlasterBolt {
         this.speed = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_BOLT_SPEED;
         this.lifetime = config.lifetime || 120; // frames
 
-        const radius = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_BOLT_RADIUS * (this.ownerType === 'player' ? 0.5 : 1.0);
-        // Reduced length from 0.5 to 0.2 based on user feedback (bolts looked "2-3m long")
-        const geo = new THREE.CylinderGeometry(radius, radius, 0.2, 8);
+        const isBallistic = config.isBallistic || false;
+        const boltColor = config.color || 0xff0000;
+
+        let radius = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_BOLT_RADIUS * (this.ownerType === 'player' ? 0.5 : 1.0);
+        let length = 0.2;
+
+        if (isBallistic) {
+            radius *= 0.33; // 1/3 size
+            length *= 0.33;
+        }
+
+        const geo = new THREE.CylinderGeometry(radius, radius, length, 8);
         const mat = new THREE.MeshStandardMaterial({
-            color: 0xff0000,
-            emissive: 0xff0000,
-            emissiveIntensity: 1,
+            color: isBallistic ? 0x888888 : boltColor, // Gray for ballistic
+            emissive: isBallistic ? 0x000000 : boltColor,
+            emissiveIntensity: isBallistic ? 0 : 1,
             transparent: true,
             opacity: GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_BOLT_OPACITY
         });
@@ -32,11 +41,12 @@ class BlasterBolt {
         this.mesh.position.copy(startPos);
 
         // PERFORMANCE FIX: Use a shared glow sprite instead of a PointLight
-        if (window.sharedGlowMaterial) {
+        // Only for non-ballistic weapons
+        if (!isBallistic && window.sharedGlowMaterial) {
             this.glowSprite = new THREE.Sprite(window.sharedGlowMaterial.clone());
-            this.glowSprite.material.color.set(0xff0000);
+            this.glowSprite.material.color.set(boltColor);
             const glowScale = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_GLOW_SIZE; // Adjust for desired glow size
-            this.glowSprite.material.opacity = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_BOLT_OPACITY;
+            this.glowSprite.material.opacity = GAME_GLOBAL_CONSTANTS.WEAPONS.BLASTER_BOLT_OPACITY * 0.75;
             this.glowSprite.scale.set(glowScale, glowScale, glowScale);
             this.mesh.add(this.glowSprite);
         }
@@ -432,10 +442,15 @@ class RangedWeapon extends MeleeWeapon {
             damage *= (1 + game.state.playerStats.longarm_damage_bonus);
         }
 
+        const isBallistic = this.config.key.includes('slugthrower') || this.config.key.includes('tusken');
+        const boltColor = this.config.glow ? this.config.glow.color : 0xff0000;
+
         const bolt = new BlasterBolt(startPosition, direction, {
             owner: window.physics.playerEntity,
             ownerType: 'player',
-            damage: damage
+            damage: damage,
+            isBallistic: isBallistic,
+            color: boltColor
         });
         window.game.entities.projectiles.push(bolt);
 

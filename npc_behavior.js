@@ -1392,11 +1392,26 @@ class NPC {
     attack() {
         if (!this.target || (this.isAlly && this.target === physics.playerEntity)) return;
 
-        // Use weapon-specific cooldown if available
-        const cooldownMultiplier = this.weaponData?.attack_cooldown_mult || 1.0;
-        // FIX: Clamp minimum cooldown to 0.5s to prevent machine-gun attacks if stats are bugged
-        const calculatedCooldown = this.attackCooldown * cooldownMultiplier;
-        this.attackTimer = Math.max(0.5, calculatedCooldown);
+        // 1. Determine Base Cooldown: Prioritize Weapon Data > NPC Config > Default 2.0s
+        let baseCooldown = 2.0;
+        if (this.weaponData && this.weaponData.attack_cooldown) {
+            baseCooldown = this.weaponData.attack_cooldown;
+        } else {
+            baseCooldown = this.attackCooldown;
+        }
+
+        // 2. Apply DEX Modifier (Higher DEX = Lower Cooldown)
+        // Standard DEX is 10. DEX 20 = half cooldown.
+        const dex = (this.stats && this.stats.DEX) ? this.stats.DEX : 10;
+        const dexMultiplier = 10 / Math.max(1, dex); // Prevent division by zero
+
+        // 3. Calculate Final Cooldown
+        let finalCooldown = baseCooldown * dexMultiplier;
+
+        // 4. Cap fire rate (e.g., absolute minimum 0.1s for sanity)
+        finalCooldown = Math.max(0.1, finalCooldown);
+
+        this.attackTimer = finalCooldown;
 
         // Prevent NPCs with no weapon from attacking
         // FIX: Check config.default_weapon as fallback
@@ -1490,11 +1505,34 @@ class NPC {
             }
         }
 
+        const damageType = this.weaponData?.damage_type?.toLowerCase() || '';
+        const isBallistic = damageType === 'ballistic';
+
+        let boltColor = 0xff0000; // Default Red
+
+        if (damageType === 'ion') {
+            boltColor = 0xffffff; // White for Ion
+        } else if (damageType === 'bowcaster') {
+            boltColor = 0x00ff00; // Green for Bowcaster
+        } else if (isBallistic) {
+            boltColor = 0x888888; // Gray for Ballistic
+        } else if (weaponName.includes('clone') || weaponName.includes('republic') || weaponName.includes('blue')) {
+            boltColor = 0x0000ff;
+        } else if (weaponName.includes('mandalorian') || weaponName.includes('yellow')) {
+            boltColor = 0xffff00;
+        } else if (weaponName.includes('tie') || weaponName.includes('green')) {
+            boltColor = 0x00ff00;
+        }
+
+        // Override if NPC has a preferred color in config? (Not implemented, but good idea for later)
+
         const bolt = new boltClass(startPosition, direction, {
             owner: this,
             ownerType: ownerType,
             damage: damage,
-            speedMultiplier: boltSpeedMultiplier
+            speedMultiplier: boltSpeedMultiplier,
+            isBallistic: isBallistic,
+            color: boltColor
         });
 
         // Track DroidSlayer attack

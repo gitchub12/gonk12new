@@ -80,6 +80,7 @@ class AssetManager {
             this.loadSpeciesData(),
             this.loadNPCClasses(),
             this.loadWeaponData(),
+            this.loadNpcWeaponMasterList(), // Load weapon master list
             this.loadFactionData(),
             this.loadPlayerStats(),
             this.loadNameData(),
@@ -154,6 +155,28 @@ class AssetManager {
             this.weaponData = await response.json();
         } catch (error) {
             console.error("Failed to load weapon data:", error);
+        }
+    }
+
+    async loadNpcWeaponMasterList() {
+        try {
+            const response = await fetch('data/NPConlyweapons/npc_weapons_master.json');
+            const data = await response.json();
+            // Data is an array. Convert to object keyed by weaponname (including .png) for easy lookup.
+            this.npcWeaponData = {};
+            data.forEach(weapon => {
+                if (weapon.weaponname) {
+                    this.npcWeaponData[weapon.weaponname] = weapon;
+                    // Also store by name without extension for fallback lookup
+                    const shortName = weapon.weaponname.replace('.png', '');
+                    if (!this.npcWeaponData[shortName]) {
+                        this.npcWeaponData[shortName] = weapon;
+                    }
+                }
+            });
+            console.log(`[AssetManager] Loaded ${data.length} weapon definitions from master list.`);
+        } catch (e) {
+            console.error("Failed to load npc_weapons_master.json:", e);
         }
     }
 

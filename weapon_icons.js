@@ -68,6 +68,7 @@ class WeaponIconSystem {
         for (const path of weaponPaths) {
             if (!path || path === "") continue;
             const name = path.split('/').pop().replace('.png', ''); // e.g., 'pistol_dh17_rebel'
+            if (name === 'none') continue;
 
             // FIX: If the path is just a filename, construct the full path.
             // This handles cases where level data might store only the weapon name.
@@ -85,6 +86,7 @@ class WeaponIconSystem {
     }
 
     async createWeaponFromPNG(weaponName, pngPath) {
+        if (weaponName === 'none') return null;
         if (this.loadedWeapons.has(weaponName)) {
             return this.loadedWeapons.get(weaponName);
         }

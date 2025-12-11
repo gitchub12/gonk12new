@@ -696,6 +696,70 @@ class TabControls {
     updateMuzzleHelpersFromUI() {
         // Stub function to prevent errors - muzzle helpers are visual debug aids
     }
+    updateNpcPoseFromUI() {
+        const rotY = parseFloat(document.getElementById('npc_body_rotY').value);
+        const posY = parseFloat(document.getElementById('npc_body_posY').value);
+        const scale = parseFloat(document.getElementById('npc_body_scale').value);
+
+        const lArmScaleY = parseFloat(document.getElementById('npc_lArm_scaleY').value);
+        const lArmRotX = parseFloat(document.getElementById('npc_lArm_rotX').value);
+        const lArmRotY = parseFloat(document.getElementById('npc_lArm_rotY').value);
+        const lArmRotZ = parseFloat(document.getElementById('npc_lArm_rotZ').value);
+
+        const rArmScaleY = parseFloat(document.getElementById('npc_rArm_scaleY').value);
+        const rArmRotX = parseFloat(document.getElementById('npc_rArm_rotX').value);
+        const rArmRotY = parseFloat(document.getElementById('npc_rArm_rotY').value);
+        const rArmRotZ = parseFloat(document.getElementById('npc_rArm_rotZ').value);
+
+        // Update display values
+        const ids = [
+            'npc_body_rotY', 'npc_body_posY', 'npc_body_scale',
+            'npc_lArm_scaleY', 'npc_lArm_rotX', 'npc_lArm_rotY', 'npc_lArm_rotZ',
+            'npc_rArm_scaleY', 'npc_rArm_rotX', 'npc_rArm_rotY', 'npc_rArm_rotZ'
+        ];
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            const valSpan = document.getElementById(id + '_val');
+            if (el && valSpan) valSpan.textContent = el.value;
+        });
+
+        if (this.game && this.game.entities && this.game.entities.npcs) {
+            this.game.entities.npcs.forEach(npc => {
+                if (npc.mesh && npc.mesh.group) {
+                    // Body Rotation (Y)
+                    npc.mesh.group.rotation.y = THREE.MathUtils.degToRad(rotY);
+
+                    // Body Y-Offset (supported via editorBodyYOffset property in gonk_models.js now)
+                    npc.mesh.editorBodyYOffset = posY;
+
+                    // Instance Scale
+                    npc.mesh.group.scale.set(scale, scale, scale);
+
+                    // Arms Overrides
+                    if (!npc.mesh.editorLArmRot) npc.mesh.editorLArmRot = new THREE.Euler();
+                    if (!npc.mesh.editorRArmRot) npc.mesh.editorRArmRot = new THREE.Euler();
+
+                    npc.mesh.editorLArmRot.set(
+                        THREE.MathUtils.degToRad(lArmRotX),
+                        THREE.MathUtils.degToRad(lArmRotY),
+                        THREE.MathUtils.degToRad(lArmRotZ)
+                    );
+                    npc.mesh.editorRArmRot.set(
+                        THREE.MathUtils.degToRad(rArmRotX),
+                        THREE.MathUtils.degToRad(rArmRotY),
+                        THREE.MathUtils.degToRad(rArmRotZ)
+                    );
+
+                    // Arm Scale (Direct manipulation of parts)
+                    if (npc.mesh.parts) {
+                        if (npc.mesh.parts.leftArm) npc.mesh.parts.leftArm.scale.y = lArmScaleY;
+                        if (npc.mesh.parts.rightArm) npc.mesh.parts.rightArm.scale.y = rArmScaleY;
+                    }
+                }
+            });
+        }
+    }
+
     snapshotRange() { }
     snapshotSpeedConstants() { }
     snapshotEffects() { }

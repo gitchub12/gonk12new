@@ -463,7 +463,8 @@ class GonkModelSystem {
     }
 
     const bodyBaseY = (parts.body && modelDef.parts.body) ? modelDef.parts.body.position[1] * dimensionScale.y : 0;
-    if (parts.body) parts.body.position.y = bodyBaseY;
+    const bodyYOffset = character.editorBodyYOffset || 0;
+    if (parts.body) parts.body.position.y = bodyBaseY + bodyYOffset;
 
     if (!isPaused) {
       switch (character.animState) {
@@ -473,7 +474,7 @@ class GonkModelSystem {
           if (parts.leftLeg) parts.leftLeg.rotation.x = -walk * 0.5;
           if (parts.rightArm) parts.rightArm.rotation.x = -walk * 0.4;
           if (parts.leftArm) parts.leftArm.rotation.x = walk * 0.4;
-          if (parts.body) parts.body.position.y = bodyBaseY + Math.abs(Math.sin(time * 2)) * 0.5;
+          if (parts.body) parts.body.position.y = bodyBaseY + bodyYOffset + Math.abs(Math.sin(time * 2)) * 0.5;
           if (parts.head) parts.head.rotation.x = Math.abs(Math.sin(time * 2)) * 0.05;
           break;
         case 'run':
@@ -482,7 +483,7 @@ class GonkModelSystem {
           if (parts.leftLeg) parts.leftLeg.rotation.x = -run * 0.8;
           if (parts.rightArm) parts.rightArm.rotation.x = -run * 0.8;
           if (parts.leftArm) parts.leftArm.rotation.x = run * 0.8;
-          if (parts.body) parts.body.position.y = bodyBaseY + Math.abs(Math.sin(time * 3)) * 1.5;
+          if (parts.body) parts.body.position.y = bodyBaseY + bodyYOffset + Math.abs(Math.sin(time * 3)) * 1.5;
           if (parts.head) parts.head.rotation.x = Math.abs(Math.sin(time * 3)) * 0.08;
           break;
         case 'shoot':
