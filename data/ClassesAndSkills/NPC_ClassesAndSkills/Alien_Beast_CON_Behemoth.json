@@ -1,11 +1,11 @@
 {
     "starting_attributes": {
-        "STR": 14,
+        "STR": 20,
         "DEX": 8,
-        "CON": 15,
-        "INT": 8,
-        "WIS": 13,
-        "CHA": 10
+        "CON": 20,
+        "INT": 6,
+        "WIS": 8,
+        "CHA": 8
     },
     "GoldSilverBronzeStats": {
         "gold": "CON",
@@ -13,19 +13,19 @@
         "bronze": "DEX"
     },
     "health_bonus_per_level": 16,
-    "default_weapon": "melee_axe_gamorrean.png",
-    "accuracy_modifier": 0.8,
+    "default_weapon": "none",
+    "accuracy_modifier": 1.0,
     "force_sensitivity": false,
-    "technical_understanding": 10,
-    "aggro": 0.9,
-    "speed": 0.025,
+    "technical_understanding": 1,
+    "aggro": 0.99,
+    "speed": 0.055,
     "soundSet": null,
     "lie_attack": 10,
     "lie_defense": 50,
     "charm_attack": 10,
     "charm_defense": 50,
     "armor": {
-        "damage_reduction": -4
+        "damage_reduction": -5
     },
     "resistances": {
         "ballistic": "20%"

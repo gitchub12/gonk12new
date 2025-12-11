@@ -1,4 +1,12 @@
 {
+    "starting_attributes": {
+        "STR": 15,
+        "DEX": 8,
+        "CON": 14,
+        "INT": 10,
+        "WIS": 13,
+        "CHA": 8
+    },
     "GoldSilverBronzeStats": {
         "gold": "STR",
         "silver": "CON",
@@ -9,9 +17,7 @@
     "accuracy_modifier": 0.9,
     "force_sensitivity": false,
     "technical_understanding": 50,
-    "special_moves": null,
-    "special_class_power": null,
-    "aggro": 0.75,
+    "aggro": 0.9,
     "speed": 0.03,
     "soundSet": null,
     "lie_attack": 40,
@@ -19,7 +25,7 @@
     "charm_attack": 40,
     "charm_defense": 50,
     "armor": {
-        "base": 2
+        "damage_reduction": -2
     },
     "resistances": {}
 }
