@@ -41,13 +41,32 @@ class AssetManager {
     }
 
     async loadNPCClasses() {
+        this.npcClasses = {};
         try {
+            // Load original classes (keeping for backward compatibility if needed)
             const response = await fetch('data/ClassesAndSkills/npc_classes.json');
             const data = await response.json();
-            this.npcClasses = data.npc_classes;
+            this.npcClasses = data.npc_classes || {};
+
+            // Load new BASIC class files
+            const newClasses = [
+                'BASIC_ANY_WIS', 'BASIC_ANY_CHA', 'BASIC_ANY_CON',
+                'BASIC_ANY_DEX', 'BASIC_ANY_FORCE', 'BASIC_ANY_INT', 'BASIC_ANY_STR'
+            ];
+
+            for (const className of newClasses) {
+                try {
+                    const res = await fetch(`data/ClassesAndSkills/NPC_ClassesAndSkills/${className}.json`);
+                    const classData = await res.json();
+                    this.npcClasses[className] = classData;
+                } catch (err) {
+                    console.warn(`Failed to load class ${className}`, err);
+                }
+            }
+            console.log("Loaded NPC Classes:", Object.keys(this.npcClasses));
         } catch (error) {
             console.error("Failed to load NPC classes:", error);
-            this.npcClasses = {}; // Fallback
+            this.npcClasses = this.npcClasses || {}; // Fallback
         }
     }
 
@@ -55,27 +74,34 @@ class AssetManager {
         this.discoverPamphletTextures();
         this.discoverPickupTextures();
         this.discoverNumberTextures();
+
+        // Step 1: Load Prerequisites (Species, Classes, Faction Config, etc.)
         await Promise.all([
+            this.loadSpeciesData(),
+            this.loadNPCClasses(),
             this.loadWeaponData(),
             this.loadFactionData(),
-            this.loadCharacterData(),
-            this.loadNameData(),
-            this.loadConversationData(),
-            this.loadFactionAttitudes(), // FIX: This function call is now defined below
-            this.preloadPlayerWeaponAssets(), // Preload zapper/pamphlet textures
             this.loadPlayerStats(),
-            this.loadNPCClasses(),
-            this.loadSpeciesData(), // NEW: Load Species data
-            this.preloadNumberTextures() // NEW: Preload number badge textures
+            this.loadNameData(),
+            this.loadFactionAttitudes()
         ]);
+
+        // Step 2: Load Dependent Data (Characters rely on Species/Classes)
+        await Promise.all([
+            this.loadCharacterData(),
+            this.loadConversationData(),
+            this.preloadPlayerWeaponAssets(),
+            this.preloadNumberTextures()
+        ]);
+
         this.buildSkinPathMap();
     }
 
     async loadSpeciesData() {
         try {
-            const response = await fetch('data/ClassesAndSkills/species.json');
+            const response = await fetch('data/factionJSONs/species/species.json');
             const data = await response.json();
-            this.speciesData = data.species;
+            this.speciesData = data;
         } catch (error) {
             console.error("Failed to load Species data:", error);
             this.speciesData = {}; // Fallback
@@ -192,7 +218,7 @@ class AssetManager {
                 const textureFile = typeof textureEntry === 'string' ? textureEntry : textureEntry.file;
                 const skinName = textureFile.replace('.png', '');
 
-                const config = {
+                let config = {
                     ...this.npcGroups._globals,
                     ...(this.npcGroups._base_type_defaults[groupKey] || {}),
                     minecraftModel: group.minecraftModel || null, // Set group-level model first
@@ -203,9 +229,109 @@ class AssetManager {
                     macroCategory: group.macroCategory,
                     groupKey: groupKey,
                 };
+
+                // DYNAMIC STATS: If species and class provided, calculate stats
+                if (config.species && config.class) {
+                    const threat = config.threat || 1;
+                    const calculatedStats = this.calculateNPCStats(config.species, config.class, threat);
+
+                    // Merge: Calculated Stats are BASE, Config overrides them
+                    // We must be careful not to lose specific overrides like "default_weapon" if the config specified it literally
+                    config = { ...calculatedStats, ...config };
+
+                    // If calculatedStats had a default weapon and config didn't, ensure it's set
+                    if (!config.default_weapon && calculatedStats.default_weapon) {
+                        config.default_weapon = calculatedStats.default_weapon;
+                    }
+                }
+
                 this.npcIcons.set(skinName, { config });
             }
         }
+    }
+
+    calculateNPCStats(speciesKey, classKey, threat) {
+        // 1. Get Species (Default to human if missing)
+        const species = this.speciesData[speciesKey] || this.speciesData['human'];
+        if (!species) console.warn(`Species ${speciesKey} not found!`);
+
+        // 2. Get Class
+        let classData = this.npcClasses[classKey];
+        if (!classData) {
+            console.warn(`Class ${classKey} not found! Using fallback.`);
+            classData = {
+                starting_attributes: { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 },
+                GoldSilverBronzeStats: { gold: "STR", silver: "CON", bronze: "DEX" },
+                health_bonus_per_level: 8,
+                accuracy_modifier: 0.9,
+                speed: 0.03
+            };
+        }
+
+        // 3. Determine Level
+        // NPC_Level = Player_Level * (Threat * 0.5)
+        // Ensure window.characterStats exists (it should in game)
+        const playerLevel = (window.characterStats && window.characterStats.level) ? window.characterStats.level : 1;
+        let npcLevel = Math.floor(playerLevel * (threat * 0.5));
+        npcLevel = Math.max(1, Math.min(25, npcLevel)); // Clamp 1-25
+
+        // 4. Calculate Final Attributes
+        const attributes = { ...classData.starting_attributes };
+
+        // Apply Species Mods
+        if (species && species.STAT_MODS && species.STAT_MODS.attributes) {
+            for (const [attr, mod] of Object.entries(species.STAT_MODS.attributes)) {
+                attributes[attr] = (attributes[attr] || 10) + mod;
+            }
+        }
+
+        // Apply Level Scaling
+        const { gold, silver, bronze } = classData.GoldSilverBronzeStats || {};
+        if (gold && attributes[gold] !== undefined) attributes[gold] += npcLevel;
+        if (silver && attributes[silver] !== undefined) attributes[silver] += Math.floor(npcLevel / 2);
+        if (bronze && attributes[bronze] !== undefined) attributes[bronze] += Math.floor(npcLevel / 3);
+
+        // 5. Derived Stats
+        // HP
+        const con = attributes.CON || 10;
+        const hpBonus = classData.health_bonus_per_level || 8;
+        const health = (con * 5) + (npcLevel * hpBonus);
+
+        // Accuracy (60 base + 2 per level) * modifier
+        const accuracy = Math.floor((60 + (npcLevel * 2)) * (classData.accuracy_modifier || 1));
+
+        // Damage (STR based for now as generic baseline, or DEX if specified?)
+        // Let's use STR for melee base.
+        const strMod = Math.floor((attributes.STR - 10) / 2);
+        const melee_damage = Math.max(1, 4 + strMod + Math.floor(npcLevel / 2));
+
+        // Speed (Species speed usually, class overrides if specific)
+        const speed = classData.speed || (species ? species.speed : 0.03);
+
+        // Technical Understanding
+        const technical_understanding = classData.technical_understanding || 30;
+
+        // Aggro
+        const aggro = classData.aggro || 0.5;
+
+        // Force Sensitivity
+        const force_sensitivity = classData.force_sensitivity || false;
+
+        return {
+            level: npcLevel,
+            attributes: attributes,
+            health: health,
+            accuracy: accuracy,
+            melee_damage: melee_damage,
+            speed: speed,
+            technical_understanding: technical_understanding,
+            aggro: aggro,
+            force_sensitivity: force_sensitivity,
+            default_weapon: classData.default_weapon,
+            // Pass through level for debug/UI
+            _debug_level: npcLevel,
+            _debug_class: classKey
+        };
     }
 
     async loadNameData() {

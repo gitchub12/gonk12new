@@ -215,5 +215,15 @@
     "technicalRequirement": 50,
     "forceSensitivityRequirement": 70,
     "energyCost": 0
+  },
+  "long_slugthrower_adventurer": {
+    "category": "long",
+    "technicalRequirement": 40,
+    "energyCost": 7
+  },
+  "long_slugthrower_velaar": {
+    "category": "long",
+    "technicalRequirement": 45,
+    "energyCost": 7
   }
 }

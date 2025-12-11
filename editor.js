@@ -266,10 +266,7 @@ class LevelEditor {
             listKey = 'darth';
         }
 
-        // Special case for Wookiee name placeholders
-        if (listKey === 'wookiee') {
-            return 'wookieeF wookieeR';
-        }
+
 
         // Return placeholder string
         return `${listKey}F ${listKey}L`;

@@ -192,10 +192,13 @@ class TabControls {
             <button id="w_snapshotBtn">Snapshot Player Weapon</button>`;
 
         const labelHTML = `
-            <h4>NPC Nameplate</h4>
-            <div class="control-group"><label>X-Offset (All): <span id="npc_label_posX_val">0</span></label><input type="range" class="npc-label-slider" id="npc_label_posX" min="-100" max="100" value="0" step="1"></div>
-            <div class="control-group"><label>Y-Offset (All): <span id="npc_label_posY_val">54</span></label><input type="range" class="npc-label-slider" id="npc_label_posY" min="-100" max="100" value="54" step="1"></div>
-            <div class="control-group"><label>Z-Offset (All): <span id="npc_label_posZ_val">0</span></label><input type="range" class="npc-label-slider" id="npc_label_posZ" min="-100" max="100" value="0" step="1"></div>
+            <h4>NPC Nameplate Tuning</h4>
+            <div class="control-group"><label>Height Multiplier (Scale): <span id="npc_height_scale_val">1.5</span></label><input type="range" class="npc-label-slider" id="npc_height_scale" min="0.0" max="10.0" value="1.5" step="0.1"></div>
+            <div class="control-group"><label>Height Base (Constant): <span id="npc_height_base_val">0.1</span></label><input type="range" class="npc-label-slider" id="npc_height_base" min="-2.0" max="5.0" value="0.1" step="0.1"></div>
+            <hr>
+            <div class="control-group"><label>X-Offset: <span id="npc_label_posX_val">0</span></label><input type="range" class="npc-label-slider" id="npc_label_posX" min="-100" max="100" value="0" step="1"></div>
+            <!-- Y-Offset Removed (Controlled by Formula above) -->
+            <div class="control-group"><label>Z-Offset: <span id="npc_label_posZ_val">0</span></label><input type="range" class="npc-label-slider" id="npc_label_posZ" min="-100" max="100" value="0" step="1"></div>
             <div class="control-group"><label>Overall Scale: <span id="npc_label_scale_val">0.005</span></label><input type="range" class="npc-label-slider" id="npc_label_scale" min="0.001" max="0.1" value="0.005" step="0.001"></div>
             <div class="control-group"><label>Name Scale: <span id="npc_name_scale_val">13.85</span></label><input type="range" class="npc-label-slider" id="npc_name_scale" min="0.1" max="40.0" value="13.85" step="0.05"></div>
             <div class="control-group"><label>Name Y-Offset: <span id="npc_name_posY_val">540</span></label><input type="range" class="npc-label-slider" id="npc_name_posY" min="-3000" max="3000" value="540" step="10"></div>
@@ -455,8 +458,15 @@ class TabControls {
     }
 
     updateLabelAndRingFromUI() {
+        // Read New Sliders and Update Global Config
+        if (document.getElementById('npc_height_base')) {
+            if (!window.NAMEPLATE_CONFIG) window.NAMEPLATE_CONFIG = { baseOffset: 0.1, scaleFactor: 1.5 };
+            window.NAMEPLATE_CONFIG.baseOffset = parseFloat(document.getElementById('npc_height_base').value);
+            window.NAMEPLATE_CONFIG.scaleFactor = parseFloat(document.getElementById('npc_height_scale').value);
+        }
+
         const posX = parseFloat(document.getElementById('npc_label_posX').value);
-        const posY = parseFloat(document.getElementById('npc_label_posY').value);
+        // posY removed (was manual override, now algorithmic)
         const posZ = parseFloat(document.getElementById('npc_label_posZ').value);
         const scale = parseFloat(document.getElementById('npc_label_scale').value);
         const nameScale = parseFloat(document.getElementById('npc_name_scale').value);
@@ -465,8 +475,12 @@ class TabControls {
 
         this.game.entities.npcs.forEach(npc => {
             if (npc.nameplate) {
-                npc.nameplate.position.set(posX * 0.2, 0.5 + (posY * 0.2), posZ * 0.2);
+                // Only update X/Z manually. Y is handled by npc_behavior.js using NAMEPLATE_CONFIG.
+                npc.nameplate.position.x = posX * 0.2;
+                npc.nameplate.position.z = posZ * 0.2;
                 npc.nameplate.scale.set(scale, scale, scale);
+                // Force update immediately for visual feedback (though loop will catch it too)
+                if (npc.updateNameplate) npc.updateNameplate();
             }
             if (npc.nameplateName && npc.nameplateHealthBar) {
                 npc.nameplateName.position.y = namePosY;

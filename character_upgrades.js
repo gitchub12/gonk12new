@@ -56,14 +56,18 @@ class CharacterUpgrades {
     }
 
     setupButtonHandlers() {
-        // Close button handler
-        const closeBtn = document.getElementById('upgrade-close-btn');
+        // Close button handler - CLONE to strip ghosts
+        let closeBtn = document.getElementById('upgrade-close-btn');
         if (closeBtn) {
-            closeBtn.addEventListener('click', () => {
-                if (window.game) {
-                    window.game.toggleCharacterSheet();
-                }
-            });
+            const newCloseBtn = closeBtn.cloneNode(true);
+            closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+            closeBtn = newCloseBtn; // Update reference
+
+            closeBtn.onclick = (e) => {
+                e.preventDefault();
+                // Simulate C key press to leverage exact game logic
+                document.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyC', bubbles: true }));
+            };
         }
 
         // Undo button handler

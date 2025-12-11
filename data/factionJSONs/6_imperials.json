@@ -10,548 +10,170 @@
       {
         "default_weapon": "rifle_e11.png",
         "threat": 4,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 45,
-        "lie_defense": 45,
-        "charm_attack": 45,
-        "charm_defense": 45,
-        "armType": "steve",
-        "file": "krennic1.png"
+        "file": "krennic1.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 4,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 45,
-        "lie_defense": 45,
-        "charm_attack": 45,
-        "charm_defense": 45,
-        "armType": null,
-        "file": "krennic2.png"
+        "file": "krennic2.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 1,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "Moff Officer.png"
+        "file": "Moff Officer.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 1,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "officer black no hat.png"
+        "file": "officer black no hat.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 1,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "officerblack1.png"
+        "file": "officerblack1.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 4,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 45,
-        "lie_defense": 45,
-        "charm_attack": 45,
-        "charm_defense": 45,
-        "armType": "steve",
-        "file": "officerpurple1.png"
+        "file": "officerpurple1.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 1,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "officerwhite1.png"
+        "file": "officerwhite1.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 5,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 45,
-        "lie_defense": 45,
-        "charm_attack": 45,
-        "charm_defense": 45,
-        "armType": null,
-        "file": "partagaz.png"
+        "file": "partagaz.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "long_f11d_phasma.png",
         "threat": 5,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 70,
-        "lie_defense": 70,
-        "charm_attack": 50,
-        "charm_defense": 70,
-        "armType": "steve",
-        "file": "phasma.png"
+        "file": "phasma.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 2,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "impofficerthreat2d.png"
+        "file": "impofficerthreat2d.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 2,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": "female",
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "impofficerfemalevoicethreat2c.png"
+        "file": "impofficerfemalevoicethreat2c.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 3,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": "female",
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "impofficerfemalevoicethreat3a.png"
+        "file": "impofficerfemalevoicethreat3a.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 1,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "impofficerthreat1a.png"
+        "file": "impofficerthreat1a.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 1,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "impofficerthreat1b.png"
+        "file": "impofficerthreat1b.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 2,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "impofficerthreat2a.png"
+        "file": "impofficerthreat2a.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 2,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "impofficerthreat2b.png"
+        "file": "impofficerthreat2b.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 2,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "impofficerthreat2c.png"
+        "file": "impofficerthreat2c.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 2,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": "female",
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "impofficerfemalevoicethreat2e.png"
+        "file": "impofficerfemalevoicethreat2e.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 3,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": "female",
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "impofficerthreat3femalevoice.png"
+        "file": "impofficerthreat3femalevoice.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 1,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "impofficerthreat1c.png"
+        "file": "impofficerthreat1c.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "default_weapon": "rifle_e11.png",
         "threat": 2,
-        "health": 55,
-        "melee_damage": 5.5,
-        "attack_cooldown": 2.7,
-        "attack_range": 16.5,
-        "accuracy": 44,
-        "perception_radius": 16.5,
-        "aggro": 0.66,
-        "speed": 0.03,
-        "collision_radius": 0.5,
-        "weight": 88,
         "soundSet": null,
-        "weight_lift": 88,
-        "technical_understanding": 82.5,
-        "force_sensitivity": 1.1,
-        "special_moves": null,
-        "jump_strength": 0,
-        "lie_attack": 40,
-        "lie_defense": 40,
-        "charm_attack": 40,
-        "charm_defense": 40,
-        "armType": "steve",
-        "file": "impofficerthreat2f.png"
+        "file": "impofficerthreat2f.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       }
     ]
   },
@@ -563,174 +185,232 @@
     "path": "stormtrooper/stormtrooper/",
     "textures": [
       {
-        "file": "stormtrooper1.png"
+        "file": "stormtrooper1.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
-        "file": "stormtrooper2.png"
+        "file": "stormtrooper2.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
-        "file": "stormtrooper3.png"
+        "file": "stormtrooper3.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
-        "lie_defense": 10,
-        "charm_defense": 10,
         "file": "BeachPatrol.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "file": "bluetrooper.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "file": "Clone Medic.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "file": "clonetrooper blue.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "file": "cloneymaybe.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "threat": 3,
-        "lie_attack": 50,
-        "lie_defense": 50,
-        "charm_attack": 50,
-        "charm_defense": 50,
-        "file": "dark trooper.png"
+        "file": "dark trooper.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "file": "deadpool.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "file": "finntrooper.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
-        "file": "greenscouttrooper.png"
-      },
-      {
-        "threat": 4,
-        "lie_attack": 55,
-        "lie_defense": 55,
-        "charm_attack": 55,
-        "charm_defense": 55,
-        "file": "imperial guard detailed.png"
+        "file": "greenscouttrooper.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "threat": 4,
-        "lie_attack": 55,
-        "lie_defense": 55,
-        "charm_attack": 55,
-        "charm_defense": 55,
-        "file": "imperial guard.png"
+        "file": "imperial guard detailed.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
-        "file": "impgrunt.png"
+        "threat": 4,
+        "file": "imperial guard.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
-        "file": "Night Trooper Zombie.png"
+        "file": "impgrunt.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
+      },
+      {
+        "file": "Night Trooper Zombie.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "threat": 3,
-        "lie_attack": 50,
-        "lie_defense": 50,
-        "charm_attack": 50,
-        "charm_defense": 50,
-        "file": "red trooper.png"
+        "file": "red trooper.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "threat": 3,
-        "lie_attack": 50,
-        "lie_defense": 50,
-        "charm_attack": 50,
-        "charm_defense": 50,
-        "file": "red trooper2.png"
+        "file": "red trooper2.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
-        "file": "sandtrooper2.png"
+        "file": "sandtrooper2.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
-        "file": "scout trooper 1.png"
+        "file": "scout trooper 1.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "file": "sgt hunter.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "file": "Snowtrooper1.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
-        "file": "Snowtrooper2.png"
+        "file": "Snowtrooper2.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
-        "file": "Stormtrooper Lego.png"
+        "file": "Stormtrooper Lego.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "file": "Stormtrooper Skin.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
-        "file": "stormtrooper4.png"
+        "file": "stormtrooper4.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
-        "file": "stormtrooper5.png"
+        "file": "stormtrooper5.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
-        "file": "StormtrooperHD.png"
+        "file": "StormtrooperHD.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "file": "teal trooper.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "file": "trooper no helmet.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
-        "file": "trooper suit1.png"
+        "file": "trooper suit1.png",
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "file": "Imperial-Remnant-Stormtrooper.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "file": "Imperial-Beach-trooper-variant-on-planetminecraft-com.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "threat": 4,
-        "lie_attack": 55,
-        "lie_defense": 55,
-        "charm_attack": 55,
-        "charm_defense": 55,
         "file": "Imperial-Stormtrooper-Zombiethreat4.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "file": "sandtrooperhighres.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "file": "scouttrooperhighresolution.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX",
+        "threat": 1
       },
       {
         "threat": 5,
-        "lie_attack": 60,
-        "lie_defense": 60,
-        "charm_attack": 60,
-        "charm_defense": 60,
         "file": "Terror-Trooperthreat5.png",
-        "armType": null
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       },
       {
         "file": "stormtroopergoldfacethreat5enoch.png",
-        "threat": 5
+        "threat": 5,
+        "species": "human_stormtrooper",
+        "class": "BASIC_ANY_DEX"
       }
     ]
   }

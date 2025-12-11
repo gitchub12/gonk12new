@@ -734,6 +734,7 @@
     "charm_attack": 25
   },
   "pistol_se14c_cornelius": {
+    "category": "pistol",
     "drop_faction": [
       "rebels"
     ],

@@ -187,20 +187,10 @@ class InputHandler {
             }
         }
 
-        if (e.code === 'KeyE') {
-            e.preventDefault();
-            if (window.game && window.game.interactionSystem) {
-                window.game.interactionSystem.handleKeyPress('KeyE');
-            }
-            if (window.physics) {
-                physics.interact();
-            }
-        }
-        if (e.code === 'Space') {
-            e.preventDefault();
-            if (window.physics) {
-                physics.jump();
-                // Play random gonk sound on jump
+        if (e.code === 'KeyQ') {
+            // Gonk Sound with Cooldown
+            const currentTime = performance.now();
+            if (!this.lastGonkTime || currentTime - this.lastGonkTime > 2000) {
                 const gonkSounds = [
                     'data/sounds/gonk/gonk_1.mp3',
                     'data/sounds/gonk/gonk_2.mp3',
@@ -217,12 +207,37 @@ class InputHandler {
                     'data/sounds/gonk/gonk_14.mp3',
                     'data/sounds/gonk/gonk_15.mp3',
                     'data/sounds/gonk/gonk_16.mp3',
-                    'data/sounds/gonk/gonk_17.mp3'
+                    'data/sounds/gonk/gonk_17.mp3',
+                    // 'data/sounds/gonk/gonk_18.mp3', // Not in original list?
+                    // 'data/sounds/gonk/gonk_19.mp3',
+                    // 'data/sounds/gonk/gonk_20.mp3' 
                 ];
                 const randomSound = gonkSounds[Math.floor(Math.random() * gonkSounds.length)];
-                const audio = new Audio(randomSound);
-                audio.volume = 0.5;
-                audio.play().catch(err => console.log('Gonk sound failed:', err));
+                // Using window.audioSystem if available, else fallback to Audio
+                if (window.audioSystem) {
+                    window.audioSystem.playSound(randomSound, 0.6);
+                } else {
+                    const audio = new Audio(randomSound);
+                    audio.volume = 0.6;
+                    audio.play().catch(err => console.log('Gonk sound failed:', err));
+                }
+                this.lastGonkTime = currentTime;
+            }
+        }
+
+        if (e.code === 'KeyE') {
+            e.preventDefault();
+            if (window.game && window.game.interactionSystem) {
+                window.game.interactionSystem.handleKeyPress('KeyE');
+            }
+            if (window.physics) {
+                physics.interact();
+            }
+        }
+        if (e.code === 'Space') {
+            e.preventDefault();
+            if (window.physics) {
+                physics.jump();
             }
         }
         if (e.code === 'KeyH') {
@@ -588,6 +603,8 @@ class Game {
             });
         }
 
+        this.setupAllyStatsPopup();
+
         const addModuleButton = document.getElementById('add-module-cheat-btn');
         addModuleButton.addEventListener('click', () => {
             const selectedModule = moduleDropdown.value;
@@ -813,6 +830,140 @@ class Game {
                 }
             });
         }
+    }
+
+    setupAllyStatsPopup() {
+        this.activeAllyPopupIndex = -1;
+
+        document.addEventListener('keydown', (e) => {
+            const key = e.key;
+
+            if (['1', '2', '3', '4', '5'].includes(key)) {
+                if (window.isTypingInChat || (window.loadingScreenManager && window.loadingScreenManager.isActive)) return;
+
+                const allyIndex = parseInt(key) - 1;
+                const allyData = this.state.allies[allyIndex];
+
+                if (allyData && !allyData.isDeadAlly) {
+                    if (this.activeAllyPopupIndex === allyIndex) {
+                        this.closeAllyStatsPopup();
+                    } else {
+                        this.showAllyStatsPopup(allyData);
+                        this.activeAllyPopupIndex = allyIndex;
+                    }
+                }
+            } else if (this.activeAllyPopupIndex !== -1) {
+                this.closeAllyStatsPopup();
+            }
+        });
+
+        // Create popup container if not exists
+        if (!document.getElementById('ally-stats-popup')) {
+            const popup = document.createElement('div');
+            popup.id = 'ally-stats-popup';
+            popup.style.position = 'absolute';
+            popup.style.top = '50%';
+            popup.style.left = '50%';
+            popup.style.transform = 'translate(-50%, -50%)';
+            popup.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+            popup.style.border = '2px solid #555';
+            popup.style.color = '#eee';
+            popup.style.padding = '20px';
+            popup.style.width = '300px';
+            popup.style.fontFamily = 'monospace';
+            popup.style.zIndex = '10000';
+            popup.style.display = 'none';
+            popup.style.pointerEvents = 'none';
+            document.body.appendChild(popup);
+        }
+    }
+
+    closeAllyStatsPopup() {
+        const popup = document.getElementById('ally-stats-popup');
+        if (popup) popup.style.display = 'none';
+        this.activeAllyPopupIndex = -1;
+    }
+
+    showAllyStatsPopup(allyData) {
+        const popup = document.getElementById('ally-stats-popup');
+        const npc = allyData.npc;
+
+        let role = 'Unknown';
+        if (npc.config.class) {
+            const parts = npc.config.class.split('_');
+            const lastPart = parts[parts.length - 1];
+            const attrMap = {
+                'WIS': 'Wisdom', 'STR': 'Strength', 'CON': 'Constitution',
+                'DEX': 'Dexterity', 'INT': 'Intelligence', 'CHA': 'Charisma',
+                'FORCE': 'Force User'
+            };
+            role = attrMap[lastPart] || (lastPart.charAt(0).toUpperCase() + lastPart.slice(1).toLowerCase());
+        }
+
+        let speciesDisplay = npc.config.species || 'Unknown';
+        if (speciesDisplay.toLowerCase().startsWith('human')) {
+            speciesDisplay = 'Human';
+        } else if (speciesDisplay.toLowerCase().includes('droid')) {
+            const parts = speciesDisplay.split('_');
+            if (parts.length > 1 && parts[0] === 'droid') {
+                speciesDisplay = parts[1].charAt(0).toUpperCase() + parts[1].slice(1) + ' Droid';
+            } else {
+                speciesDisplay = speciesDisplay.replace(/_/g, ' ');
+                speciesDisplay = speciesDisplay.charAt(0).toUpperCase() + speciesDisplay.slice(1);
+            }
+        } else {
+            speciesDisplay = speciesDisplay.replace(/_/g, ' ');
+            speciesDisplay = speciesDisplay.charAt(0).toUpperCase() + speciesDisplay.slice(1);
+        }
+
+        const weaponName = npc.weaponData ? npc.weaponData.name : 'Unarmed';
+        const damageMod = (npc.itemData?.properties?.damage_modifier || 0);
+        const baseDmg = (npc.weaponData?.damage || npc.config.melee_damage || 0);
+        const fireRate = (npc.weaponData?.fireRate || 1);
+        const dps = ((baseDmg + damageMod) / fireRate).toFixed(1);
+
+        const hp = `${Math.floor(npc.health)}/${Math.floor(npc.maxHealth)}`;
+
+        const stats = npc.stats || {};
+        const str = stats.STR || 10;
+        const dex = stats.DEX || 10;
+        const con = stats.CON || 10;
+        const int = stats.INT || 10;
+        const wis = stats.WIS || 10;
+        const cha = stats.CHA || 10;
+
+        let html = `
+            <div style="border-bottom: 1px solid #fff; margin-bottom: 10px; padding-bottom: 5px; font-weight: bold; font-size: 1.2em; color: ${allyData.color}">
+                ${allyData.name} <span style="font-size:0.8em; color: #aaa;">(Ally ${this.state.allies.indexOf(allyData) + 1})</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 0.9em;">
+                <div><span style="color:#aaa;">Role:</span> ${role}</div>
+                <div><span style="color:#aaa;">Species:</span> ${speciesDisplay}</div>
+                
+                <div style="grid-column: 1 / -1; margin-top: 5px; border-top: 1px solid #555; padding-top: 5px;">
+                     <span style="color:#aaa;">Weapon:</span> ${weaponName}
+                </div>
+                <!-- Damage Mod Hidden per user request -->
+                <div><span style="color:#aaa;">DPS:</span> ${dps}</div>
+                
+                <div style="grid-column: 1 / -1; margin-top: 5px; border-top: 1px solid #555; padding-top: 5px;">
+                    <span style="color:#aaa;">HP:</span> ${hp}
+                </div>
+                
+                <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; text-align: center; margin-top: 5px;">
+                    <div title="Strength">STR: ${str}</div>
+                    <div title="Dexterity">DEX: ${dex}</div>
+                    <div title="Constitution">CON: ${con}</div>
+                    <div title="Intelligence">INT: ${int}</div>
+                    <div title="Wisdom">WIS: ${wis}</div>
+                    <div title="Charisma">CHA: ${cha}</div>
+                </div>
+            </div>
+            <div style="margin-top: 10px; font-size: 0.8em; color: #888; text-align: center;">Press any key to close</div>
+        `;
+
+        popup.innerHTML = html;
+        popup.style.display = 'block';
     }
 
     setupLighting() {
@@ -1051,9 +1202,39 @@ class Game {
         }
     }
 
+    forceCloseCharacterSheet() {
+        const wrapper = document.getElementById('character-page-wrapper');
+        const closeBtn = document.getElementById('upgrade-close-btn');
+        const actionButtons = document.getElementById('upgrade-action-buttons');
+
+        wrapper.style.display = 'none';
+
+        // Check if tab menu is still open - if so, don't unpause or lock pointer
+        const tabMenuOpen = window.tabControls && (
+            document.getElementById('leftEditorPanel')?.style.display !== 'none' ||
+            document.getElementById('rightEditorPanel')?.style.display !== 'none'
+        );
+
+        if (!tabMenuOpen) {
+            this.state.isPaused = false;
+            // Only show HUD if conversation UI is NOT visible
+            if (this.hudContainer && !window.isConversationUIVisible) this.hudContainer.style.display = 'block';
+            if (this.canvas) this.canvas.requestPointerLock();
+        }
+
+        // Hide upgrade UI buttons
+        if (closeBtn) closeBtn.style.display = 'none';
+        if (actionButtons) actionButtons.style.display = 'none';
+
+        // Play character sheet close sound
+        if (window.audioSystem) {
+            window.audioSystem.playSound('charactersheetclose', 0.7);
+        }
+    }
+
     toggleCharacterSheet() {
         const wrapper = document.getElementById('character-page-wrapper');
-        const isVisible = wrapper.style.display === 'grid';
+        const isVisible = wrapper.style.display !== 'none' && wrapper.style.display !== '';
 
         // Don't allow OPENING C menu if any E interaction menu is open (but always allow closing)
         if (!isVisible && this.isAnyInteractionMenuOpen()) {
@@ -1444,14 +1625,63 @@ class Game {
                     box.classList.add('visible');
                 } else {
                     // Existing logic for live allies
+                    const npc = allyData.npc;
+
+                    if (!box.querySelector('.ally-number')) {
+                        const numDiv = document.createElement('div');
+                        numDiv.className = 'ally-number';
+                        numDiv.style.position = 'absolute';
+                        numDiv.style.top = '2px';
+                        numDiv.style.left = '4px';
+                        numDiv.style.fontWeight = '900';
+                        numDiv.style.fontSize = '20px'; // Increased by ~10%
+                        numDiv.style.zIndex = '10';
+                        numDiv.style.fontFamily = '"Outfit", sans-serif'; // Match UI font
+                        box.appendChild(numDiv);
+                    }
+                    const numDiv = box.querySelector('.ally-number');
+
+                    // Fix: Use npc.config.faction to get the original faction (e.g. 'rebels') 
+                    // instead of allyData.faction which might be 'player_droid'
+                    let rawFaction = npc.config.faction || allyData.faction || npc.faction || 'neutral';
+
+                    const factionMap = {
+                        'rebels': 'Rebel',
+                        'imperials': 'Imperial',
+                        'aliens': 'Alien',
+                        'droids': 'Droid',
+                        'clones': 'Clone',
+                        'mandalorians': 'Mandalorian',
+                        'sith': 'Sith',
+                        'takers': 'Taker',
+                        'player_droid': 'Droid' // Fallback
+                    };
+                    const factionSingular = factionMap[rawFaction] || rawFaction.charAt(0).toUpperCase() + rawFaction.slice(1);
+
+                    numDiv.textContent = `${i + 1} ${factionSingular}`;
+
                     const factionColor = allyData.color;
+
+                    // Use the raw faction for styling checks if needed, or allyData.faction for color
+                    // Sticking to allyData.color logic for text color.
+                    // But for Outline style, we checked 'imperials'.
+
+                    if (rawFaction === 'imperials') {
+                        numDiv.style.color = 'black';
+                        numDiv.style.webkitTextStroke = '1px white'; // Chrome/Safari
+                        numDiv.style.textShadow = '-1px -1px 0 #FFF, 1px -1px 0 #FFF, -1px 1px 0 #FFF, 1px 1px 0 #FFF';
+                    } else {
+                        numDiv.style.color = factionColor;
+                        numDiv.style.webkitTextStroke = '1px black';
+                        numDiv.style.textShadow = '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000';
+                    }
+
                     allyImage.src = allyData.icon;
                     allyImage.style.filter = 'none'; // Remove grayscale
                     box.style.borderColor = factionColor;
                     if (allyData.name.includes(' ') && allyData.name.split(' ').length === 2) {
                         nameSpan.innerHTML = allyData.name.replace(' ', '<br>');
                     } else { nameSpan.innerHTML = allyData.name; }
-                    const npc = allyData.npc;
                     const maxHealth = npc.maxHealth;
                     const damagePercent = (1 - (npc.health / maxHealth)) * 100;
                     healthOverlay.style.height = `${damagePercent}%`;

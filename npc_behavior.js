@@ -74,7 +74,7 @@ class NPC {
         this.target = null;
         this.lastTargetSearch = Math.random() * 0.5;
 
-        this.faction = this.config.faction || 'aliens';
+        this.faction = this.itemData.properties.faction || this.config.faction || 'aliens';
         this.originalFaction = this.faction;
         this.personalRelationships = {};
         this.traits = this.config; // The whole config is now the traits object
@@ -95,6 +95,14 @@ class NPC {
 
         // --- NEW NPC LEVELING & CLASS SYSTEM ---
         this.applyProgressionSystem();
+
+        // FIX: Apply y_offset to the visual mesh (children of group) to allow floating adjustments
+        // This moves the model relative to the physics collider.
+        if (this.config.y_offset) {
+            this.mesh.group.children.forEach(child => {
+                child.position.y += this.config.y_offset;
+            });
+        }
 
         this.createNameplate();
     }
@@ -197,6 +205,11 @@ class NPC {
 
         // Merge defaults and specific stats. Specific stats take precedence.
         this.weaponData = { ...categoryDefaults, ...specificWeaponStats };
+
+        // FIX: Ensure itemData has the weapon property for other systems (like attack()) to see
+        if (!this.itemData.properties.weapon && this.config.default_weapon) {
+            this.itemData.properties.weapon = this.config.default_weapon;
+        }
     }
 
     // NEW: Getter for Friend status based on faction relationship
@@ -222,40 +235,63 @@ class NPC {
         const inverseScale = baseScale / scaleFactor;
         this.nameplate.scale.set(inverseScale, inverseScale, inverseScale);
 
-        // 2. Dynamic Positioning (Bounding Box Method - Root Relative)
+        // 2. Dynamic Positioning (Bounding Box Method)
+        let localTopY = 2.0; // Default top of mesh in local units
 
-        // Calculate approximate height of the model in LOCAL space (unscaled)
-        // Default to 2.0m (slightly taller than human)
-        let localMeshHeight = 2.0;
-
-        // Try to get actual bounds if geometry exists
         let foundGeometry = false;
         this.mesh.group.traverse((child) => {
             if (!foundGeometry && child.isMesh && child.geometry) {
                 child.geometry.computeBoundingBox();
                 const box = child.geometry.boundingBox;
                 if (box) {
-                    // Local height of the mesh geometry
-                    localMeshHeight = box.max.y - box.min.y;
-                    foundGeometry = true;
+                    // We want the TOP of the mesh (Max Y). 
+                    // Assuming Origin is at 0 (Feet) or Center.
+                    // Ideally Max Y represents the head top in local space.
+                    // FIX: Include child.position.y to account for manual offsets (e.g. Grogu lowered)
+                    const absoluteTop = child.position.y + box.max.y;
+                    // FIX: Allow lower/negative heights (Grogu might be near 0). Threshold lowered to -10.
+                    if (absoluteTop > -10.0) {
+                        localTopY = absoluteTop;
+                        foundGeometry = true;
+                    }
                 }
             }
         });
 
-        // Debug height calculation
-        // console.log(`[Nameplate] ${this.name}: LocalHeight=${localMeshHeight.toFixed(2)}, Scale=${scaleFactor}`);
+        // Current Scale Y of the parent Group
+        const currentScaleY = this.mesh.group.scale.y || this.config.scale_y || this.config.scale || 1.0;
 
-        // Apply Safety Buffer (10% extra height) to avoid burying
-        localMeshHeight *= 1.1;
+        // User Requirements:
+        // - "Too low at 1, far too low at scale 2"
+        // - "Change needs to be increasing by TWICE as much"
 
-        // We want the nameplate to be 1.0m (World Units) above the top of the mesh.
-        // Since the parent (Root) is scaled by scaleFactor, we need to convert that 1.0m gap into Local Units.
-        // LocalGap = WorldGap / ScaleFactor = 1.0 / scaleFactor.
+        // FIX: Switch from Fixed World Gap to Fixed LOCAL Gap.
+        // This causes the World Gap to scale WITH the model.
+        // Scale 1.0 -> Gap 1.1m
+        // Scale 2.0 -> Gap 2.2m (Double!)
+        // Scale 0.5 -> Gap 0.55m
 
-        // Total Local Y = LocalMeshHeight + LocalGap
-        const localYOffset = localMeshHeight + (1.0 / scaleFactor);
+        // Store for update loop
+        this.localTopY = localTopY;
+        this.hasValidHeight = true;
 
-        this.nameplate.position.y = localYOffset;
+        // Initial Position (Dynamic Tuning - Visual Height Based)
+        if (!window.NAMEPLATE_CONFIG) window.NAMEPLATE_CONFIG = { baseOffset: 0.1, scaleFactor: 0.5 };
+
+        const worldHeight = this.localTopY * currentScaleY;
+        const gapFromSize = window.NAMEPLATE_CONFIG.scaleFactor * worldHeight;
+        const baseGap = window.NAMEPLATE_CONFIG.baseOffset + gapFromSize;
+
+        const configOffset = this.config.nameplateOffset || this.config.nameplate_y_offset || 0;
+        const totalWorldGap = baseGap + configOffset;
+        const hybridLocalGap = totalWorldGap / currentScaleY;
+
+        // Debug
+        if (window.game?.debugMode) {
+            console.log(`[NP-Height] ${this.name}: Top=${localTopY.toFixed(2)}, WorldGap=${totalWorldGap.toFixed(2)} (ConfigOffset=${configOffset})`);
+        }
+
+        this.nameplate.position.y = localTopY + hybridLocalGap;
 
         this.nameplateName = new THREE.Group();
         this.nameSprite = this.createTextSprite(this.name, { fontsize: 48, fontface: 'Arial', textColor: { r: 255, g: 255, b: 255, a: 1.0 } });
@@ -399,6 +435,58 @@ class NPC {
         const barWidth = 25; // Use the same fixed base width
         this.healthBar.scale.x = barWidth * Math.max(0, healthPercent);
         this.healthBar.position.x = - (barWidth * (1 - healthPercent)) / 2;
+
+        // FIX: Retry Height Calculation (Async Model Loading support)
+        if (!this.hasValidHeight) {
+            let foundGeometry = false;
+            let maxY = 0;
+            this.mesh.group.traverse((child) => {
+                if (child.isMesh && child.geometry) {
+                    child.geometry.computeBoundingBox();
+                    const box = child.geometry.boundingBox;
+                    // FIX: Include child.position.y
+                    const absoluteTop = child.position.y + (box ? box.max.y : 0);
+                    if (box && absoluteTop > maxY) {
+                        maxY = absoluteTop;
+                        foundGeometry = true;
+                    }
+                }
+            });
+
+            // If we found a substantial height (allow negative for floated meshes), update!
+            if (foundGeometry && maxY > -10.0) {
+                this.localTopY = maxY;
+                this.hasValidHeight = true;
+                if (window.game?.debugMode) console.log(`[NP-Height-Late] ${this.name}: Geometry Loaded. Top Updated to ${maxY.toFixed(2)}`);
+            }
+        }
+
+        // FIX: Enforce Height Position (Dynamic Tuning via Global Config)
+        // Now uses VISUAL HEIGHT (localTopY) to determine gap, not just transform scale.
+        // Ensures Rancors get larger gaps than Jawas even if Scale is 1.0.
+        if (!window.NAMEPLATE_CONFIG) {
+            window.NAMEPLATE_CONFIG = { baseOffset: 0.1, scaleFactor: 1.5 }; // USER SELECTED DEFAULTS
+        }
+
+        if (this.nameplate && this.localTopY !== undefined) {
+            const currentScaleY = this.mesh.group.scale.y || this.config.scale_y || this.config.scale || 1.0;
+            const worldHeight = this.localTopY * currentScaleY;
+
+            // Gap Calculation:
+            // ScaleFactor is now "Percentage of Height" (e.g. 0.5 = 50% of height above head)
+            // BaseOffset is "Flat Meters" (e.g. 0.1m extra)
+            const gapFromSize = window.NAMEPLATE_CONFIG.scaleFactor * worldHeight;
+            const baseGap = window.NAMEPLATE_CONFIG.baseOffset + gapFromSize;
+
+            // Allow Config Override (from Editor Tab / Config JSON)
+            // NOTE: REMOVED this.config.y_offset to prevent double-counting mesh offsets.
+            const configOffset = this.config.nameplateOffset || this.config.nameplate_y_offset || 0;
+
+            const totalWorldGap = baseGap + configOffset;
+            const localGap = totalWorldGap / currentScaleY;
+
+            this.nameplate.position.y = this.localTopY + localGap;
+        }
 
         // --- COLOR LOGIC ---
         let nameColor = new THREE.Color(1, 1, 1); // Default White (Neutral)
@@ -866,13 +954,9 @@ class NPC {
         this.updateTarget();
         this.executeState(deltaTime);
 
-        // Batched nameplate updates for performance
-        nameplateUpdateFrame++;
-        const updateInterval = window.RENDERING_CONFIG?.nameplates?.update_interval_frames || 3;
-
-        if (nameplateUpdateFrame % updateInterval === 0) {
-            this.updateNameplateVisibility();
-        }
+        // Batched nameplate updates REMOVED to ensure consistency.
+        // Previous global counter caused Nondeterministic updates.
+        this.updateNameplateVisibility();
 
         if (this.allyRing) {
             const groundHeight = physics.getGroundHeight(this.mesh.group.position.x, this.mesh.group.position.z);
@@ -884,9 +968,11 @@ class NPC {
     updateNameplateVisibility() {
         if (!this.nameplate) return;
 
+        // Validated start of visibility logic
+        // Previous debug block removed for safety/redundancy.
         const playerPos = window.physics.playerCollider.position;
         const npcPos = this.mesh.group.position;
-        const debugMode = window.game?.debugMode || false;
+        const debugMode = window.game?.debugMode;
 
         // --- 1. UPDATE REVEALED STATE ---
         // Once revealed, it stays revealed.
@@ -898,9 +984,16 @@ class NPC {
 
             // Trigger 1: Proximity (Strict 2.0 meter + Perception Bonus)
             // Safety: Ensure playerPos is valid (not 0,0,0 spawn glitch)
-            if (playerPos.lengthSq() > 1) {
-                const perceptionBonus = window.characterStats?.perceptionBonus || 0; // Placeholder for future module
-                const revealDistance = 2.0 + perceptionBonus;
+            // Trigger 1: Proximity
+            // Allow 0,0,0 (remove lengthSq check) but ensure playerPos exists
+            if (playerPos) {
+                // Base 5m + Wisdom Bonus + Perception Skill
+                const wisBonus = window.characterStats?.attributes?.WIS ? (window.characterStats.attributes.WIS - 10) : 0;
+                const percSkill = window.characterStats?.skills?.perception || 0;
+                const moduleBonus = window.characterStats?.perceptionBonus || 0;
+
+                const revealDistance = 2.0 + wisBonus + percSkill + moduleBonus; // REDUCED BASE TO 2.0 (1 Wall Height)
+
                 if (playerPos.distanceTo(npcPos) < revealDistance) {
                     this.nameplateRevealed = true;
                 }
@@ -1301,12 +1394,16 @@ class NPC {
 
         // Use weapon-specific cooldown if available
         const cooldownMultiplier = this.weaponData?.attack_cooldown_mult || 1.0;
-        this.attackTimer = this.attackCooldown * cooldownMultiplier;
+        // FIX: Clamp minimum cooldown to 0.5s to prevent machine-gun attacks if stats are bugged
+        const calculatedCooldown = this.attackCooldown * cooldownMultiplier;
+        this.attackTimer = Math.max(0.5, calculatedCooldown);
 
         // Prevent NPCs with no weapon from attacking
-        if (!this.itemData.properties.weapon) return;
+        // FIX: Check config.default_weapon as fallback
+        const weaponPath = this.itemData.properties.weapon || this.config.default_weapon;
+        if (!weaponPath) return;
 
-        const weaponName = this.itemData.properties.weapon ? this.itemData.properties.weapon.split('/').pop().replace('.png', '') : 'unarmed';
+        const weaponName = weaponPath.split('/').pop().replace('.png', '');
         const category = window.weaponIcons.getCategoryFromName(weaponName);
 
         if (category === 'melee' || category === 'saber' || !this.weaponMesh) {
@@ -1336,7 +1433,8 @@ class NPC {
 
         if (distanceToTarget <= effectiveRange) {
             // Use weapon damage if available, otherwise fallback to NPC's base melee damage
-            const damage = this.weaponData?.damage || this.config.melee_damage || 5;
+            let damage = this.weaponData?.damage || this.config.melee_damage || 5;
+            damage += (this.itemData.properties.damage_modifier || 0);
             if (this.target.isPlayer) {
                 game.takePlayerDamage(damage, this);
                 if (window.audioSystem) audioSystem.playPlayerHurtSound('melee');
@@ -1378,7 +1476,8 @@ class NPC {
 
         startPosition.add(direction.clone().multiplyScalar(0.2)); // Offset to avoid self-collision
 
-        const damage = this.weaponData?.damage || 5;
+        let damage = this.weaponData?.damage || 5;
+        damage += (this.itemData.properties.damage_modifier || 0);
         const boltSpeedMultiplier = this.weaponData?.bolt_speed_mult || 1.0;
 
         // DroidSlayer variant modifiers

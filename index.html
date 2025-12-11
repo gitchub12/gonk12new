@@ -1406,10 +1406,10 @@
                 GONK</h1>
         </div>
 
-        <!-- CLOSE BUTTON (Top Right) -->
-        <img id="char-sheet-close-btn" src="data/pngs/HUD/CharacterSheet/closeredx.png"
+        <img id="final-close-button" src="data/pngs/HUD/CharacterSheet/closeredx.png"
             style="position: absolute; top: 10px; right: 10px; width: 60px; height: 60px; cursor: pointer; z-index: 2000;"
-            onclick="event.stopPropagation(); window.game.toggleCharacterSheet();" />
+            onclick="event.stopPropagation(); event.preventDefault(); document.getElementById('character-page-wrapper').style.display='none'; if(window.game) { window.game.state.isPaused=false; if(window.game.canvas) window.game.canvas.requestPointerLock(); if(window.game.hudContainer && !window.isConversationUIVisible) window.game.hudContainer.style.display='block'; } if(window.audioSystem) window.audioSystem.playSound('charactersheetclose', 0.7);" />
+
 
         <!-- LEFT SIDEBAR (Stats) -->
         <div id="stats-display"
