@@ -251,6 +251,258 @@
         "speed_multiplier": 1,
         "flyspeed": 0
     },
+    "droid_astromech": {
+        "STAT_MODS": {
+            "attributes": {
+                "INT": 2,
+                "CHA": -2,
+                "CON": -2
+            },
+            "languages": {
+                "speak_basic": false,
+                "understand_basic": true
+            }
+        },
+        "resistances": {
+            "cold": "50%"
+        },
+        "special_species_power": null,
+        "jump_strength": 0,
+        "accuracy": 95,
+        "aggro": 0.55,
+        "speed": 0.028,
+        "weight": 39.6,
+        "perception_radius": 26.4,
+        "collision_radius": 0.3,
+        "soundSet": null,
+        "scale_x": 0.8,
+        "scale_y": 0.8,
+        "scale_z": 0.8,
+        "y_offset": 0,
+        "speed_multiplier": 1,
+        "flyspeed": 0
+    },
+    "droid_battle": {
+        "STAT_MODS": {
+            "attributes": {
+                "DEX": 2,
+                "INT": -2,
+                "CON": -2
+            }
+        },
+        "resistances": {
+            "cold": "50%"
+        },
+        "special_species_power": null,
+        "jump_strength": 0,
+        "accuracy": 95,
+        "aggro": 0.55,
+        "speed": 0.028,
+        "weight": 88,
+        "perception_radius": 27.5,
+        "collision_radius": 0.5,
+        "soundSet": null,
+        "scale_x": 1,
+        "scale_y": 1,
+        "scale_z": 1,
+        "y_offset": 0,
+        "speed_multiplier": 1,
+        "flyspeed": 0
+    },
+    "droid_assassin": {
+        "STAT_MODS": {
+            "attributes": {
+                "DEX": 4,
+                "INT": 0,
+                "CON": 0
+            }
+        },
+        "resistances": {
+            "cold": "50%"
+        },
+        "special_species_power": null,
+        "jump_strength": 0,
+        "accuracy": 97,
+        "aggro": 0.57,
+        "speed": 0.03,
+        "weight": 90,
+        "perception_radius": 29.5,
+        "collision_radius": 0.5,
+        "soundSet": null,
+        "scale_x": 1,
+        "scale_y": 1,
+        "scale_z": 1,
+        "y_offset": 0,
+        "speed_multiplier": 1,
+        "flyspeed": 0
+    },
+    "droid_labor": {
+        "STAT_MODS": {
+            "attributes": {
+                "STR": 2,
+                "INT": -2,
+                "CON": -2
+            }
+        },
+        "resistances": {
+            "cold": "50%"
+        },
+        "special_species_power": null,
+        "jump_strength": 0,
+        "accuracy": 95,
+        "aggro": 0.55,
+        "speed": 0.028,
+        "weight": 88,
+        "perception_radius": 27.5,
+        "collision_radius": 0.5,
+        "soundSet": null,
+        "scale_x": 1,
+        "scale_y": 1,
+        "scale_z": 1,
+        "y_offset": 0,
+        "speed_multiplier": 1,
+        "flyspeed": 0
+    },
+    "droid_mechanic": {
+        "STAT_MODS": {
+            "attributes": {
+                "INT": 2,
+                "CHA": -2,
+                "CON": -2
+            }
+        },
+        "resistances": {
+            "cold": "50%"
+        },
+        "special_species_power": null,
+        "jump_strength": 0,
+        "accuracy": 95,
+        "aggro": 0.55,
+        "speed": 0.028,
+        "weight": 88,
+        "perception_radius": 27.5,
+        "collision_radius": 0.5,
+        "soundSet": null,
+        "scale_x": 1,
+        "scale_y": 1,
+        "scale_z": 1,
+        "y_offset": 0,
+        "speed_multiplier": 1,
+        "flyspeed": 0
+    },
+    "droid_medical": {
+        "STAT_MODS": {
+            "attributes": {
+                "INT": 2,
+                "STR": -2,
+                "CON": -2
+            }
+        },
+        "resistances": {
+            "cold": "50%"
+        },
+        "special_species_power": null,
+        "jump_strength": 0,
+        "accuracy": 95,
+        "aggro": 0.55,
+        "speed": 0.028,
+        "weight": 88,
+        "perception_radius": 27.5,
+        "collision_radius": 0.5,
+        "soundSet": null,
+        "scale_x": 1,
+        "scale_y": 1,
+        "scale_z": 1,
+        "y_offset": 0,
+        "speed_multiplier": 1,
+        "flyspeed": 0
+    },
+    "droid_probe": {
+        "STAT_MODS": {
+            "attributes": {
+                "WIS": 2,
+                "CHA": -2,
+                "CON": -2
+            },
+            "languages": {
+                "speak_basic": false,
+                "understand_basic": true
+            }
+        },
+        "resistances": {
+            "cold": "50%"
+        },
+        "special_species_power": null,
+        "jump_strength": 0,
+        "accuracy": 95,
+        "aggro": 0.55,
+        "speed": 0.028,
+        "weight": 88,
+        "perception_radius": 27.5,
+        "collision_radius": 0.5,
+        "soundSet": null,
+        "scale_x": 1,
+        "scale_y": 1,
+        "scale_z": 1,
+        "y_offset": 0,
+        "speed_multiplier": 1,
+        "flyspeed": 0
+    },
+    "droid_protocol": {
+        "STAT_MODS": {
+            "attributes": {
+                "WIS": 2,
+                "CHA": 2,
+                "DEX": -2,
+                "CON": -2
+            }
+        },
+        "resistances": {
+            "cold": "50%"
+        },
+        "special_species_power": null,
+        "jump_strength": 0,
+        "accuracy": 95,
+        "aggro": 0.55,
+        "speed": 0.028,
+        "weight": 88,
+        "perception_radius": 27.5,
+        "collision_radius": 0.5,
+        "soundSet": null,
+        "scale_x": 1,
+        "scale_y": 1,
+        "scale_z": 1,
+        "y_offset": 0,
+        "speed_multiplier": 1,
+        "flyspeed": 0
+    },
+    "droid_service": {
+        "STAT_MODS": {
+            "attributes": {
+                "CHA": 2,
+                "STR": -2,
+                "CON": -2
+            }
+        },
+        "resistances": {
+            "cold": "50%"
+        },
+        "special_species_power": null,
+        "jump_strength": 0,
+        "accuracy": 95,
+        "aggro": 0.55,
+        "speed": 0.028,
+        "weight": 88,
+        "perception_radius": 27.5,
+        "collision_radius": 0.5,
+        "soundSet": null,
+        "scale_x": 1,
+        "scale_y": 1,
+        "scale_z": 1,
+        "y_offset": 0,
+        "speed_multiplier": 1,
+        "flyspeed": 0
+    },
     "dug": {
         "STAT_MODS": {
             "attributes": {
@@ -1134,7 +1386,7 @@
         "speed_multiplier": 1,
         "flyspeed": 0
     },
-    "human_female": {
+    "human_slight": {
         "STAT_MODS": {
             "attributes": {}
         },
@@ -1193,7 +1445,7 @@
         "y_offset": 0,
         "speed_multiplier": 1,
         "flyspeed": 0,
-        "force_sensitive": true
+        "force_sensitivity": true
     },
     "human_stormtrooper": {
         "STAT_MODS": {
