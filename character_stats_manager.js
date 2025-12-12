@@ -41,7 +41,8 @@ class CharacterStatsManager {
         this.weaponSlots = 0; // Number of weapon slots
 
         this.energyMaxBonusPct = 0; // Percentage bonus to max energy
-        this.energyRegenBonusPct = 0; // Percentage bonus to energy regen rate
+        this.maxEnergy = 100; // Base energy
+        this.energyRegenBonusPct = 5; // Percentage bonus to energy regen rate (Base 5%)
         this.damageBonusPct = 0; // Percentage bonus to all damage
 
         this.maxAllies = 0; // Maximum number of allies
@@ -175,6 +176,50 @@ class CharacterStatsManager {
         this.energyRegenBonusPct = levelData.energy_regen_bonus_pct || 0;
         this.damageBonusPct = levelData.damage_bonus_pct || 0;
         this.maxAllies = levelData.max_allies || 0;
+
+        // Calculate Max Energy (Base 100 + INT * 5 + Level * 2)
+        // User specified INT increases max, WIS increases regen.
+        const intMod = this.getStatModifier(this.stats.INT);
+        const wisMod = this.getStatModifier(this.stats.WIS);
+        const baseEnergy = 100;
+        const statEnergy = (intMod * 5);
+        this.maxEnergy = Math.floor((baseEnergy + statEnergy + (level * 2)) * (1 + (this.energyMaxBonusPct / 100)));
+
+        // Calculate Energy Regen Rate
+        // Base: 20
+        // Overcharge: +1 per rank (Flat Base Increase)
+        // WIS: +5% per modifier point (Multiplier to Base)
+
+        let baseRegen = 20;
+        let overchargeFlat = 0;
+
+        // Scan powers for Overcharge/Quickcharge
+        if (this.classPowers) {
+            const regex = /(?:Overcharge|Quickcharge|HK Quickcharge)\s*(\d+)/i;
+            for (const power of this.classPowers) {
+                const match = power.match(regex);
+                if (match) {
+                    overchargeFlat += parseInt(match[1]);
+                }
+            }
+        }
+
+        // Check for specific modules if known and not in powers
+        if (window.moduleManager && window.moduleManager.hasModule) {
+            if (window.moduleManager.hasModule('HK Quickcharge 5') && !this.classPowers.includes('HK Quickcharge 5')) {
+                overchargeFlat += 5;
+            }
+            // Add other overrides if needed
+        }
+
+        const totalBaseRegen = baseRegen + overchargeFlat;
+        const wisBonusPct = wisMod * 5; // 5% per point
+
+        // Combined Regen
+        this.energyRegenRate = totalBaseRegen * (1 + (wisBonusPct / 100));
+
+        // Apply Power Bonuses (Legacy hook, might account for non-standard bonuses)
+        // this.applyPowerBonuses(); // Removing this call as we integrated the logic above for clarity
 
         // Calculate HP: 5×CON + (level × HP_per_level)
         const hpPerLevel = this.currentClassData.base_stats.hp_per_level;
@@ -316,6 +361,8 @@ class CharacterStatsManager {
             maxHp: this.maxHp,
             armor: this.armor,
             weaponSlots: this.weaponSlots,
+            maxEnergy: this.maxEnergy,
+            energyRegenRate: this.energyRegenRate,
             energyMaxBonusPct: this.energyMaxBonusPct,
             energyRegenBonusPct: this.energyRegenBonusPct,
             damageBonusPct: this.damageBonusPct,
@@ -373,6 +420,10 @@ class CharacterStatsManager {
                 if (this.stats.jump_strength) this.stats.jump_strength += 0.01;
                 // climb height is not a stat here
                 this.weaponSlots = 7;
+                // HK chassis passive: faster energy regen? 
+                // User mentioned "HK Quickcharge 5". If that's a module, it's separate.
+                // But if it's innate:
+                // this.energyRegenBonusPct += 50; 
                 break;
             case 'gonk':
             default:
@@ -413,6 +464,28 @@ class CharacterStatsManager {
         if (window.characterUpgrades) window.characterUpgrades.updateD20Display();
     }
 
+    // Apply bonuses from special powers
+    applyPowerBonuses() {
+        if (!this.classPowers) return;
+
+        // HK Quickcharge 5: +5 flat regen + 10% bonus
+        let hasQuickcharge = this.classPowers.includes('HK Quickcharge 5');
+
+        // Also check module manager if available
+        if (!hasQuickcharge && window.moduleManager && window.moduleManager.hasModule) {
+            hasQuickcharge = window.moduleManager.hasModule('HK Quickcharge 5') ||
+                window.moduleManager.hasModule('hk_quickcharge_5'); // Check ID as well
+        }
+
+        if (hasQuickcharge) {
+            this.energyRegenRate += 5.0;
+            this.energyRegenRate *= 1.10;
+            console.log("Applied HK Quickcharge 5 bonus (Power/Module active)");
+        } else {
+            console.log("HK Quickcharge 5 not found in powers or modules");
+        }
+    }
+
     // Save state
     saveState() {
         return {
@@ -445,6 +518,7 @@ class CharacterStatsManager {
         this.weaponSlots = state.weaponSlots || 0;
         this.energyMaxBonusPct = state.energyMaxBonusPct || 0;
         this.energyRegenBonusPct = state.energyRegenBonusPct || 0;
+        this.maxEnergy = state.maxEnergy || 100; // Load maxEnergy or default
         this.damageBonusPct = state.damageBonusPct || 0;
         this.maxAllies = state.maxAllies || 0;
         this.classPowers = [...(state.classPowers || [])];

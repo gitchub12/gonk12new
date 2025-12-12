@@ -606,13 +606,18 @@ class TabControls {
         const scale = parseFloat(document.getElementById('npc_weapon_scale').value);
 
         // Update display values
-        document.getElementById('npc_weapon_posX_val').textContent = posX.toFixed(3);
-        document.getElementById('npc_weapon_posY_val').textContent = posY.toFixed(3);
-        document.getElementById('npc_weapon_posZ_val').textContent = posZ.toFixed(3);
-        document.getElementById('npc_weapon_rotX_val').textContent = rotX.toFixed(3);
-        document.getElementById('npc_weapon_rotY_val').textContent = rotY.toFixed(3);
-        document.getElementById('npc_weapon_rotZ_val').textContent = rotZ.toFixed(3);
-        document.getElementById('npc_weapon_scale_val').textContent = scale.toFixed(3);
+        // Update display values safely
+        const setContent = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
+        };
+        setContent('npc_weapon_posX_val', posX.toFixed(3));
+        setContent('npc_weapon_posY_val', posY.toFixed(3));
+        setContent('npc_weapon_posZ_val', posZ.toFixed(3));
+        setContent('npc_weapon_rotX_val', rotX.toFixed(3));
+        setContent('npc_weapon_rotY_val', rotY.toFixed(3));
+        setContent('npc_weapon_rotZ_val', rotZ.toFixed(3));
+        setContent('npc_weapon_scale_val', scale.toFixed(3));
 
         const GGC = GAME_GLOBAL_CONSTANTS;
         if (GGC.WEAPON_OFFSETS) {

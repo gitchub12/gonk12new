@@ -336,7 +336,7 @@
         "scale_z": 1.3,
         "species": "gamorrean",
         "class": "BASIC_ANY_STR",
-        "threat": 1
+        "threat": 4
       },
       {
         "file": "gamorrean_5.png",
@@ -349,7 +349,7 @@
       },
       {
         "file": "gamorrean_6.png",
-        "threat": 2,
+        "threat": 5,
         "scale_x": 1.3,
         "scale_y": 1.1,
         "scale_z": 1.3,
@@ -370,21 +370,21 @@
         "scale_y": 1.2,
         "species": "gungan",
         "class": "BASIC_ANY_STR",
-        "threat": 1
+        "threat": 2
       },
       {
         "file": "gungan2.png",
         "scale_y": 1.2,
         "species": "gungan",
         "class": "BASIC_ANY_STR",
-        "threat": 1
+        "threat": 3
       },
       {
         "file": "gungan3.png",
         "scale_y": 1.2,
         "species": "gungan",
         "class": "BASIC_ANY_STR",
-        "threat": 1
+        "threat": 4
       },
       {
         "file": "gungan4.png",
@@ -405,7 +405,7 @@
         "scale_y": 1.2,
         "species": "gungan",
         "class": "BASIC_ANY_STR",
-        "threat": 1
+        "threat": 5
       },
       {
         "file": "gunganrishloo.png",

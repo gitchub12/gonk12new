@@ -869,7 +869,8 @@ class Game {
             popup.style.border = '2px solid #555';
             popup.style.color = '#eee';
             popup.style.padding = '20px';
-            popup.style.width = '300px';
+            popup.style.width = '375px'; // Increased by 25%
+            popup.style.fontSize = '12pt'; // Slightly larger text
             popup.style.fontFamily = 'monospace';
             popup.style.zIndex = '10000';
             popup.style.display = 'none';
@@ -916,7 +917,14 @@ class Game {
             speciesDisplay = speciesDisplay.charAt(0).toUpperCase() + speciesDisplay.slice(1);
         }
 
-        const weaponName = npc.weaponData ? npc.weaponData.name : 'Unarmed';
+        // Fix weapon name display (weaponname property, strip .png)
+        let weaponName = 'Unarmed';
+        if (npc.weaponData && npc.weaponData.weaponname) {
+            weaponName = npc.weaponData.weaponname.replace('.png', '').replace(/_/g, ' ');
+            // Title case
+            weaponName = weaponName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        }
+
         const damageMod = (npc.itemData?.properties?.damage_modifier || 0);
         const baseDmg = (npc.weaponData?.damage || npc.config.melee_damage || 0);
         const fireRate = (npc.weaponData?.fireRate || 1);
@@ -1393,6 +1401,14 @@ class Game {
             this.state.isPaused = true;
             if (this.hudContainer) this.hudContainer.style.display = 'none';
             document.exitPointerLock();
+
+            // Play greeting sound
+            if (window.audioSystem) {
+                // Try playing with the specific path format requested
+                window.audioSystem.playSound('data\\speech\\vendors\\theguidehellothere.mp3', 1.0);
+            } else {
+                new Audio('data/speech/vendors/theguidehellothere.mp3').play().catch(e => console.warn(e));
+            }
         }
     }
 
@@ -1486,8 +1502,12 @@ class Game {
             window.weaponPickupManager.update(physics.playerCollider, this.entities.droppedWeapons, this.state.allies);
             if (window.playerWeaponSystem) { playerWeaponSystem.update(this.deltaTime, totalTime); }
             // Energy Regeneration
-            let energyRegen = 12.500;
-            if (this.state.playerStats.energy_regen_bonus) {
+            let energyRegen = 20.000;
+            if (window.characterStats && window.characterStats.energyRegenRate > 0) {
+                // Use the accurately calculated rate from Character Stats Manager
+                energyRegen = window.characterStats.energyRegenRate;
+            } else if (this.state.playerStats.energy_regen_bonus) {
+                // Fallback (e.g. at startup)
                 energyRegen *= (1 + this.state.playerStats.energy_regen_bonus);
             }
             this.state.energy = Math.min(this.state.maxEnergy, this.state.energy + (energyRegen * deltaTime));
@@ -1651,14 +1671,21 @@ class Game {
                         'aliens': 'Alien',
                         'droids': 'Droid',
                         'clones': 'Clone',
-                        'mandalorians': 'Mandalorian',
+                        'mandalorians': 'Mando',
                         'sith': 'Sith',
                         'takers': 'Taker',
                         'player_droid': 'Droid' // Fallback
                     };
                     const factionSingular = factionMap[rawFaction] || rawFaction.charAt(0).toUpperCase() + rawFaction.slice(1);
 
-                    numDiv.textContent = `${i + 1} ${factionSingular}`;
+                    let spacing = '\u00A0'; // Default 1 (non-breaking) space
+                    if (factionSingular === 'Sith') {
+                        spacing = '\u00A0\u00A0\u00A0'; // 3 spaces
+                    } else if (['Rebel', 'Droid', 'Alien', 'Clone', 'Taker'].includes(factionSingular)) {
+                        spacing = '\u00A0\u00A0'; // 2 spaces
+                    }
+
+                    numDiv.textContent = `${i + 1}${spacing}${factionSingular}`;
 
                     const factionColor = allyData.color;
 
@@ -1666,7 +1693,7 @@ class Game {
                     // Sticking to allyData.color logic for text color.
                     // But for Outline style, we checked 'imperials'.
 
-                    if (rawFaction === 'imperials') {
+                    if (rawFaction === 'imperials' || rawFaction === 'sith') {
                         numDiv.style.color = 'black';
                         numDiv.style.webkitTextStroke = '1px white'; // Chrome/Safari
                         numDiv.style.textShadow = '-1px -1px 0 #FFF, 1px -1px 0 #FFF, -1px 1px 0 #FFF, 1px 1px 0 #FFF';
@@ -1682,6 +1709,8 @@ class Game {
                     if (allyData.name.includes(' ') && allyData.name.split(' ').length === 2) {
                         nameSpan.innerHTML = allyData.name.replace(' ', '<br>');
                     } else { nameSpan.innerHTML = allyData.name; }
+
+                    // Use actual NPC max HP
                     const maxHealth = npc.maxHealth;
                     const damagePercent = (1 - (npc.health / maxHealth)) * 100;
                     healthOverlay.style.height = `${damagePercent}%`;

@@ -153,8 +153,11 @@ class NPC {
 
             if (speciesDef) {
                 // Apply stat modifiers
-                if (speciesDef.modifiers) {
-                    for (const [stat, mod] of Object.entries(speciesDef.modifiers)) {
+                // FIX: JSON uses STAT_MODS.attributes, not generic 'modifiers'
+                const modifiers = speciesDef.STAT_MODS ? speciesDef.STAT_MODS.attributes : speciesDef.modifiers;
+
+                if (modifiers) {
+                    for (const [stat, mod] of Object.entries(modifiers)) {
                         if (this.stats[stat] !== undefined) {
                             this.stats[stat] += mod;
                         }

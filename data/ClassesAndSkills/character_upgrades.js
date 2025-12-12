@@ -647,21 +647,72 @@ class CharacterUpgrades {
             statsDisplay.innerHTML = `
                 <!-- STATS BLOCK -->
                 <div style="margin-bottom: 30px; width: 100%;">
+                    <style>
+                        .stat-row { position: relative; cursor: help; }
+                        .stat-row:hover .stat-tooltip { display: block; }
+                        .stat-tooltip {
+                            display: none;
+                            position: absolute;
+                            left: 100%;
+                            top: 0;
+                            width: 200px;
+                            background: rgba(0,0,0,0.9);
+                            border: 1px solid #0ff;
+                            color: #fff;
+                            font-size: 12px;
+                            padding: 10px;
+                            z-index: 1000;
+                            border-radius: 4px;
+                            margin-left: 10px;
+                            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                            pointer-events: none;
+                            font-weight: normal;
+                            line-height: 1.4;
+                            text-align: left;
+                        }
+                    </style>
                     <div style="font-size: 24px; line-height: 1.8; font-weight: bold;">
-                        <div style="display: flex; justify-content: space-between;"><span style="color: #0ff;">STR</span> <span style="color: #fff;">${data.stats.STR}</span></div>
-                        <div style="display: flex; justify-content: space-between;"><span style="color: #0ff;">DEX</span> <span style="color: #fff;">${data.stats.DEX}</span></div>
-                        <div style="display: flex; justify-content: space-between;"><span style="color: #0ff;">CON</span> <span style="color: #fff;">${data.stats.CON}</span></div>
-                        <div style="display: flex; justify-content: space-between;"><span style="color: #0ff;">INT</span> <span style="color: #fff;">${data.stats.INT}</span></div>
-                        <div style="display: flex; justify-content: space-between;"><span style="color: #0ff;">WIS</span> <span style="color: #fff;">${data.stats.WIS}</span></div>
-                        <div style="display: flex; justify-content: space-between;"><span style="color: #0ff;">CHA</span> <span style="color: #fff;">${data.stats.CHA}</span></div>
+                        <div class="stat-row" style="display: flex; justify-content: space-between;">
+                            <span style="color: #0ff;">STR</span> 
+                            <span style="color: #fff;">${data.stats.STR} (${data.modifiers.STR >= 0 ? '+' : ''}${data.modifiers.STR})</span>
+                            <div class="stat-tooltip">Melee Damage bonus equal to the modifier. Weight limit for wielding is 15 pounds per point. Requires 16 STR to lift E-Web cannon or unique gattlinglaser and a 14 to use Z6 Rotary Blasters.</div>
+                        </div>
+                        <div class="stat-row" style="display: flex; justify-content: space-between;">
+                            <span style="color: #0ff;">DEX</span> 
+                            <span style="color: #fff;">${data.stats.DEX} (${data.modifiers.DEX >= 0 ? '+' : ''}${data.modifiers.DEX})</span>
+                            <div class="stat-tooltip">Ranged Attack bonus. Reflex Save bonus. Armor Class bonus. Affects accuracy with blasters and ability to dodge attacks.</div>
+                        </div>
+                        <div class="stat-row" style="display: flex; justify-content: space-between;">
+                            <span style="color: #0ff;">CON</span> 
+                            <span style="color: #fff;">${data.stats.CON} (${data.modifiers.CON >= 0 ? '+' : ''}${data.modifiers.CON})</span>
+                            <div class="stat-tooltip">Hit Point bonus per level. Stamina and resistance to physical trauma. Determines your total health pool.</div>
+                        </div>
+                        <div class="stat-row" style="display: flex; justify-content: space-between;">
+                            <span style="color: #0ff;">INT</span> 
+                            <span style="color: #fff;">${data.stats.INT} (${data.modifiers.INT >= 0 ? '+' : ''}${data.modifiers.INT})</span>
+                            <div class="stat-tooltip">Skill points per level. Bonus to Energy Max (+5 per modifier point). Essential for Slicing and Repair skills.</div>
+                        </div>
+                        <div class="stat-row" style="display: flex; justify-content: space-between;">
+                            <span style="color: #0ff;">WIS</span> 
+                            <span style="color: #fff;">${data.stats.WIS} (${data.modifiers.WIS >= 0 ? '+' : ''}${data.modifiers.WIS})</span>
+                            <div class="stat-tooltip">Willpower Save bonus. Bonus to Energy Regen (+0.5/sec per modifier) and Energy Max (+5 per modifier). Critical for Force users and situational awareness.</div>
+                        </div>
+                        <div class="stat-row" style="display: flex; justify-content: space-between;">
+                            <span style="color: #0ff;">CHA</span> 
+                            <span style="color: #fff;">${data.stats.CHA} (${data.modifiers.CHA >= 0 ? '+' : ''}${data.modifiers.CHA})</span>
+                            <div class="stat-tooltip">Social skill bonus. Affects Force Power effectiveness and leadership abilities. Important for Persuasion and trading.</div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- VITALS BLOCK -->
                 <div style="margin-bottom: 30px; width: 100%;">
-                    <div style="color: #f00; font-size: 20px; font-weight: bold; margin-bottom: 5px;">HP: <span style="color: #fff; float: right;">${data.hp}/${correctMaxHp}</span></div>
+                    <div style="color: #f00; font-size: 20px; font-weight: bold; margin-bottom: 5px;">HP: <span style="color: #fff; float: right;">${data.hp}/${data.maxHp}</span></div>
                     <div style="color: #0ff; font-size: 20px; font-weight: bold; margin-bottom: 5px;">ENERGY: <span style="color: #fff; float: right;">${data.maxEnergy}</span></div>
-                    <div style="color: #0f0; font-size: 16px; font-weight: bold;">POWER/SEC: <span style="color: #fff; float: right;">${data.energyRegenBonusPct}%</span></div>
+                    
+                    <!-- Power/Sec calculation: MaxEnergy * (RegenPercent / 100) -->
+                    <!-- Note: data.energyRegenBonusPct is the total regen rate in percent (e.g., 5 means 5%) -->
+                    <div style="color: #0f0; font-size: 16px; font-weight: bold;">POWER/SEC: <span style="color: #fff; float: right;">${(data.energyRegenRate || 0).toFixed(1)}</span></div>
                 </div>
 
                  <!-- LEVEL INFO -->
