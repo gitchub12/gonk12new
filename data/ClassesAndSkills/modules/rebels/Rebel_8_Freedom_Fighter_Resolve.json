@@ -1,0 +1,14 @@
+{
+    "id": "rebel_8_freedom_fighter_resolve",
+    "name": "Freedom Fighter Resolve",
+    "tier": 8,
+    "faction": "rebel",
+    "description": "+2 Will saves and resistance to fear.",
+    "icon": "data/pngs/MODULES/rebel_8_freedom_fighter_resolve.png",
+    "effects": {
+        "immediate": {
+            "will_save_bonus": 2,
+            "fear_resistance": true
+        }
+    }
+}

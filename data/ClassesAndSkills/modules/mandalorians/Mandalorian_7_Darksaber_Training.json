@@ -1,0 +1,13 @@
+{
+    "id": "mandalorian_7_darksaber_training",
+    "name": "Darksaber Training",
+    "tier": 7,
+    "faction": "mandalorian",
+    "description": "+20% Damage with Lightsabers/Melee.",
+    "icon": "data/pngs/MODULES/mandalorian_7_darksaber_training.png",
+    "effects": {
+        "immediate": {
+            "melee_damage_bonus_pct": 20
+        }
+    }
+}

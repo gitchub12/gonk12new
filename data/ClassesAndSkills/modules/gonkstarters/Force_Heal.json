@@ -1,0 +1,11 @@
+{
+    "id":  "Force Heal",
+    "name":  "Force Heal",
+    "type":  "active",
+    "faction":  "Gonk",
+    "description":  "Uses the Force to restore Health.",
+    "rank":  1,
+    "effects":  {
+                    "ability_force_heal":  true
+                }
+}

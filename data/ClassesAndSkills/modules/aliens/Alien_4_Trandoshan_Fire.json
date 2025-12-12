@@ -1,0 +1,13 @@
+{
+    "id": "alien_4_trandoshan_fire",
+    "name": "Trandoshan Climate (Fire)",
+    "tier": 4,
+    "faction": "alien",
+    "description": "Reduces incoming fire damage by 15%. Stacks for immunity.",
+    "icon": "data/pngs/MODULES/alien_4_trandoshan_fire.png",
+    "effects": {
+        "immediate": {
+            "fire_resistance_pct": 15
+        }
+    }
+}

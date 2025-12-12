@@ -1,0 +1,13 @@
+{
+    "id": "clone_9_precise_shot",
+    "name": "Precise Shot",
+    "tier": 9,
+    "faction": "clone",
+    "description": "Deal +50% damage when aiming down sights (zoomed).",
+    "icon": "data/pngs/MODULES/clone_9_precise_shot.png",
+    "effects": {
+        "immediate": {
+            "ads_damage_bonus_pct": 50
+        }
+    }
+}

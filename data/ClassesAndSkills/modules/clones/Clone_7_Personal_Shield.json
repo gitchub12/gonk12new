@@ -1,0 +1,14 @@
+{
+    "id": "clone_7_personal_shield",
+    "name": "Starship Power (Personal Shield)",
+    "tier": 7,
+    "faction": "clone",
+    "description": "50 Point Personal Shield.",
+    "icon": "data/pngs/MODULES/clone_7_personal_shield.png",
+    "effects": {
+        "immediate": {
+            "shield_max": 50,
+            "shield_regen": 2
+        }
+    }
+}

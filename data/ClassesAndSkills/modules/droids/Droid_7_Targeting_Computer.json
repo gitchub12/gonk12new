@@ -1,0 +1,13 @@
+{
+    "id": "droid_7_targeting_computer",
+    "name": "Targeting Computer",
+    "tier": 7,
+    "faction": "droid",
+    "description": "+10% Critical Hit Chance.",
+    "icon": "data/pngs/MODULES/droid_7_targeting_computer.png",
+    "effects": {
+        "immediate": {
+            "crit_chance_bonus": 0.1
+        }
+    }
+}

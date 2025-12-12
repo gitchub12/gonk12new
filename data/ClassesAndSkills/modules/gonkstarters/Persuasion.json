@@ -1,0 +1,11 @@
+{
+    "id":  "Persuasion",
+    "name":  "Persuasion",
+    "type":  "passive",
+    "faction":  "Gonk",
+    "description":  "Uses Charisma to influence others.",
+    "rank":  1,
+    "effects":  {
+                    "skill_persuasion":  1
+                }
+}

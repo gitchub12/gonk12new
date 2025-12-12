@@ -1,0 +1,13 @@
+{
+    "id": "rebel_1_street_smart",
+    "name": "Street Smart",
+    "tier": 1,
+    "faction": "rebel",
+    "description": "Gain +10% more credits from all sources.",
+    "icon": "data/pngs/MODULES/rebel_1_street_smart.png",
+    "effects": {
+        "immediate": {
+            "credit_bonus_pct": 10
+        }
+    }
+}

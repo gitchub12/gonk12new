@@ -1,0 +1,14 @@
+{
+    "id": "rebel_6_scrambler_trick",
+    "name": "Scrambler Trick",
+    "tier": 6,
+    "faction": "rebel",
+    "description": "Chance to blind enemies on hit. Effect doubled vs Droids.",
+    "icon": "data/pngs/MODULES/rebel_6_scrambler_trick.png",
+    "effects": {
+        "immediate": {
+            "on_hit_blind_chance": 0.1,
+            "droid_blind_multiplier": 2
+        }
+    }
+}

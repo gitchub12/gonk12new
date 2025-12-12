@@ -1,0 +1,14 @@
+{
+    "id": "taker_5_amphibious_lungs",
+    "name": "Amphibious Lungs",
+    "tier": 5,
+    "faction": "taker",
+    "description": "Breathe underwater and swim 50% faster.",
+    "icon": "data/pngs/MODULES/taker_5_amphibious_lungs.png",
+    "effects": {
+        "immediate": {
+            "water_breathing": true,
+            "swim_speed_bonus": 0.5
+        }
+    }
+}

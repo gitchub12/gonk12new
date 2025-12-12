@@ -605,6 +605,7 @@ class Game {
 
         this.setupAllyStatsPopup();
 
+
         const addModuleButton = document.getElementById('add-module-cheat-btn');
         addModuleButton.addEventListener('click', () => {
             const selectedModule = moduleDropdown.value;
@@ -616,17 +617,21 @@ class Game {
             if (window.moduleManager) {
                 const success = window.moduleManager.grantModule(selectedModule);
                 if (success) {
-                    alert(`Added module: ${selectedModule}`);
+                    console.log(`Added module: ${selectedModule}`);
                     // Also ensure it's saved to persistent player data
                     if (window.characterStats && window.characterStats.playerData) {
                         if (!window.characterStats.playerData.modules) window.characterStats.playerData.modules = [];
                         if (!window.characterStats.playerData.modules.includes(selectedModule)) {
-                            window.characterStats.playerData.modules.push(selectedModule);
+                            // This logic in grantModule usually handles pushing to array, but for cheat consistency:
+                            // We shouldn't duplicate here if grantModule already tracked it. 
+                            // grantModule operates on activeModules. 
+                            // We should sync playerData.modules with activeModules for save consistency
+                            window.characterStats.playerData.modules = [...window.moduleManager.activeModules];
                             window.characterStats.savePlayerData();
                         }
                     }
                 } else {
-                    alert(`Failed to add module (or already owned): ${selectedModule}`);
+                    console.log(`Failed to add module (or already owned): ${selectedModule}`);
                 }
             } else {
                 console.error('Module Manager not found!');
@@ -635,6 +640,82 @@ class Game {
             // Reset dropdown
             moduleDropdown.value = '';
         });
+
+        const fillModulesButton = document.getElementById('fill-modules-cheat-btn');
+        if (fillModulesButton) {
+            fillModulesButton.addEventListener('click', () => {
+                if (window.moduleManager && window.characterUpgrades) {
+                    const MAX_MODULES = 24;
+                    const currentCount = window.moduleManager.activeModules.length;
+                    const space = MAX_MODULES - currentCount;
+
+                    if (space <= 0) {
+                        console.log('No module slots available!');
+                        return;
+                    }
+
+                    const allModules = Object.keys(window.characterUpgrades.getModuleData());
+                    if (allModules.length === 0) return;
+
+                    let addedCount = 0;
+                    let attempts = 0;
+                    const MAX_ATTEMPTS = 200;
+
+                    // Try to fill unique modules until full or max attempts
+                    while (window.moduleManager.activeModules.length < MAX_MODULES && attempts < MAX_ATTEMPTS) {
+                        const randomMod = allModules[Math.floor(Math.random() * allModules.length)];
+                        if (window.moduleManager.grantModule(randomMod)) {
+                            addedCount++;
+                        }
+                        attempts++;
+                    }
+
+                    // Sync Persistent Data
+                    if (window.characterStats && window.characterStats.playerData) {
+                        window.characterStats.playerData.modules = [...window.moduleManager.activeModules];
+                        window.characterStats.savePlayerData();
+                    }
+
+                    console.log(`Filled ${addedCount} slots with random modules.`);
+                    if (window.characterUpgrades) window.characterUpgrades.updateD20Display();
+                }
+            });
+        }
+
+        const levelUpModulesButton = document.getElementById('level-up-modules-cheat-btn');
+        if (levelUpModulesButton) {
+            levelUpModulesButton.addEventListener('click', () => {
+                if (window.moduleManager) {
+                    const currentModules = [...window.moduleManager.activeModules];
+                    if (currentModules.length === 0) {
+                        console.log("No modules to level up.");
+                        return;
+                    }
+
+                    let leveledCount = 0;
+
+                    // Get unique modules to ensure we only level up each type once (Rank +1)
+                    const uniqueModules = [...new Set(currentModules)];
+
+                    // Iterate and attempt to grant each unique module again (Rank +1)
+                    uniqueModules.forEach(modId => {
+                        if (window.moduleManager.grantModule(modId)) {
+                            leveledCount++;
+                        }
+                    });
+
+                    // Sync Persistent Data
+                    if (window.characterStats && window.characterStats.playerData) {
+                        window.characterStats.playerData.modules = [...window.moduleManager.activeModules];
+                        window.characterStats.savePlayerData();
+                    }
+
+                    console.log(`Leveled up ${leveledCount} modules.`);
+                    if (window.characterUpgrades) window.characterUpgrades.updateD20Display();
+                }
+            });
+        }
+
 
         const debugModeCheckbox = document.getElementById('debug-mode-checkbox');
         if (debugModeCheckbox) {
@@ -1303,9 +1384,17 @@ class Game {
         const isVisible = this.cheatsMenu.style.display === 'block';
         if (isVisible) {
             this.cheatsMenu.style.display = 'none';
-            this.state.isPaused = false;
-            if (this.hudContainer && !window.isConversationUIVisible) this.hudContainer.style.display = 'block';
-            if (this.canvas) this.canvas.requestPointerLock();
+
+            // Check if Character Sheet is open (uses 'grid') or Tab Controls (check left panel)
+            const charSheet = document.getElementById('character-page-wrapper');
+            const isCharSheetOpen = charSheet && (charSheet.style.display === 'grid' || charSheet.style.display === 'block');
+            const tabControlsOpen = window.tabControls && window.tabControls.isVisible;
+
+            if (!isCharSheetOpen && !tabControlsOpen) {
+                this.state.isPaused = false;
+                if (this.hudContainer && !window.isConversationUIVisible) this.hudContainer.style.display = 'block';
+                if (this.canvas) this.canvas.requestPointerLock();
+            }
         } else {
             this.cheatsMenu.style.display = 'block';
             this.state.isPaused = true;
@@ -1316,6 +1405,31 @@ class Game {
             const levelDisplay = document.getElementById('current-level-display');
             if (levelDisplay && window.characterStats) {
                 levelDisplay.textContent = `Current Level: ${window.characterStats.level || 1}`;
+            }
+
+            // Populate module dropdown
+            const moduleDropdown = document.getElementById('add-module-dropdown');
+            if (moduleDropdown && window.characterUpgrades) {
+                // Save current selection if any? No, reset is fine or keep if consistent.
+                // Better to clear and rebuild to ensure sorted order and completeness
+                moduleDropdown.innerHTML = '<option value="">-- Select Module --</option>';
+
+                const moduleData = window.characterUpgrades.getModuleData();
+                const moduleNames = Object.keys(moduleData).sort((a, b) => {
+                    const dataA = moduleData[a];
+                    const dataB = moduleData[b];
+                    const factionCompare = (dataA.faction || 'zzz').localeCompare(dataB.faction || 'zzz');
+                    if (factionCompare !== 0) return factionCompare;
+                    return a.localeCompare(b);
+                });
+
+                moduleNames.forEach(moduleName => {
+                    const data = moduleData[moduleName];
+                    const option = document.createElement('option');
+                    option.value = moduleName;
+                    option.textContent = `${moduleName} [${data.faction || 'general'}] (Rank ${data.rank || 1})`;
+                    moduleDropdown.appendChild(option);
+                });
             }
         }
     }

@@ -1,0 +1,13 @@
+{
+    "id": "droid_6_repair_protocol",
+    "name": "Repair Protocol",
+    "tier": 6,
+    "faction": "droid",
+    "description": "Slowly regenerate HP over time (0.5/sec).",
+    "icon": "data/pngs/MODULES/droid_6_repair_protocol.png",
+    "effects": {
+        "immediate": {
+            "hp_regen": 0.5
+        }
+    }
+}

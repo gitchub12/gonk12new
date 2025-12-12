@@ -1,0 +1,13 @@
+{
+    "id": "sith_4_improved_martial_arts",
+    "name": "Improved Martial Arts",
+    "tier": 4,
+    "faction": "sith",
+    "description": "Damage scales with consecutive hits on same target.",
+    "icon": "data/pngs/MODULES/sith_4_improved_martial_arts.png",
+    "effects": {
+        "immediate": {
+            "consecutive_hit_damage_bonus": 1
+        }
+    }
+}

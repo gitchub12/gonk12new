@@ -1,0 +1,11 @@
+{
+    "id":  "Running",
+    "name":  "Running",
+    "type":  "passive",
+    "faction":  "Gonk",
+    "description":  "Uses Constitution to maintain speed over distances.",
+    "rank":  1,
+    "effects":  {
+                    "skill_running":  1
+                }
+}

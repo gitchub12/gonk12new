@@ -1,0 +1,14 @@
+{
+    "id": "sith_10_force_speed_sith",
+    "name": "Force Speed",
+    "tier": 10,
+    "faction": "sith",
+    "description": "On hit, briefly increase energy regeneration.",
+    "icon": "data/pngs/MODULES/sith_10_force_speed_sith.png",
+    "effects": {
+        "immediate": {
+            "on_hit_energy_regen_bonus": 1.0,
+            "on_hit_energy_regen_duration": 0.5
+        }
+    }
+}

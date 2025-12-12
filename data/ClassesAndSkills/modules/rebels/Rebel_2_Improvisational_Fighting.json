@@ -1,0 +1,13 @@
+{
+    "id": "rebel_2_improvisational_fighting",
+    "name": "Improvisational Fighting",
+    "tier": 2,
+    "faction": "rebel",
+    "description": "+10% damage with melee weapons.",
+    "icon": "data/pngs/MODULES/rebel_2_improvisational_fighting.png",
+    "effects": {
+        "immediate": {
+            "melee_damage_bonus_pct": 10
+        }
+    }
+}

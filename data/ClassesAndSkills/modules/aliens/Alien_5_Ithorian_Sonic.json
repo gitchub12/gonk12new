@@ -1,0 +1,13 @@
+{
+    "id": "alien_5_ithorian_sonic",
+    "name": "Ithorian Climate (Sonic)",
+    "tier": 5,
+    "faction": "alien",
+    "description": "Reduces incoming sonic damage by 15% and resists sonic effects.",
+    "icon": "data/pngs/MODULES/alien_5_ithorian_sonic.png",
+    "effects": {
+        "immediate": {
+            "sonic_resistance_pct": 15
+        }
+    }
+}

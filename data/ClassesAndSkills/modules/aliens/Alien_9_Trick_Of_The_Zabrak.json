@@ -1,0 +1,14 @@
+{
+    "id": "alien_9_trick_of_the_zabrak",
+    "name": "Trick of the Zabrak",
+    "tier": 9,
+    "faction": "alien",
+    "description": "Flash burst blinds nearby enemies when hit (cooldown).",
+    "icon": "data/pngs/MODULES/alien_9_trick_of_the_zabrak.png",
+    "effects": {
+        "immediate": {
+            "reactive_blind_chance": 0.25,
+            "reactive_blind_radius": 10
+        }
+    }
+}

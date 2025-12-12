@@ -1,0 +1,14 @@
+{
+    "id": "taker_6_spore_cloud",
+    "name": "Spore Cloud",
+    "tier": 6,
+    "faction": "taker",
+    "description": "Emit a damaging cloud to nearby enemies (2 dps).",
+    "icon": "data/pngs/MODULES/taker_6_spore_cloud.png",
+    "effects": {
+        "immediate": {
+            "aura_damage_per_sec": 2,
+            "aura_radius": 5
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "id": "taker_3_hatred",
+    "name": "Hatred",
+    "tier": 3,
+    "faction": "taker",
+    "description": "Gain Energy when taking damage.",
+    "icon": "data/pngs/MODULES/taker_3_hatred.png",
+    "effects": {
+        "immediate": {
+            "energy_gain_on_hit": 5
+        }
+    }
+}

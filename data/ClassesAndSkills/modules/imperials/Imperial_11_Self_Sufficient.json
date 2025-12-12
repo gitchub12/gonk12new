@@ -1,0 +1,13 @@
+{
+    "id": "imperial_11_self_sufficient",
+    "name": "Self Sufficient",
+    "tier": 11,
+    "faction": "imperial",
+    "description": "Full Heal when completing a level.",
+    "icon": "data/pngs/MODULES/imperial_11_self_sufficient.png",
+    "effects": {
+        "immediate": {
+            "level_end_full_heal": true
+        }
+    }
+}

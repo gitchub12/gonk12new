@@ -1,0 +1,13 @@
+{
+    "id": "taker_4_organic_weaponry",
+    "name": "Organic Weaponry",
+    "tier": 4,
+    "faction": "taker",
+    "description": "+15% Damage with biological/melee weapons.",
+    "icon": "data/pngs/MODULES/taker_4_organic_weaponry.png",
+    "effects": {
+        "immediate": {
+            "organic_damage_bonus_pct": 15
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "id": "droid_11_technical_wizard_core",
+    "name": "Technical Wizard Core",
+    "tier": 11,
+    "faction": "droid",
+    "description": "Grants 1 bonus core at level start if you have none.",
+    "icon": "data/pngs/MODULES/droid_11_technical_wizard_core.png",
+    "effects": {
+        "immediate": {
+            "min_level_start_cores": 1
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "id": "rebel_9_field_medic_surgery",
+    "name": "Field Medic Surgery",
+    "tier": 9,
+    "faction": "rebel",
+    "description": "Ability: Heal allies at cost of 1 permanent Power.",
+    "icon": "data/pngs/MODULES/rebel_9_field_medic_surgery.png",
+    "effects": {
+        "immediate": {
+            "enable_surgery_heal": true,
+            "surgery_power_cost": 1
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "id": "mandalorian_12_heavy_recoil_rig",
+    "name": "Weapon Spec (Heavy)",
+    "tier": 12,
+    "faction": "mandalorian",
+    "description": "Massive damage bonus (+25%) for Heavy Weapons.",
+    "icon": "data/pngs/MODULES/mandalorian_12_heavy_recoil_rig.png",
+    "effects": {
+        "immediate": {
+            "longarm_damage_bonus_pct": 25
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "id": "alien_2_stealthy_gungan",
+    "name": "Stealthy Gungan",
+    "tier": 2,
+    "faction": "alien",
+    "description": "Stealth distortion reduces chance enemies hit or notice you. Stacking increases effect.",
+    "icon": "data/pngs/MODULES/alien_2_stealthy_gungan.png",
+    "effects": {
+        "immediate": {
+            "dodge_chance": 0.05,
+            "stealth_rating": 2
+        }
+    }
+}

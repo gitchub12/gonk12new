@@ -1,0 +1,13 @@
+{
+    "id": "droid_4_logic_loop",
+    "name": "Logic Loop",
+    "tier": 4,
+    "faction": "droid",
+    "description": "+2 Intelligence.",
+    "icon": "data/pngs/MODULES/droid_4_logic_loop.png",
+    "effects": {
+        "immediate": {
+            "int_bonus": 2
+        }
+    }
+}

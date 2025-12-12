@@ -1,0 +1,13 @@
+{
+    "id": "clone_2_coordinate",
+    "name": "Coordinate",
+    "tier": 2,
+    "faction": "clone",
+    "description": "Allies target the most recently struck enemy.",
+    "icon": "data/pngs/MODULES/clone_2_coordinate.png",
+    "effects": {
+        "immediate": {
+            "mark_targets_on_hit": true
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "id": "rebel_7_underworld_connections",
+    "name": "Underworld Connections",
+    "tier": 7,
+    "faction": "rebel",
+    "description": "-15% shop prices.",
+    "icon": "data/pngs/MODULES/rebel_7_underworld_connections.png",
+    "effects": {
+        "immediate": {
+            "shop_price_multiplier": -0.15
+        }
+    }
+}

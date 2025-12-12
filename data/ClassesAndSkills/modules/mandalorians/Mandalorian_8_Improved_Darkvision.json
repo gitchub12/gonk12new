@@ -1,0 +1,13 @@
+{
+    "id": "mandalorian_8_improved_darkvision",
+    "name": "Improved Darkvision",
+    "tier": 8,
+    "faction": "mandalorian",
+    "description": "Thermal outlines of enemies at long range.",
+    "icon": "data/pngs/MODULES/mandalorian_8_improved_darkvision.png",
+    "effects": {
+        "immediate": {
+            "thermal_vision_range_bonus": 100
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "id": "sith_12_spring_attack",
+    "name": "Spring Attack",
+    "tier": 12,
+    "faction": "sith",
+    "description": "Deals 2x damage to unaware targets.",
+    "icon": "data/pngs/MODULES/sith_12_spring_attack.png",
+    "effects": {
+        "immediate": {
+            "unaware_damage_multiplier": 2
+        }
+    }
+}

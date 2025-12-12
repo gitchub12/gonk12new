@@ -1,0 +1,14 @@
+{
+    "id": "imperial_1_inspire_confidence",
+    "name": "Inspire Confidence",
+    "tier": 1,
+    "faction": "imperial",
+    "description": "Increases defense/armor of nearby allies.",
+    "icon": "data/pngs/MODULES/imperial_1_inspire_confidence.png",
+    "effects": {
+        "immediate": {
+            "aura_defense_bonus": 2,
+            "aura_radius": 15
+        }
+    }
+}

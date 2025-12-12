@@ -1,0 +1,13 @@
+{
+    "id": "droid_12_machine_efficiency",
+    "name": "Machine Efficiency",
+    "tier": 12,
+    "faction": "droid",
+    "description": "-20% Energy cost for all actions.",
+    "icon": "data/pngs/MODULES/droid_12_machine_efficiency.png",
+    "effects": {
+        "immediate": {
+            "energy_cost_multiplier": -0.2
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "id": "imperial_5_urban_tracking",
+    "name": "Urban Tracking",
+    "tier": 5,
+    "faction": "imperial",
+    "description": "Jams nearby enemy spawn points.",
+    "icon": "data/pngs/MODULES/imperial_5_urban_tracking.png",
+    "effects": {
+        "immediate": {
+            "jam_spawners": true,
+            "jam_radius": 30
+        }
+    }
+}

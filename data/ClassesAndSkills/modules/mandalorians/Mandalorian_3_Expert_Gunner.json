@@ -1,0 +1,14 @@
+{
+    "id": "mandalorian_3_expert_gunner",
+    "name": "Expert Gunner",
+    "tier": 3,
+    "faction": "mandalorian",
+    "description": "+10% Accuracy and Range.",
+    "icon": "data/pngs/MODULES/mandalorian_3_expert_gunner.png",
+    "effects": {
+        "immediate": {
+            "accuracy_bonus": 10,
+            "range_multiplier": 1.1
+        }
+    }
+}

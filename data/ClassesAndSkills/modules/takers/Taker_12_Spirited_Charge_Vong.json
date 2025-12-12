@@ -1,0 +1,14 @@
+{
+    "id": "taker_12_spirited_charge_vong",
+    "name": "Spirited Charge (Vong)",
+    "tier": 12,
+    "faction": "taker",
+    "description": "Double Jump Height and Fall Damage Immunity.",
+    "icon": "data/pngs/MODULES/taker_12_spirited_charge_vong.png",
+    "effects": {
+        "immediate": {
+            "jump_height_bonus": 1.0,
+            "fall_damage_immunity": true
+        }
+    }
+}

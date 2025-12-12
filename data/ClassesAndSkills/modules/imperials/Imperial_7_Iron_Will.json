@@ -1,0 +1,14 @@
+{
+    "id": "imperial_7_iron_will",
+    "name": "Iron Will",
+    "tier": 7,
+    "faction": "imperial",
+    "description": "Immunity to Fear and +2 Resolve.",
+    "icon": "data/pngs/MODULES/imperial_7_iron_will.png",
+    "effects": {
+        "immediate": {
+            "fear_immunity": true,
+            "resolve_bonus": 2
+        }
+    }
+}

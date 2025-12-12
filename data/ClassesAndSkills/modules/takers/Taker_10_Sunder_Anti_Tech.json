@@ -1,0 +1,14 @@
+{
+    "id": "taker_10_sunder_anti_tech",
+    "name": "Sunder Anti-Tech",
+    "tier": 10,
+    "faction": "taker",
+    "description": "Deal +50% damage to Droids and stagger them.",
+    "icon": "data/pngs/MODULES/taker_10_sunder_anti_tech.png",
+    "effects": {
+        "immediate": {
+            "droid_damage_bonus_pct": 50,
+            "stagger_chance_droids": 0.5
+        }
+    }
+}

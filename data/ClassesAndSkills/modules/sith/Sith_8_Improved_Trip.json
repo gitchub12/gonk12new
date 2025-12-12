@@ -1,0 +1,13 @@
+{
+    "id": "sith_8_improved_trip",
+    "name": "Improved Trip",
+    "tier": 8,
+    "faction": "sith",
+    "description": "Melee kick that can stun enemies.",
+    "icon": "data/pngs/MODULES/sith_8_improved_trip.png",
+    "effects": {
+        "immediate": {
+            "enable_kick_stun": true
+        }
+    }
+}

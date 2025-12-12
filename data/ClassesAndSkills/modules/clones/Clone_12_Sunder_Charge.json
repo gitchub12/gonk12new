@@ -1,0 +1,13 @@
+{
+    "id": "clone_12_sunder_charge",
+    "name": "Sunder Breach Charge",
+    "tier": 12,
+    "faction": "clone",
+    "description": "Ability to place a charge that destroys spawners instantly.",
+    "icon": "data/pngs/MODULES/clone_12_sunder_charge.png",
+    "effects": {
+        "immediate": {
+            "enable_breach_charge": true
+        }
+    }
+}

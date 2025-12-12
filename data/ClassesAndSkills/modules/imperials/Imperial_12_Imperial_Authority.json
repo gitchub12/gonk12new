@@ -1,0 +1,13 @@
+{
+    "id": "imperial_12_imperial_authority",
+    "name": "Imperial Authority",
+    "tier": 12,
+    "faction": "imperial",
+    "description": "Enemies have -10% damage output in your presence.",
+    "icon": "data/pngs/MODULES/imperial_12_imperial_authority.png",
+    "effects": {
+        "immediate": {
+            "aura_enemy_damage_malus": -0.1
+        }
+    }
+}

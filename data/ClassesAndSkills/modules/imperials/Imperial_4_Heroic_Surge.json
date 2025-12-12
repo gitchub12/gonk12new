@@ -1,0 +1,14 @@
+{
+    "id": "imperial_4_heroic_surge",
+    "name": "Heroic Surge",
+    "tier": 4,
+    "faction": "imperial",
+    "description": "Movement speed buff for allies + scaling damage bonus.",
+    "icon": "data/pngs/MODULES/imperial_4_heroic_surge.png",
+    "effects": {
+        "immediate": {
+            "aura_speed_bonus": 0.1,
+            "aura_damage_bonus_pct": 5
+        }
+    }
+}

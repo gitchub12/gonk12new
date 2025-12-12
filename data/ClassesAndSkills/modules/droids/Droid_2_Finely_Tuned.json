@@ -1,0 +1,13 @@
+{
+    "id": "droid_2_finely_tuned",
+    "name": "Finely Tuned",
+    "tier": 2,
+    "faction": "droid",
+    "description": "+5% damage to all attacks.",
+    "icon": "data/pngs/MODULES/droid_2_finely_tuned.png",
+    "effects": {
+        "immediate": {
+            "damage_bonus_pct": 5
+        }
+    }
+}

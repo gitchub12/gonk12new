@@ -1,0 +1,13 @@
+{
+    "id": "droid_3_gearhead_power",
+    "name": "Gearhead (Power)",
+    "tier": 3,
+    "faction": "droid",
+    "description": "+1 Maximum Power (Energy).",
+    "icon": "data/pngs/MODULES/droid_3_gearhead_power.png",
+    "effects": {
+        "immediate": {
+            "energy_max_bonus": 10
+        }
+    }
+}

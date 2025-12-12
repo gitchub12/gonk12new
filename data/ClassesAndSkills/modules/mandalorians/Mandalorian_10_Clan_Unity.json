@@ -1,0 +1,13 @@
+{
+    "id": "mandalorian_10_clan_unity",
+    "name": "Clan Unity Influence",
+    "tier": 10,
+    "faction": "mandalorian",
+    "description": "+5% Damage and Armor per Mandalorian Ally.",
+    "icon": "data/pngs/MODULES/mandalorian_10_clan_unity.png",
+    "effects": {
+        "immediate": {
+            "mandalorian_ally_synergy": 0.05
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "id": "clone_8_burst_of_speed",
+    "name": "Burst of Speed",
+    "tier": 8,
+    "faction": "clone",
+    "description": "First 2 seconds of movement after stopping are at 2x speed.",
+    "icon": "data/pngs/MODULES/clone_8_burst_of_speed.png",
+    "effects": {
+        "immediate": {
+            "burst_speed_multiplier": 2,
+            "burst_speed_duration": 2
+        }
+    }
+}

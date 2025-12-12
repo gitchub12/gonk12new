@@ -1,0 +1,11 @@
+{
+    "id":  "Insight",
+    "name":  "Insight",
+    "type":  "passive",
+    "faction":  "Gonk",
+    "description":  "Uses Wisdom to discern intent.",
+    "rank":  1,
+    "effects":  {
+                    "skill_insight":  1
+                }
+}

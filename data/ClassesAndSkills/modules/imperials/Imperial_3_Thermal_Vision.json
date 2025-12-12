@@ -1,0 +1,13 @@
+{
+    "id": "imperial_3_thermal_vision",
+    "name": "Thermal Vision",
+    "tier": 3,
+    "faction": "imperial",
+    "description": "See heat signatures of enemies through walls.",
+    "icon": "data/pngs/MODULES/imperial_3_thermal_vision.png",
+    "effects": {
+        "immediate": {
+            "thermal_vision": true
+        }
+    }
+}

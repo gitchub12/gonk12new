@@ -1,0 +1,11 @@
+{
+    "id":  "Climb",
+    "name":  "Climb",
+    "type":  "passive",
+    "faction":  "Gonk",
+    "description":  "Uses Strength to scale surfaces.",
+    "rank":  1,
+    "effects":  {
+                    "skill_climb":  1
+                }
+}

@@ -1,0 +1,13 @@
+{
+    "id": "sith_1_frightful_presence",
+    "name": "Frightful Presence",
+    "tier": 1,
+    "faction": "sith",
+    "description": "Reduces enemy aggro toward you.",
+    "icon": "data/pngs/MODULES/sith_1_frightful_presence.png",
+    "effects": {
+        "immediate": {
+            "aggro_reduction_pct": 0.1
+        }
+    }
+}

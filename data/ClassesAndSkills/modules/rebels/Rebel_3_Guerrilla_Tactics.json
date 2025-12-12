@@ -1,0 +1,13 @@
+{
+    "id": "rebel_3_guerrilla_tactics",
+    "name": "Guerrilla Tactics",
+    "tier": 3,
+    "faction": "rebel",
+    "description": "+20% damage against enemies who haven't detected you yet.",
+    "icon": "data/pngs/MODULES/rebel_3_guerrilla_tactics.png",
+    "effects": {
+        "immediate": {
+            "stealth_attack_damage_bonus_pct": 20
+        }
+    }
+}

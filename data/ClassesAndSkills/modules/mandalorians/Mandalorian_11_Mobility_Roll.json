@@ -1,0 +1,13 @@
+{
+    "id": "mandalorian_11_mobility_roll",
+    "name": "Mobility Roll",
+    "tier": 11,
+    "faction": "mandalorian",
+    "description": "Roll has invincibility frames at start.",
+    "icon": "data/pngs/MODULES/mandalorian_11_mobility_roll.png",
+    "effects": {
+        "immediate": {
+            "roll_iframe_duration": 0.3
+        }
+    }
+}

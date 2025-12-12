@@ -1,0 +1,11 @@
+{
+    "id":  "Perception",
+    "name":  "Perception",
+    "type":  "passive",
+    "faction":  "Gonk",
+    "description":  "Uses Wisdom to notice things.",
+    "rank":  1,
+    "effects":  {
+                    "skill_perception":  1
+                }
+}

@@ -1,0 +1,14 @@
+{
+    "id": "sith_6_stunning_strike",
+    "name": "Stunning Strike",
+    "tier": 6,
+    "faction": "sith",
+    "description": "Melee attacks apply a bleed effect.",
+    "icon": "data/pngs/MODULES/sith_6_stunning_strike.png",
+    "effects": {
+        "immediate": {
+            "melee_bleed_damage": 2,
+            "melee_bleed_duration": 5
+        }
+    }
+}

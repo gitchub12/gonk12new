@@ -1,0 +1,13 @@
+{
+    "id": "sith_5_sith_sorcery",
+    "name": "Sith Sorcery",
+    "tier": 5,
+    "faction": "sith",
+    "description": "+20% Force Power Damage.",
+    "icon": "data/pngs/MODULES/sith_5_sith_sorcery.png",
+    "effects": {
+        "immediate": {
+            "force_damage_bonus_pct": 20
+        }
+    }
+}

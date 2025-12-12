@@ -1,0 +1,14 @@
+{
+    "id": "alien_6_sharp_eyed_bothan",
+    "name": "Sharp-Eyed Bothan",
+    "tier": 6,
+    "faction": "alien",
+    "description": "Enhances detection radius for spotting enemies on minimap.",
+    "icon": "data/pngs/MODULES/alien_6_sharp_eyed_bothan.png",
+    "effects": {
+        "immediate": {
+            "radar_range_bonus": 50,
+            "reveal_enemies": true
+        }
+    }
+}

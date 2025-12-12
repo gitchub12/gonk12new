@@ -1,0 +1,14 @@
+{
+    "id": "taker_11_shapers_insight_know_enemy",
+    "name": "Know Enemy (Shaper)",
+    "tier": 11,
+    "faction": "taker",
+    "description": "+20% Damage vs Non-Droids. +5 Accuracy.",
+    "icon": "data/pngs/MODULES/taker_11_shapers_insight_know_enemy.png",
+    "effects": {
+        "immediate": {
+            "organic_damage_bonus_pct": 20,
+            "accuracy_bonus": 5
+        }
+    }
+}

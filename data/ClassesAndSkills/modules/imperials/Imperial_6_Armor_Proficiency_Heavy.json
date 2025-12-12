@@ -1,0 +1,14 @@
+{
+    "id": "imperial_6_armor_proficiency_heavy",
+    "name": "Heavy Armor Proficiency",
+    "tier": 6,
+    "faction": "imperial",
+    "description": "Increases armor rating by 20% and adds +2 flat DR.",
+    "icon": "data/pngs/MODULES/imperial_6_armor_proficiency_heavy.png",
+    "effects": {
+        "immediate": {
+            "armor_bonus_pct": 20,
+            "damage_reduction": 2
+        }
+    }
+}

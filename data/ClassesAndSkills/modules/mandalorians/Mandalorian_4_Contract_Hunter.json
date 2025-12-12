@@ -1,0 +1,13 @@
+{
+    "id": "mandalorian_4_contract_hunter",
+    "name": "Contract Hunter",
+    "tier": 4,
+    "faction": "mandalorian",
+    "description": "+20% Credits from bounties/bosses.",
+    "icon": "data/pngs/MODULES/mandalorian_4_contract_hunter.png",
+    "effects": {
+        "immediate": {
+            "bounty_credit_bonus_pct": 20
+        }
+    }
+}

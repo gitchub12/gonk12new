@@ -226,9 +226,9 @@
                     const classMap = {
                         'tech': 'Techie',
                         'protocol': 'Protocol',
-                        'hk': 'HK',
+                        'hk': 'Hunter Killer', // Fixed mapping
                         'adept': 'Adept',
-                        'bonk': 'Bonk'
+                        'bonk': 'Gonk'         // Fixed mapping
                     };
                     const normalizedClass = classMap[selectedClass] || selectedClass;
 
@@ -237,7 +237,12 @@
 
                     // Also set in characterStats system
                     if (window.parent.characterStats && window.parent.characterStats.selectClass) {
-                        await window.parent.characterStats.selectClass(normalizedClass);
+                        try {
+                            const result = await window.parent.characterStats.selectClass(normalizedClass);
+                            console.log(`CharacterStats.selectClass(${normalizedClass}) returned:`, result);
+                        } catch (err) {
+                            console.error("Error calling selectClass:", err);
+                        }
                     }
 
                     // Update character sheet display

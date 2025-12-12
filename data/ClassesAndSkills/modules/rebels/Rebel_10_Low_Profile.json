@@ -1,0 +1,13 @@
+{
+    "id": "rebel_10_low_profile",
+    "name": "Low Profile",
+    "tier": 10,
+    "faction": "rebel",
+    "description": "Reduces enemy perception radius by 25%.",
+    "icon": "data/pngs/MODULES/rebel_10_low_profile.png",
+    "effects": {
+        "immediate": {
+            "enemy_perception_multiplier": 0.75
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "id":  "Slicing",
+    "name":  "Slicing",
+    "type":  "passive",
+    "faction":  "Gonk",
+    "description":  "Uses Intelligence to bypass security.",
+    "rank":  1,
+    "effects":  {
+                    "skill_slicing":  1
+                }
+}

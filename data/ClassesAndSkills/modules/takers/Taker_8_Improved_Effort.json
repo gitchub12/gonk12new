@@ -1,0 +1,14 @@
+{
+    "id": "taker_8_improved_effort",
+    "name": "Improved Effort",
+    "tier": 8,
+    "faction": "taker",
+    "description": "Regenerate 2 HP/sec, but Max HP is reduced by 10.",
+    "icon": "data/pngs/MODULES/taker_8_improved_effort.png",
+    "effects": {
+        "immediate": {
+            "hp_regen": 2,
+            "max_hp_bonus": -10
+        }
+    }
+}

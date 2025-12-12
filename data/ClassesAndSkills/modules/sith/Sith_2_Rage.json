@@ -1,0 +1,13 @@
+{
+    "id": "sith_2_rage",
+    "name": "Rage",
+    "tier": 2,
+    "faction": "sith",
+    "description": "Damage increases as health gets lower.",
+    "icon": "data/pngs/MODULES/sith_2_rage.png",
+    "effects": {
+        "immediate": {
+            "low_hp_damage_bonus": true
+        }
+    }
+}

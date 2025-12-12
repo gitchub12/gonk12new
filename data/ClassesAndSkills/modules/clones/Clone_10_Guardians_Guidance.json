@@ -1,0 +1,13 @@
+{
+    "id": "clone_10_guardians_guidance",
+    "name": "Guardian's Guidance",
+    "tier": 10,
+    "faction": "clone",
+    "description": "+5 Armor when near other Clone allies.",
+    "icon": "data/pngs/MODULES/clone_10_guardians_guidance.png",
+    "effects": {
+        "immediate": {
+            "aura_armor_bonus_conditional": 5
+        }
+    }
+}

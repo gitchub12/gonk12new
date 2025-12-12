@@ -10,20 +10,106 @@ class ModuleManager {
 
     async loadModules() {
         try {
-            const response = await fetch('data/modules.json');
-            const data = await response.json();
+            // First load the manifest
+            const manifestResponse = await fetch('data/ClassesAndSkills/modules/module_manifest.json');
+            if (!manifestResponse.ok) {
+                console.warn('[ModuleManager] Manifest not found, falling back to legacy modules.json');
+                return await this.loadLegacyModules();
+            }
 
-            // Convert array to object keyed by ID
+            const manifestData = await manifestResponse.json();
+            const moduleFiles = manifestData.modules || [];
+
             this.modules = {};
-            data.modules.forEach(module => {
-                this.modules[module.id] = module;
+
+            // Load all referenced modules in parallel
+            const loadPromises = moduleFiles.map(async (filePath) => {
+                try {
+                    const res = await fetch(`data/ClassesAndSkills/modules/${filePath}`);
+                    if (!res.ok) throw new Error(`Status ${res.status}`);
+                    const modData = await res.json();
+                    this.modules[modData.id] = modData;
+                } catch (err) {
+                    console.error(`[ModuleManager] Failed to load module ${filePath}:`, err);
+                }
             });
 
-            console.log(`[ModuleManager] Loaded ${Object.keys(this.modules).length} modules`);
+            await Promise.all(loadPromises);
+
+            // Legacy modules disabled to prevent pollution
+            // await this.loadLegacyModules(true);
+
+            console.log(`[ModuleManager] Loaded ${Object.keys(this.modules).length} modules from manifest`);
             return true;
         } catch (error) {
-            console.error('[ModuleManager] Failed to load modules:', error);
+            console.error('[ModuleManager] Serious error loading modules:', error);
             return false;
+        }
+    }
+
+    async loadLegacyModules(merge = false) {
+        try {
+            const response = await fetch('data/modules.json');
+            if (!response.ok) return false;
+            const data = await response.json();
+
+            if (!merge) this.modules = {};
+
+            data.modules.forEach(module => {
+                // Only add if not already present (newer separate files take precedence)
+                if (!this.modules[module.id]) {
+                    this.modules[module.id] = module;
+                }
+            });
+
+            if (!merge) console.log(`[ModuleManager] Loaded ${Object.keys(this.modules).length} modules (Legacy Mode)`);
+            return true;
+        } catch (e) {
+            console.error('[ModuleManager] Failed to load legacy modules:', e);
+            return false;
+        }
+    }
+
+    // Granular deactivation
+    deactivateModules(filterFn) {
+        console.log('[ModuleManager] Deactivating modules matching filter...');
+        let removedCount = 0;
+
+        // Remove from activeModules
+        const initialCount = this.activeModules.length;
+        this.activeModules = this.activeModules.filter(modId => {
+            const mod = this.modules[modId];
+            const shouldRemove = mod && filterFn(mod);
+            if (shouldRemove) {
+                // Also need to un-apply effects? complex.
+                // For now, we just remove it from the list so it stops growing/scaling
+                // A full reset might be needed to clear permanent stats, but dynamic deactivation usually acts as a suppression
+
+                // Remove tracked effects for this module
+                Object.keys(this.appliedEffects).forEach(key => {
+                    if (key.startsWith(modId)) {
+                        delete this.appliedEffects[key];
+                    }
+                });
+                removedCount++;
+                return false;
+            }
+            return true;
+        });
+
+        // Update Game State
+        if (window.game && window.game.state && window.game.state.modules) {
+            window.game.state.modules = window.game.state.modules.filter(modId => {
+                const mod = this.modules[modId];
+                return !(mod && filterFn(mod));
+            });
+        }
+
+        console.log(`[ModuleManager] Removed ${removedCount} modules.`);
+
+        // Trigger a re-evaluation of stats if possible, or just let the next update cycle handle it
+        if (window.game && window.game.updateCharacterSheet) {
+            window.game.updateCharacterSheet();
         }
     }
 
@@ -33,6 +119,8 @@ class ModuleManager {
             console.error(`[ModuleManager] Unknown module: ${moduleId}`);
             return false;
         }
+
+        // Check availability via filter if strict mode was on? Default permissive.
 
         // NEW: Check if this is a duplicate - if so, just add it again to increase level
         // The character_upgrades.js will handle counting and displaying the level

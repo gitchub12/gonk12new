@@ -1,0 +1,13 @@
+{
+    "id": "alien_11_toughness_gamorrean",
+    "name": "Toughness Gamorrean",
+    "tier": 11,
+    "faction": "alien",
+    "description": "Massive bonus HP (+50).",
+    "icon": "data/pngs/MODULES/alien_11_toughness_gamorrean.png",
+    "effects": {
+        "immediate": {
+            "max_hp_bonus": 50
+        }
+    }
+}

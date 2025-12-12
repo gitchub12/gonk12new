@@ -1,0 +1,14 @@
+{
+    "id": "alien_7_razor_claws_nautolan",
+    "name": "Razor Claws Nautolan",
+    "tier": 7,
+    "faction": "alien",
+    "description": "Melee strikes apply a bleed (damage over time).",
+    "icon": "data/pngs/MODULES/alien_7_razor_claws_nautolan.png",
+    "effects": {
+        "immediate": {
+            "melee_bleed_damage": 3,
+            "melee_bleed_duration": 3
+        }
+    }
+}

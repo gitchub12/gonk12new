@@ -1,0 +1,14 @@
+{
+    "id": "taker_7_adaptive_flesh",
+    "name": "Adaptive Flesh",
+    "tier": 7,
+    "faction": "taker",
+    "description": "Gain 10% resistance to the last damage type taken (stacks up to 30%).",
+    "icon": "data/pngs/MODULES/taker_7_adaptive_flesh.png",
+    "effects": {
+        "immediate": {
+            "adaptive_resistance": true,
+            "adaptive_resistance_cap": 0.3
+        }
+    }
+}

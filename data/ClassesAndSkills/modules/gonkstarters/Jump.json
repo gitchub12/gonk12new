@@ -1,0 +1,11 @@
+{
+    "id":  "Jump",
+    "name":  "Jump",
+    "type":  "passive",
+    "faction":  "Gonk",
+    "description":  "Uses Strength to leap great distances.",
+    "rank":  1,
+    "effects":  {
+                    "skill_jump":  1
+                }
+}

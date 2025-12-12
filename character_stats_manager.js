@@ -116,22 +116,46 @@ class CharacterStatsManager {
         this.applyLevelBonuses(1);
 
         // Grant starting modules
-        if (classData.starting_modules && classData.starting_modules.length > 0) {
-            console.log(`[CharacterStats] Class has starting modules:`, classData.starting_modules);
+        let startingModuleList = [];
+        // Use the centralized list from CharacterUpgrades (SOURCE OF TRUTH)
+        if (window.characterUpgrades && window.characterUpgrades.getClassStartingModules) {
+            startingModuleList = window.characterUpgrades.getClassStartingModules(className);
+        } else if (classData.starting_modules) {
+            // Fallback (deprecated)
+            startingModuleList = classData.starting_modules;
+        }
 
-            if (!window.moduleManager) {
-                console.error('[CharacterStats] ERROR: window.moduleManager is not available!');
-            } else if (!window.game) {
-                console.error('[CharacterStats] ERROR: window.game is not available!');
-            } else if (!window.game.state) {
-                console.error('[CharacterStats] ERROR: window.game.state is not available!');
-            } else {
-                console.log(`[CharacterStats] Granting starting modules for ${className}:`, classData.starting_modules);
-                for (const moduleId of classData.starting_modules) {
-                    console.log(`[CharacterStats] Attempting to grant module: ${moduleId}`);
-                    const result = window.moduleManager.grantModule(moduleId);
-                    console.log(`[CharacterStats] Module grant result for ${moduleId}:`, result);
+        if (startingModuleList.length > 0) {
+            console.log(`[CharacterStats] Granting starting modules for ${className}:`, startingModuleList);
+
+            if (window.moduleManager) {
+                for (const modStr of startingModuleList) {
+                    // Parse "Name Rank" format (e.g. "Jump 3")
+                    const match = modStr.match(/^(.+?)\s+(\d+)$/);
+                    let modId = modStr;
+                    let rank = 1;
+
+                    if (match) {
+                        modId = match[1]; // "Jump"
+                        rank = parseInt(match[2]); // 3
+                    }
+
+                    // Normalize ID (remove spaces if needed, but our new files use spaces in filenames/IDs like "Force Heal")
+                    // Actually, the new JSONs use "Force Heal" as ID?
+                    // Let's check: "Force_Heal.json" likely has ID "Force Heal" or "Force_Heal"?
+                    // File content step 582: "id": "Force Heal" for Force_Heal.json.
+                    // So "Force Heal" is correct.
+                    // But if user typed "Jump 3", modId is "Jump".
+                    // The file is "Jump.json", ID "Jump".
+                    // So we are good.
+
+                    console.log(`[CharacterStats] Granting ${modId} (Rank ${rank})`);
+                    for (let i = 0; i < rank; i++) {
+                        window.moduleManager.grantModule(modId);
+                    }
                 }
+            } else {
+                console.error('[CharacterStats] window.moduleManager missing, cannot grant modules.');
             }
         } else {
             console.log(`[CharacterStats] No starting modules for ${className}`);

@@ -1,0 +1,13 @@
+{
+    "id": "rebel_5_gearhead_salvage",
+    "name": "Gearhead Salvage",
+    "tier": 5,
+    "faction": "rebel",
+    "description": "Increases scrap amounts gained by 25%.",
+    "icon": "data/pngs/MODULES/rebel_5_gearhead_salvage.png",
+    "effects": {
+        "immediate": {
+            "scrap_bonus_pct": 25
+        }
+    }
+}

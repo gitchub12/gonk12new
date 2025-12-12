@@ -1,0 +1,13 @@
+{
+    "id": "mandalorian_1_thick_hide_beskar",
+    "name": "Thick Hide (Beskar)",
+    "tier": 1,
+    "faction": "mandalorian",
+    "description": "Beskar Armor grants +3 Armor.",
+    "icon": "data/pngs/MODULES/mandalorian_1_thick_hide_beskar.png",
+    "effects": {
+        "immediate": {
+            "armor": 3
+        }
+    }
+}

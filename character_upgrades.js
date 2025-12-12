@@ -18,6 +18,423 @@ class CharacterUpgrades {
 
         // Setup UI button handlers
         this.setupButtonHandlers();
+
+        // Listen for D20/Character Sheet toggle
+        this.d20SheetVisible = false;
+
+        // Ensure we bind the tooltip to follow cursor if active (for the character sheet tooltips)
+        document.addEventListener('mousemove', (e) => {
+            const tooltip = document.getElementById('module-tooltip');
+            if (tooltip && tooltip.style.display === 'block') {
+                // Offset slightly so cursor doesn't cover text
+                const offsetX = 15;
+                const offsetY = 15;
+
+                let left = e.clientX + offsetX;
+                let top = e.clientY + offsetY;
+
+                // Boundary checks
+                if (left + tooltip.offsetWidth > window.innerWidth) {
+                    left = e.clientX - tooltip.offsetWidth - offsetX;
+                }
+                if (top + tooltip.offsetHeight > window.innerHeight) {
+                    top = e.clientY - tooltip.offsetHeight - offsetY;
+                }
+
+                tooltip.style.left = left + 'px';
+                tooltip.style.top = top + 'px';
+            }
+        });
+    }
+
+    getModuleData() {
+        if (window.moduleManager && window.moduleManager.modules) {
+            return window.moduleManager.modules;
+        }
+        return {};
+    }
+
+    getClassStartingModules(className) {
+        if (!className) return [];
+        // Normalized map - keys match standard class names
+        const startingModules = {
+            'Gonk': ['Intimidate', 'Repair', 'Running', 'Climb', 'Pamphlet Toss', 'Scavenge'],
+            'Hunter Killer': ['Intimidate', 'Jump 3', 'Repair', 'Running 3', 'HK Quickcharge 5'],
+            'Protocol': ['Jump 3', 'Persuasion', 'Perception', 'Medicine', 'Repair', 'Slicing', 'Speak Languages', 'Pamphlet Toss'],
+            'Techie': ['Climb', 'Medicine', 'Repair', 'Slicing', 'Insight', 'Craft', 'Scavenge'],
+            'Slicer': ['Climb', 'Medicine', 'Repair', 'Slicing', 'Insight', 'Craft', 'Scavenge'],
+            'Adept': ['Perception', 'Jump 3', 'Persuasion', 'Medicine', 'Force Heal']
+        };
+
+        // Handle case-insensitive or loose matching
+        const key = Object.keys(startingModules).find(k => k.toLowerCase() === className.toLowerCase() || k.toLowerCase().replace(' ', '') === className.toLowerCase().replace(' ', ''));
+        return startingModules[key] || [];
+    }
+
+    updateD20Display() {
+        const statsDisplay = document.getElementById('stats-display');
+        const moduleGrid = document.getElementById('module-grid');
+        const cs = window.characterStats;
+
+        if (!statsDisplay || !moduleGrid || !cs) return;
+
+        // --- 1. POPULATE STATS SIDEBAR (Perfect Layout Restoration) ---
+        const stats = cs.stats || { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 };
+
+        // Helper to calc mod
+        const getMod = (val) => Math.floor((val - 10) / 2);
+        const mods = {
+            STR: getMod(stats.STR), DEX: getMod(stats.DEX), CON: getMod(stats.CON),
+            INT: getMod(stats.INT), WIS: getMod(stats.WIS), CHA: getMod(stats.CHA)
+        };
+
+        const level = cs.level || 1;
+        const currentHp = Math.floor(window.game?.state?.health || cs.hp || 0);
+        const maxHp = cs.maxHp || 100;
+        const currentEnergy = Math.floor(window.game?.state?.energy || 0);
+        const maxEnergy = cs.maxEnergy || 100;
+        const regenRate = cs.energyRegenRate || 20;
+        const wire = window.game?.state?.wire || 0;
+        const credits = window.game?.state?.credits || 0;
+
+        const displayClass = (cs.currentClass === 'Techie') ? 'SLICER' : (cs.currentClass || 'GONK').toUpperCase();
+
+        // Header Update (if element exists outside stats-display)
+        const headerTitle = document.getElementById('char-sheet-title');
+        if (headerTitle) headerTitle.textContent = `${displayClass} GONK`;
+
+        statsDisplay.innerHTML = `
+            <!-- STATS BLOCK -->
+            <div style="margin-bottom: 30px; width: 100%;">
+                <style>
+                    .stat-row { position: relative; cursor: default; margin-bottom: 5px; }
+                    .stat-row:hover .stat-tooltip { display: block; }
+                    .stat-tooltip {
+                        display: none; position: absolute; left: 100%; top: 0;
+                        width: 200px; background: rgba(0,0,0,0.9); border: 1px solid #0ff;
+                        color: #fff; font-size: 12px; padding: 10px; z-index: 1000;
+                        border-radius: 4px; margin-left: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                        pointer-events: none; font-weight: normal; line-height: 1.4; text-align: left;
+                    }
+                </style>
+                <div style="font-size: 24px; line-height: 1.8; font-weight: bold;">
+                    <div class="stat-row" style="display: flex; justify-content: space-between;">
+                        <span style="color: #0ff;">STR</span> 
+                        <span style="color: #fff;">${stats.STR} (${mods.STR >= 0 ? '+' : ''}${mods.STR})</span>
+                        <div class="stat-tooltip">Melee Damage bonus equal to the modifier. Weight limit for wielding is 15 pounds per point.</div>
+                    </div>
+                    <div class="stat-row" style="display: flex; justify-content: space-between;">
+                        <span style="color: #0ff;">DEX</span> 
+                        <span style="color: #fff;">${stats.DEX} (${mods.DEX >= 0 ? '+' : ''}${mods.DEX})</span>
+                        <div class="stat-tooltip">Ranged Attack bonus. Reflex Save bonus. Armor Class bonus. Affects accuracy with blasters/dodging.</div>
+                    </div>
+                    <div class="stat-row" style="display: flex; justify-content: space-between;">
+                        <span style="color: #0ff;">CON</span> 
+                        <span style="color: #fff;">${stats.CON} (${mods.CON >= 0 ? '+' : ''}${mods.CON})</span>
+                        <div class="stat-tooltip">Hit Point bonus per level. Stamina and resistance to physical trauma.</div>
+                    </div>
+                    <div class="stat-row" style="display: flex; justify-content: space-between;">
+                        <span style="color: #0ff;">INT</span> 
+                        <span style="color: #fff;">${stats.INT} (${mods.INT >= 0 ? '+' : ''}${mods.INT})</span>
+                        <div class="stat-tooltip">Skill points per level. Bonus to Energy Max (+5 per modifier). Essential for Slicing/Repair.</div>
+                    </div>
+                    <div class="stat-row" style="display: flex; justify-content: space-between;">
+                        <span style="color: #0ff;">WIS</span> 
+                        <span style="color: #fff;">${stats.WIS} (${mods.WIS >= 0 ? '+' : ''}${mods.WIS})</span>
+                        <div class="stat-tooltip">Willpower Save bonus. Bonus to Regen (+0.5/sec per mod) and Max Energy (+5 per mod). Force power critical.</div>
+                    </div>
+                    <div class="stat-row" style="display: flex; justify-content: space-between;">
+                        <span style="color: #0ff;">CHA</span> 
+                        <span style="color: #fff;">${stats.CHA} (${mods.CHA >= 0 ? '+' : ''}${mods.CHA})</span>
+                        <div class="stat-tooltip">Social skill bonus. Affects Force Power effectiveness and leadership.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VITALS BLOCK -->
+            <div style="margin-bottom: 40px; width: 100%;">
+                <div class="stat-row" style="color: #ff3333; font-size: 24px; font-weight: bold; margin-bottom: 10px; display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 5px;">
+                    <span>HEALTH</span>
+                    <span style="color: #fff;">${currentHp} / ${maxHp}</span>
+                    <div class="stat-tooltip">Health Points (HP).<br>Determined by Constitution stats, Level, and Armor.</div>
+                </div>
+                <div class="stat-row" style="color: #00ffff; font-size: 24px; font-weight: bold; margin-bottom: 10px; display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 5px;">
+                    <span>ENERGY</span>
+                    <span style="color: #fff;">${maxEnergy}</span>
+                    <div class="stat-tooltip">Energy Capacity.<br>Available energy for abilities.<br>Increased by Intelligence and Level.</div>
+                </div>
+                <div class="stat-row" style="color: #33ff33; font-size: 20px; font-weight: bold; display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 5px;">
+                    <span>POWER/SEC</span>
+                    <span style="color: #fff;">${regenRate.toFixed(1)}</span>
+                    <div class="stat-tooltip">Energy Regeneration Rate.<br>Energy restored per second.<br>Increased by Wisdom and Modules.</div>
+                </div>
+            </div>
+
+             <!-- LEVEL INFO -->
+            <div style="margin-bottom: 30px; width: 100%; text-align: center;">
+                <div style="color: #ff0; font-size: 28px; font-weight: bold; text-shadow: 0 0 10px #ff0;">LEVEL ${level}</div>
+            </div>
+
+            <!-- RESOURCES BLOCK -->
+            <div style="margin-top: auto; width: 100%; border-top: 2px solid #333; padding-top: 20px;">
+                <div class="stat-row" style="display: flex; align-items: center; margin-bottom: 20px;">
+                    <img src="data/pngs/HUD/CharacterSheet/scrapsymbol.png" style="width: 50px; height: 50px; margin-right: 20px;">
+                    <span style="font-size: 36px; color: #e0e0e0; font-weight: bold; text-shadow: 0 0 5px #fff;">${wire}</span>
+                    <div class="stat-tooltip">Scrap.<br>Used for crafting and upgrading modules.</div>
+                </div>
+                <div class="stat-row" style="display: flex; align-items: center;">
+                    <img src="data/pngs/HUD/CharacterSheet/creditssymbol.png" style="width: 50px; height: 50px; margin-right: 20px;">
+                    <span style="font-size: 36px; color: #ffd700; font-weight: bold; text-shadow: 0 0 5px #ff0;">${credits}</span>
+                    <div class="stat-tooltip">Credits.<br>Used for purchasing items and services.</div>
+                </div>
+            </div>
+        `;
+
+        // --- 2. POPULATE MODULE GRID (Combined Logic) ---
+        // Restore Grid Layout using Flexbox to guarantee wrapping and NO scrollbars
+        moduleGrid.style.cssText = `
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 15px; padding: 10px; width: 100%;
+            height: auto; overflow: visible;
+        `;
+        moduleGrid.innerHTML = '';
+
+        // Gather modules
+        const classStartIds = this.getClassStartingModules(cs.currentClass);
+        const activeIds = window.moduleManager?.activeModules || [];
+
+        // Combine, removing filtered
+        const allModuleStrings = [...classStartIds, ...activeIds]
+            .filter(id => id && !id.includes('extra_memory_core'));
+
+        // Parse Logic: Aggregating "Jump 3" into { name: 'Jump', level: 3 }
+        const moduleCounts = {};
+
+        allModuleStrings.forEach(modStr => {
+            // Check for "Name X" format
+            const match = modStr.match(/^(.+?)\s+(\d+)$/);
+            if (match) {
+                const name = match[1];
+                const lvl = parseInt(match[2]);
+                moduleCounts[name] = (moduleCounts[name] || 0) + lvl;
+            } else {
+                // Just a name or ID
+                moduleCounts[modStr] = (moduleCounts[modStr] || 0) + 1;
+            }
+        });
+
+        // If strict unique slot limit needed, slicing might be required, but display all unique for now
+        // But limited to 24 slots visual
+        const uniqueKeys = Object.keys(moduleCounts);
+
+        // Create Cards
+        uniqueKeys.slice(0, 24).forEach(modKey => {
+            const count = moduleCounts[modKey];
+            const modData = window.moduleManager?.modules?.[modKey] || { name: modKey, faction: null, description: 'Unknown Module' };
+            let faction = modData.faction;
+
+            // FORCE GONK FACTION FOR BASE MODULES
+            const gonkBaseModules = [
+                'Intimidate', 'Repair', 'Running', 'Climb', 'Pamphlet Toss', 'Scavenge',
+                'Jump', 'HK Quickcharge', 'Persuasion', 'Perception', 'Medicine',
+                'Slicing', 'Speak Languages', 'Insight', 'Craft', 'Force Heal'
+            ];
+
+            const checkKey = modKey.replace(/_/g, ' ').toLowerCase();
+            const checkName = (modData.name || '').replace(/_/g, ' ').toLowerCase();
+
+            const isGonk = gonkBaseModules.some(base => {
+                const baseLower = base.toLowerCase();
+                return checkKey.startsWith(baseLower) || checkName.startsWith(baseLower);
+            });
+
+            if (isGonk) {
+                faction = 'gonk';
+            }
+
+            // Faction Fallback Logic (if not already set to gonk or valid)
+            if ((!faction || faction === 'neutral') && !isGonk) {
+                const nameLower = (modData.name || modKey).toLowerCase();
+                if (nameLower.includes('clone') || nameLower.includes('republic')) faction = 'clones';
+                else if (nameLower.includes('mandalorian')) faction = 'mandalorians';
+                else if (nameLower.includes('droid') || nameLower.includes('hk')) faction = 'droids';
+                else if (nameLower.includes('rebel')) faction = 'rebels';
+                else if (nameLower.includes('imperial')) faction = 'imperials';
+                else if (nameLower.includes('sith')) faction = 'sith';
+                else faction = 'neutral';
+            }
+
+            // Card Creation (Root Style) - Updated Size & No Scrollbars
+            const card = document.createElement('div');
+            card.className = 'module-card';
+            card.style.cssText = `
+                position: relative; width: 140px; height: 160px;
+                background: rgba(0,0,0,0.8); border: 2px solid #444; border-radius: 5px;
+                display: flex; flex-direction: column; align-items: center; padding: 0;
+                box-sizing: border-box; transition: border-color 0.2s;
+                flex-shrink: 0; /* Prevent shrinking in flex container */
+                cursor: default !important; /* Added cursor style */
+            `;
+
+            const getFactionColor = (f) => {
+                switch (f?.toLowerCase()) {
+                    case 'rebels': case 'rebel': return '#d94242';
+                    case 'imperials': case 'imperial': return '#ffffff';
+                    case 'aliens': case 'alien': return '#00ff00';
+                    case 'droids': case 'droid': return '#003366'; // Regular Dark Blue
+                    case 'gonk': return '#001a4d'; // Darker Deep Blue for Base Classes
+                    case 'clones': case 'clone': return '#ff8c00';
+                    case 'mandalorians': case 'mandalorian': return '#ffd700'; // Yellow for Mandos
+                    case 'sith': return '#990000';
+                    case 'takers': case 'taker': return '#C0C0C0';
+                    default: return '#888';
+                }
+            };
+
+            const factionColor = getFactionColor(faction);
+            card.style.borderColor = factionColor;
+
+            // Determine text color based on background brightness
+            // Simple heuristic: lighter colors get black text, dark get white
+            const isLightColor = (color) => {
+                // Handle named colors or known hex
+                if (color === '#ffffff' || color === '#ffd700' || color === '#ff8c00' || color === '#00ff00' || color === '#00d2ff' || color === '#C0C0C0') return true;
+                return false;
+            };
+            const badgeTextColor = isLightColor(factionColor) ? '#000' : '#fff';
+            const badgeBorderColor = isLightColor(factionColor) ? '#fff' : '#000';
+
+            // Icon - Fills width, aligned top
+            const iconDiv = document.createElement('div');
+            iconDiv.style.cssText = `
+                width: 100%; height: 125px; /* Leaves 35px for text */
+                background-image: url('data/pngs/MODULES/${modKey}.png'), url('data/pngs/MODULES/placeholder.png'); 
+                background-size: cover; background-position: top center;
+                border-bottom: 1px solid #333;
+                border-radius: 3px 3px 0 0;
+            `;
+
+            // Faction Colored Rank Badge
+            const rankBadge = document.createElement('div');
+            rankBadge.textContent = count;
+            rankBadge.style.cssText = `
+                position: absolute; bottom: 5px; right: 5px; 
+                background: ${factionColor}; color: ${badgeTextColor}; 
+                font-weight: bold; border-radius: 50%;
+                width: 24px; height: 24px; display: flex; align-items: center;
+                justify-content: center; font-size: 14px; 
+                border: 1px solid ${badgeBorderColor};
+                z-index: 20; box-shadow: 0 0 3px #000;
+                cursor: default; /* Added cursor style */
+            `;
+
+            // Name
+            const nameDiv = document.createElement('div');
+            nameDiv.textContent = modData.name || modKey;
+            nameDiv.style.cssText = `
+                font-size: 12px; text-align: center; color: ${factionColor};
+                font-weight: bold; line-height: 1.1; height: 35px; width: 100%;
+                display: flex; align-items: flex-end; /* Changed to flex-end */
+                justify-content: center;
+                overflow: hidden; padding: 0 5px 2px 5px; /* Added padding-bottom */
+                box-sizing: border-box;
+                position: absolute; bottom: 0; left: 0;
+                cursor: default; /* Added cursor style */
+            `;
+
+            card.appendChild(iconDiv);
+            card.appendChild(rankBadge);
+            card.appendChild(nameDiv);
+
+            // Hover Events
+            card.addEventListener('mouseenter', () => {
+                const tooltip = document.getElementById('module-tooltip');
+                const ttName = document.getElementById('tooltip-module-name');
+                const ttDesc = document.getElementById('tooltip-module-description');
+                const ttEffects = document.getElementById('tooltip-module-effects');
+
+                if (tooltip && ttName && ttDesc && ttEffects) {
+                    // 1. Calculate Rarity
+                    let rarity = "Common";
+                    if (count >= 12) rarity = "Unique";
+                    else if (count >= 11) rarity = "Legendary";
+                    else if (count >= 10) rarity = "Epic";
+                    else if (count >= 7) rarity = "Rare";
+                    else if (count >= 4) rarity = "Uncommon";
+
+                    // 2. Format Faction Adjective
+                    let factionAdj = "Standard";
+                    switch (faction?.toLowerCase()) {
+                        case 'gonk': factionAdj = "Gonk"; break;
+                        case 'droids': case 'droid': factionAdj = "Droid"; break;
+                        case 'aliens': case 'alien': factionAdj = "Alien"; break;
+                        case 'clones': case 'clone': factionAdj = "Clone"; break;
+                        case 'mandalorians': case 'mandalorian': factionAdj = "Mandalorian"; break;
+                        case 'rebels': case 'rebel': factionAdj = "Rebel"; break;
+                        case 'imperials': case 'imperial': factionAdj = "Imperial"; break;
+                        case 'sith': factionAdj = "Sith"; break;
+                        case 'takers': case 'taker': factionAdj = "Taker"; break;
+                        default: factionAdj = "Standard";
+                    }
+
+                    // 3. Construct Header
+                    const headerHtml = `
+                        <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; color: ${factionColor}; border-bottom: 1px solid #555; padding-bottom: 4px; width: 100%;">
+                            ${rarity} ${factionAdj} Module
+                        </div>
+                    `;
+
+                    // Force vertical stacking
+                    ttName.style.display = 'flex';
+                    ttName.style.flexDirection = 'column';
+                    ttName.style.alignItems = 'flex-start';
+                    ttName.style.width = '100%';
+
+                    ttName.innerHTML = `
+                        ${headerHtml}
+                        <div style="margin-top: 2px; color: #fff; width: 100%; text-align: left;">
+                            <span style="font-size: 14px; font-weight: bold;">${modData.name || modKey}</span>
+                            <span style="font-size: 0.8em; color: #ccc; margin-left: 5px;">(Rank ${count})</span>
+                        </div>
+                    `;
+                    // Note: ttName color styling is overridden by inner elements, which is intended
+
+                    let desc = modData.description || "No description available.";
+                    ttDesc.innerHTML = desc.replace(/\n/g, '<br>');
+
+                    let effectsHtml = '';
+                    if (modData.effects) {
+                        effectsHtml += '<strong>Effects:</strong><br>';
+                        for (const key in modData.effects) {
+                            if (typeof modData.effects[key] === 'object') continue;
+                            effectsHtml += `${key}: ${modData.effects[key]}<br>`;
+                        }
+                    }
+                    ttEffects.innerHTML = effectsHtml;
+
+                    tooltip.style.display = 'block';
+                    tooltip.style.borderColor = factionColor;
+                }
+            });
+
+            card.addEventListener('mouseleave', () => {
+                const tooltip = document.getElementById('module-tooltip');
+                if (tooltip) tooltip.style.display = 'none';
+            });
+
+            moduleGrid.appendChild(card);
+        });
+
+        // Fill empty slots visually
+        const emptySlots = 24 - uniqueKeys.length;
+        for (let i = 0; i < emptySlots; i++) {
+            const emptyCard = document.createElement('div');
+            emptyCard.style.cssText = `
+                width: 140px; height: 160px; border: 2px solid #333;
+                background: rgba(0,0,0,0.3); box-sizing: border-box;
+            `;
+            moduleGrid.appendChild(emptyCard);
+        }
     }
 
     autoUnlockCarryPowers() {
@@ -628,6 +1045,9 @@ class CharacterUpgrades {
     }
 
     drawUpgradeUI() {
+        // NOTE: Old 3D Upgrade Board - Can be deleted in next passthrough if authorized.
+        // Disabled in favor of D20 Character Sheet.
+        /*
         const container = document.getElementById('upgrade-container');
         const tooltip = document.getElementById('upgrade-tooltip');
         const closeBtn = document.getElementById('upgrade-close-btn');
@@ -786,9 +1206,12 @@ class CharacterUpgrades {
 
             container.appendChild(nodeElement);
         });
+        */
     }
 
     drawConnections(container, spacingX, spacingY, nodeWidth, nodeHeight, topPadding) {
+        // NOTE: Old 3D Upgrade Board - Can be deleted in next passthrough if authorized.
+        /*
         const svgNS = "http://www.w3.org/2000/svg";
         const svg = document.createElementNS(svgNS, 'svg');
         svg.style.position = 'absolute';
@@ -827,6 +1250,7 @@ class CharacterUpgrades {
             });
         });
         container.appendChild(svg);
+        */
     }
 }
 

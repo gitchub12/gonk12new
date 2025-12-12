@@ -1,0 +1,13 @@
+{
+    "id": "clone_5_weapon_focus_pistols",
+    "name": "Weapon Focus (Pistols)",
+    "tier": 5,
+    "faction": "clone",
+    "description": "+15% Damage with Pistols.",
+    "icon": "data/pngs/MODULES/clone_5_weapon_focus_pistols.png",
+    "effects": {
+        "immediate": {
+            "pistol_damage_bonus_pct": 15
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "id": "clone_6_weapon_focus_melee",
+    "name": "Weapon Focus (Melee)",
+    "tier": 6,
+    "faction": "clone",
+    "description": "+15% Damage with Melee Weapons.",
+    "icon": "data/pngs/MODULES/clone_6_weapon_focus_melee.png",
+    "effects": {
+        "immediate": {
+            "melee_damage_bonus_pct": 15
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "id": "imperial_10_sure_footed",
+    "name": "Sure Footed",
+    "tier": 10,
+    "faction": "imperial",
+    "description": "+50% Ammo Capacity and +2 Grenade Capacity.",
+    "icon": "data/pngs/MODULES/imperial_10_sure_footed.png",
+    "effects": {
+        "immediate": {
+            "ammo_capacity_multiplier": 1.5,
+            "grenade_capacity_bonus": 2
+        }
+    }
+}

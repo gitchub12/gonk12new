@@ -1,0 +1,14 @@
+{
+    "id": "imperial_2_weapon_proficiency_heavy",
+    "name": "Heavy Weapon Proficiency",
+    "tier": 2,
+    "faction": "imperial",
+    "description": "Enables usage of Heavy Weapons and +1 Damage.",
+    "icon": "data/pngs/MODULES/imperial_2_weapon_proficiency_heavy.png",
+    "effects": {
+        "immediate": {
+            "unlock_slot": "longarm",
+            "longarm_damage_bonus": 1
+        }
+    }
+}

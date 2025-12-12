@@ -1,0 +1,13 @@
+{
+    "id": "sith_9_drain_life",
+    "name": "Drain Life",
+    "tier": 9,
+    "faction": "sith",
+    "description": "Heal for 10% of damage dealt.",
+    "icon": "data/pngs/MODULES/sith_9_drain_life.png",
+    "effects": {
+        "immediate": {
+            "lifesteal_pct": 0.1
+        }
+    }
+}

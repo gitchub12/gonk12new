@@ -1,0 +1,13 @@
+{
+    "id": "rebel_4_gearhead_armor",
+    "name": "Gearhead Armor",
+    "tier": 4,
+    "faction": "rebel",
+    "description": "Gain temporary armor at the start of each level.",
+    "icon": "data/pngs/MODULES/rebel_4_gearhead_armor.png",
+    "effects": {
+        "immediate": {
+            "level_start_temp_armor": 10
+        }
+    }
+}

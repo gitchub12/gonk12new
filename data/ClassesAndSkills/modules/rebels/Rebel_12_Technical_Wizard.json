@@ -1,0 +1,13 @@
+{
+    "id": "rebel_12_technical_wizard",
+    "name": "Technical Wizard",
+    "tier": 12,
+    "faction": "rebel",
+    "description": "+5 to Slicing checks.",
+    "icon": "data/pngs/MODULES/rebel_12_technical_wizard.png",
+    "effects": {
+        "immediate": {
+            "slicing_bonus": 5
+        }
+    }
+}

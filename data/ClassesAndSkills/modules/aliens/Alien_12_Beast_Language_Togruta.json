@@ -1,0 +1,14 @@
+{
+    "id": "alien_12_beast_language_togruta",
+    "name": "Beast Language Togruta",
+    "tier": 12,
+    "faction": "alien",
+    "description": "Speak to beasts and gain massive bonus to beast interactions.",
+    "icon": "data/pngs/MODULES/alien_12_beast_language_togruta.png",
+    "effects": {
+        "immediate": {
+            "beast_language": true,
+            "animal_affinity_bonus": 5
+        }
+    }
+}

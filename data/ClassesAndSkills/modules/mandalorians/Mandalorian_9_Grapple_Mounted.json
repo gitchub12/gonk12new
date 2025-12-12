@@ -1,0 +1,14 @@
+{
+    "id": "mandalorian_9_grapple_mounted",
+    "name": "Mounted Combat (Grapple)",
+    "tier": 9,
+    "faction": "mandalorian",
+    "description": "Grapple pull speed increased, energy cost reduced.",
+    "icon": "data/pngs/MODULES/mandalorian_9_grapple_mounted.png",
+    "effects": {
+        "immediate": {
+            "grapple_speed_bonus": 0.5,
+            "grapple_energy_cost_reduction": 5
+        }
+    }
+}

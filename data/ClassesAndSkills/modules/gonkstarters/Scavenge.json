@@ -1,0 +1,11 @@
+{
+    "id":  "Scavenge",
+    "name":  "Scavenge",
+    "type":  "passive",
+    "faction":  "Gonk",
+    "description":  "Uses Intelligence to find useful parts.",
+    "rank":  1,
+    "effects":  {
+                    "skill_scavenge":  1
+                }
+}

@@ -437,11 +437,32 @@ class TabControls {
 
     hide() {
         this.isVisible = false;
-        this.game.state.isPaused = false;
+
+        // Visual Hide
         if (this.leftPanel) this.leftPanel.style.display = 'none';
         if (this.rightPanel) this.rightPanel.style.display = 'none';
         if (this.globalControlsPanel) this.globalControlsPanel.style.display = 'none';
-        if (game.canvas) game.canvas.requestPointerLock();
+
+        // Check if other Cursor-Reliant UIs are open (Character Sheet, Cheats)
+        const charSheet = document.getElementById('character-page-wrapper');
+        const isCharSheetOpen = charSheet && charSheet.style.display !== 'none';
+
+        // Simple check for cheat menu if it exists, or just rely on user intent for CharSheet for now
+        // Assuming "cheats" might refer to the editor panels themselves? 
+        // User said "unless i have the cheats or character sheet up".
+        // Tab IS the cheats editor usually. 
+        // If they mean the "Cheat Menu" (Shift+C or similar?), let's check generic "isPaused".
+
+        // But specifically, if CharSheet is open, do NOT unpause/lock.
+        if (isCharSheetOpen) {
+            // Keep game paused and cursor free
+            this.game.state.isPaused = true;
+            document.exitPointerLock();
+        } else {
+            // Resume game
+            this.game.state.isPaused = false;
+            if (this.game.canvas) this.game.canvas.requestPointerLock();
+        }
     }
 
     updateFactionHudFromUI(e) {

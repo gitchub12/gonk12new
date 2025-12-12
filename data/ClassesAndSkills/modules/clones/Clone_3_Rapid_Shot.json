@@ -1,0 +1,13 @@
+{
+    "id": "clone_3_rapid_shot",
+    "name": "Rapid Shot",
+    "tier": 3,
+    "faction": "clone",
+    "description": "+15% Fire Rate for ranged weapons.",
+    "icon": "data/pngs/MODULES/clone_3_rapid_shot.png",
+    "effects": {
+        "immediate": {
+            "fire_rate_bonus": 0.15
+        }
+    }
+}

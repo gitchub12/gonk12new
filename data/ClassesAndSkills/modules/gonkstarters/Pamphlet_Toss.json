@@ -1,0 +1,11 @@
+{
+    "id":  "Pamphlet Toss",
+    "name":  "Pamphlet Toss",
+    "type":  "active",
+    "faction":  "Gonk",
+    "description":  "Throw a pamphlet to distract or inform targets.",
+    "rank":  1,
+    "effects":  {
+                    "ability_pamphlet_toss":  true
+                }
+}

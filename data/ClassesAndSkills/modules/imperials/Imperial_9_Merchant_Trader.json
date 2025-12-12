@@ -1,0 +1,14 @@
+{
+    "id": "imperial_9_merchant_trader",
+    "name": "Merchant Trader",
+    "tier": 9,
+    "faction": "imperial",
+    "description": "Extra loot drop chance from Rebels and Aliens.",
+    "icon": "data/pngs/MODULES/imperial_9_merchant_trader.png",
+    "effects": {
+        "immediate": {
+            "loot_drop_bonus_rebel": 0.2,
+            "loot_drop_bonus_alien": 0.2
+        }
+    }
+}

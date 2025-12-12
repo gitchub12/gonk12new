@@ -1,0 +1,13 @@
+{
+    "id": "taker_9_vong_zealot",
+    "name": "Vong Zealot",
+    "tier": 9,
+    "faction": "taker",
+    "description": "+15% Attack Speed.",
+    "icon": "data/pngs/MODULES/taker_9_vong_zealot.png",
+    "effects": {
+        "immediate": {
+            "attack_speed_bonus": 0.15
+        }
+    }
+}

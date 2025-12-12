@@ -1,0 +1,13 @@
+{
+    "id": "droid_1_armor_familiarity",
+    "name": "Armor Familiarity",
+    "tier": 1,
+    "faction": "droid",
+    "description": "Reduces damage taken by a flat amount (-1).",
+    "icon": "data/pngs/MODULES/droid_1_armor_familiarity.png",
+    "effects": {
+        "immediate": {
+            "flat_damage_reduction": 1
+        }
+    }
+}

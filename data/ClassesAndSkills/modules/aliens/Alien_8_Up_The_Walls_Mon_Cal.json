@@ -1,0 +1,15 @@
+{
+    "id": "alien_8_up_the_walls_mon_cal",
+    "name": "Up the Walls Mon Cal",
+    "tier": 8,
+    "faction": "alien",
+    "description": "Enables climbing strategies and improves swim speed.",
+    "icon": "data/pngs/MODULES/alien_8_up_the_walls_mon_cal.png",
+    "effects": {
+        "immediate": {
+            "climb_speed_bonus": 0.5,
+            "swim_speed_bonus": 0.5,
+            "can_wall_run": true
+        }
+    }
+}

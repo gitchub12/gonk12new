@@ -1,0 +1,13 @@
+{
+    "id": "sith_11_improved_critical",
+    "name": "Improved Critical",
+    "tier": 11,
+    "faction": "sith",
+    "description": "Increased damage to targets below 50% HP.",
+    "icon": "data/pngs/MODULES/sith_11_improved_critical.png",
+    "effects": {
+        "immediate": {
+            "damage_bonus_vs_low_hp": 0.5
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "id":  "Speak Languages",
+    "name":  "Speak Languages",
+    "type":  "passive",
+    "faction":  "Gonk",
+    "description":  "Uses Intelligence to communicate in various dialects.",
+    "rank":  1,
+    "effects":  {
+                    "skill_speak_languages":  1
+                }
+}

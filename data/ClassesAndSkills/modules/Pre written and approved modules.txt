@@ -1,0 +1,252 @@
+Character upgrades is too big and all one file.  So!  Change it.  EVERY module should have an origin, a rarity on a scale of 1-12, and its own icon and abilities.
+
+Move those each into their specific folders.
+The names below are in the NOW text.  The examples form L1 (lowest level) to L5 a high level but not the cap is an example of how these will work.  My original thought was to cap at 5 so you might see “fire resistant” at L1 and immune at L5, but spread it out and in that instance curve it or something so that it is never full immunity.
+
+---
+
+Alien 1: OG Verpine Chitin NOW Tusken Thick Hide (Flat armor bonus that always applies to incoming damage)  
+L1 small armor increase to L5 very high armor increase
+
+Alien 5: OG Gungan Mistcloak NOW Stealthy Gungan (Stealth distortion reduces chance enemies hit or notice you)  
+L1 slight hit/notice reduction to L5 major hit/notice reduction
+
+Alien 6: OG Kel Dor Renewal NOW Kel Dor Stamina (Passive HP regeneration up to 50x rank over time during the level)  
+L1 very slow regen to L5 fast noticeable regen
+
+Alien 7: OG Trandoshan Fire Resist NOW Trandoshan Climate Specialization (Fire) (Reduces incoming fire damage significantly)  
+L1 light fire resistance to L5 very high fire resistance
+
+Alien 8: OG Ithorian Sonic Resist NOW Ithorian Climate Specialization (Sonic) (Reduces incoming sonic damage and sonic effects)  
+L1 light sonic resistance to L5 very high sonic resistance
+
+Alien 9: OG Bothan Instinct NOW Sharp-Eyed Bothan (Enhances detection radius for spotting enemies earlier)  
+L1 short detection gain to L5 very long detection range
+
+Alien 10: OG Nautolan Lash NOW Razor Claws Nautolan (Melee strikes apply a damage-over-time bleed)  
+L1 weak bleed to L5 strong bleed
+
+Alien 12: OG Mon Cal Clingpads NOW Up the Walls Mon Cal (Enables climbing on walls and vertical surfaces)  
+L1 full wall-climb ability to L5 full wall-climb ability
+
+Alien 13: OG Zabrak Flashflare NOW Trick of the Zabrak (Flash burst blinds enemies briefly)  
+L1 very short blind to L5 long blind
+
+Alien 16: OG Wookiee Rage NOW Extended Rage (Wookiee) (Temporary enraged boost to damage output)  
+L1 small damage boost short duration to L5 huge damage boost long duration
+
+Alien 19: OG Gamorrean Bulk NOW Toughness (Gamorrean) (Massive bonus HP added on top of normal health)  
+L1 +30 HP to L5 +130 HP
+
+Alien 20: OG Togruta Wildbond NOW Beast Language (Togruta) (Speak to beasts and gain a bonus to beast-interaction checks)  
+L1 +1 check bonus to L5 +5 check bonus
+
+---
+
+Clone 1: OG Tactical Overlay NOW Improved Low-Light Vision (Flat damage bonus to all attacks)  
+L1 small damage increase to L5 large damage increase
+
+Clone 2: OG Synchronized Fire NOW Coordinate (All allies target the most recently struck enemy)  
+L1 short assist window to L5 long assist window
+
+Clone 4: OG Rapid Fire Drill NOW Rapid Shot (Increases fire rate for ranged weapons)  
+L1 slight fire-rate boost to L5 very high fire-rate boost
+
+Clone 5A: OG Rifle Calibration (Longarms) NOW Weapon Focus (Rifles) (Damage boost to longarms only)  
+L1 small longarm damage bonus to L5 large longarm damage bonus
+
+Clone 6: OG Pistol Calibration NOW Weapon Focus (Pistols) (Damage boost to pistols only)  
+L1 small pistol damage bonus to L5 large pistol damage bonus
+
+Clone Melee (Alien 4): OG Tusken Thrust NOW Weapon Focus (Melee) (Damage boost to melee weapons only)  
+L1 small melee damage bonus to L5 large melee damage bonus
+
+Clone 9: OG Personal Shield NOW Starship Power Override (Personal Shield) (Absorbs incoming damage until shield breaks)  
+L1 small shield to L5 very large shield
+
+Clone 10: OG Tactical Sprint NOW Burst of Speed (Boosts run speed at start of sprint)  
+L1 0.2s at 1.5× speed to L5 0.3s at 2.0× speed
+
+Clone 11: OG Sharpshot NOW Precise Shot (Zoom aiming and extra damage per level when zoomed)  
+L1 +1 zoom-damage to L5 +5 zoom-damage
+
+Clone 13: OG Formation Bracing NOW Guardian’s Guidance (Armor bonus when near clone allies)  
+L1 small armor bonus to L5 large armor bonus
+
+Clone 14: OG Biometric Sync NOW Extreme Effort (Heals a percentage of HP when entering a new level)  
+L1 small level-start heal to L5 noticeably larger level-start heal
+
+Clone 15: OG Breach Charge NOW Sunder (Instant spawner destruction with fuse delay)  
+L1 7-second fuse to L5 2-second fuse
+
+Clone 19: OG Reflex Guard NOW Agile Riposte (Auto-fires one shot at attacker on cooldown without energy cost)  
+L1 long cooldown between reflex shots to L5 short cooldown between reflex shots
+
+Clone 20: OG Anti-Crit Protocol NOW Superior Expertise (Reduces incoming critical damage by a percentage)  
+L1 20% crit reduction to L5 100% crit reduction
+
+---
+
+Rebel 4: OG Jury-Rigged Armor NOW Gearhead Armor (Armor for first 30 seconds of each level)  
+L1 small start-of-level armor to L5 very high start-of-level armor
+
+Rebel 5: OG Salvage Expert NOW Gearhead (Increases scrap amounts gained)  
+L1 small scrap bonus to L5 very large scrap bonus
+
+Rebel 6: OG Scrambler Pulse NOW Trick (Blind effect with double duration on droids)  
+L1 short blind (2× vs droids) to L5 long blind (2× vs droids)
+
+Rebel 10: OG Field Medic Sacrifice NOW Surgery (Heals allies by sacrificing permanent power until next level)  
+L1 low heal per power to L5 very high heal per power
+
+Rebel 12: OG Undercover NOW Low Profile (Reduces enemy perception radius)  
+L1 slight perception reduction to L5 major perception reduction
+
+Rebel 14: OG Bomb Maker NOW Shady Merchant (Adds +1 bomb and +2 bomb damage per module level)  
+L1 +2 bomb damage to L5 +10 bomb damage
+
+Rebel 17: OG Data Scrape NOW Technical Wizard (Flat bonus to Slicing checks)  
+L1 +2 slicing bonus to L5 +7 slicing bonus
+
+---
+
+Mandalorian 1: OG Beskar Plating NOW Thick Hide (Beskar) (Strong Beskar armor for major protection)  
+L1 modest armor boost to L5 extremely high armor boost
+
+Mandalorian 2: OG Jetpack Boost NOW Improved Flight (Short jetburst with lower energy cost at higher levels)  
+L1 high energy cost to L5 very low energy cost
+
+Mandalorian 8: OG Hunter’s Visor NOW Improved Darkvision (Thermal vision outline reveals foes through walls and hiding)  
+L1 short range to L5 extreme range
+
+Mandalorian 9: OG Grapple Line NOW Mounted Combat (Grapple Variant) (Pull self or enemies; energy cost drops and movement speed rises while pulling)  
+L1 high energy cost and no speed bonus to L5 low energy cost and large pull-speed bonus
+
+Mandalorian 12: OG Clan Unity NOW Influence (Damage and armor bonus per allied Mandalorian)  
+L1 +5% per Mando ally to L5 +10% per Mando ally
+
+Mandalorian 14: OG Combat Roll NOW Mobility (Side roll with brief invincibility at roll start)  
+L1 very tiny i-frame at roll start to L5 noticeably longer i-frame at roll start
+
+Mandalorian 16: OG Target Beacon NOW Coordinated Attack (All allies target the beaconed foe and gain bonus damage)  
+L1 small ally damage bonus vs beaconed target to L5 very high ally damage bonus vs beaconed target
+
+Mandalorian 17: OG Heavy Recoil Rig NOW Weapon Specialization (Heavy Weapons) (Increases damage when using heavy weapons)  
+L1 minor heavy-weapon bonus to L5 major heavy-weapon bonus
+
+Mandalorian 18: OG Dual Wield Protocol NOW Two-Weapon Fighting (Reduces penalties for dual-wielding weapons)  
+L1 slightly reduced dual-wield penalty to L5 greatly reduced dual-wield penalty
+
+Mandalorian 19: OG Battle Training NOW Martial Arts (Global percentage damage increase)  
+L1 small damage % bonus to L5 large damage % bonus
+
+---
+
+Sith 1: OG Terror Aura NOW Frightful Presence (Reduces enemy aggro toward you)  
+L1 –0.1 aggro to L5 –0.4 aggro
+
+Sith 2: OG Pain Conversion NOW Rage (Damage increases as your HP gets lower)  
+L1 small low-HP damage bonus to L5 very high low-HP damage bonus
+
+Sith 3: OG Ruthless Precision NOW Precise Attack (Increased critical chance versus weakened foes)  
+L1 minor crit bonus vs weakened to L5 major crit bonus vs weakened
+
+Sith 4: OG Blood Oath NOW Improved Martial Arts (Damage increases per consecutive hit on the same target)  
+L1 low stacking damage per hit to L5 high stacking damage per hit
+
+Sith 6: OG Cruel Strike NOW Stunning Strike (Melee attacks apply a bleed effect over time)  
+L1 weak bleed to L5 strong bleed
+
+Sith 8: OG Backbreaker Kick NOW Improved Trip (Melee kick that can stun lower-level foes)  
+L1 very short stun to L5 significantly longer stun
+
+Sith 10: OG Crimson Rush NOW Force Speed (Non-Force Variant) (On hit, briefly increases your energy regeneration)  
+L1 0.2-second regen bonus to L5 1-second regen bonus
+
+Sith 11: OG Executioner’s Mark NOW Improved Critical (Increases damage to targets below an HP threshold)  
+L1 bonus below 25% HP to L5 bonus below 50% HP
+
+Sith 12: OG Predator’s Patience NOW Spring Attack (Deals x2 damage to non-engaged (unaware) targets)  
+L1 x2 damage to L5 x2 damage
+
+Sith 13: OG Twin-Blade Form NOW Two-Weapon Fighting (Mastery) (Allows dual-wield melee weapons and grants +1 damage per level)  
+L1 +1 damage to L5 +5 damage
+
+Sith 19: OG Unrelenting NOW Endurance (Gives time after 0 HP to find healing or reach next level)  
+L1 about 20 seconds to L5 about 60 seconds
+
+Sith 20: OG Lightsaber Dual Wield NOW Greater Two-Weapon Fighting (Allows dual-wield lightsabers and grants +1 damage per level)  
+L1 +1 damage to L5 +5 damage
+
+---
+
+Imperial 3: OG Formation Drill NOW Inspire Confidence (Increases defense of nearby allies)  
+L1 small ally defense bonus to L5 large ally defense bonus
+
+Imperial 5: OG Heavy Weapons Protocol NOW Weapon Group Proficiency (Heavy Weapons) (Enables heavy weapons and grants heavy-weapon damage bonus)  
+L1 +1 heavy-weapon damage to L5 +5 heavy-weapon damage
+
+Imperial 6: OG Thermal Vision NOW Improved Darkvision (Heat vision with unique Imperial glow)  
+L1 short heat-vision range to L5 long heat-vision range
+
+Imperial 10: OG Imperial March NOW Heroic Surge (Movement buff for allies plus scaling damage bonus)  
+L1 small speed/damage bonus to L5 strong speed/damage bonus
+
+Imperial 11: OG Comms Override NOW Urban Tracking (Jams spawning points and suppresses enemy buffs in a radius)  
+L1 small jam radius/light suppression to L5 large jam radius/full suppression
+
+Imperial 12: OG Heavy Armor Protocol NOW Armor Proficiency (Heavy) (Increases armor gained from armor items and adds damage reduction)  
+L1 slight damage reduction to L5 strong damage reduction
+
+Imperial 13: OG Discipline Boost NOW Iron Will (Fear immunity and resolve bonus to allies)  
+L1 +1 resolve to L5 +5 resolve
+
+Imperial 15: OG Trooper Fitness NOW Great Fortitude (Flat HP increase and extra melee damage)  
+L1 small HP gain and +1 melee damage to L5 large HP gain and +5 melee damage
+
+Imperial 18: OG Salvage Seizure NOW Merchant Trader (Extra loot and credit bonus from Rebels and Aliens)  
+L1 small loot/credit bonus to L5 large loot/credit bonus
+
+Imperial 19: OG Carry More NOW Sure Footed (Increases ammo and grenade carrying capacity)  
+L1 small extra capacity to L5 very large extra capacity
+
+Imperial 20: OG Field Ration NOW Self-Sufficient (Heals only after leaving a level)  
+L1 small after-level heal to L5 large after-level heal
+
+---
+
+Taker 1: OG Vonduun Armor Graft NOW Thick Hide (Vong) (Special armor absorbs damage before HP and reflects some damage)  
+L1 small absorb and reflect to L5 large absorb and reflect
+
+Taker 3: OG Pain Embrace NOW Hatred (Gain max Power equal to HP damage taken and a regen burst after damage)  
+L1 +1 regen burst to L5 +5 regen burst
+
+Taker 8: OG Regrowth NOW Improved Effort (HP regen but reduces max HP each time a healing threshold is passed)  
+L1 reduces 1 max HP per ~50 healed to L5 reduces 1 max HP per ~100 healed
+
+Taker 10: OG Anti-Tech Aura NOW Sunder (Anti-Tech) (Continuously damages droids and begins to stagger them at higher levels)  
+L1 small damage/no stagger to L5 high damage/frequent stagger
+
+Taker 16: OG Shaper’s Insight NOW Know Enemy (Bonus damage vs non-droids and melee accuracy bonus)  
+L1 +1 accuracy to L5 +5 accuracy
+
+Taker 19: OG Vong Leap NOW Spirited Charge (Massively increased jump and reduced fall damage)  
+L1 slight fall-damage reduction to L5 full fall-damage immunity
+
+---
+
+Droid 1: OG Reinforced Plating NOW Armor Familiarity (Flat damage reduction per hit)  
+L1 –1 damage taken to L5 –5 damage taken
+
+Droid 2: OG Overclock NOW Finely Tuned (Scaling damage increase to all attacks)  
+L1 small damage boost to L5 large damage boost
+
+Droid 3: OG Cooling Loop NOW Gearhead (Power) (Increases maximum Power)  
+L1 +1 max Power to L5 +5 max Power
+
+Droid 11: OG Factory Reset Core NOW Technical Wizard (Core) (Grants 1 bonus core at level start if Gonk does not already have one)  
+L1 up to 1 bonus core max to L5 up to 1 bonus core max
+
+Droid 16: OG Servo Strength NOW Improved Martial Programming (Increases melee damage)  
+L1 small melee bonus to L5 large melee bonus
+

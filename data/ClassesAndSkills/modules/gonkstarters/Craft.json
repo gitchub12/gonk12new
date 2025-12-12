@@ -1,0 +1,11 @@
+{
+    "id":  "Craft",
+    "name":  "Craft",
+    "type":  "passive",
+    "faction":  "Gonk",
+    "description":  "Uses Intelligence to build items.",
+    "rank":  1,
+    "effects":  {
+                    "skill_craft":  1
+                }
+}

@@ -1,0 +1,14 @@
+{
+    "id": "rebel_11_shady_merchant_bombs",
+    "name": "Shady Merchant Bombs",
+    "tier": 11,
+    "faction": "rebel",
+    "description": "Start level with +2 bombs. Bombs deal +20% damage.",
+    "icon": "data/pngs/MODULES/rebel_11_shady_merchant_bombs.png",
+    "effects": {
+        "immediate": {
+            "bonus_bombs": 2,
+            "bomb_damage_bonus_pct": 20
+        }
+    }
+}

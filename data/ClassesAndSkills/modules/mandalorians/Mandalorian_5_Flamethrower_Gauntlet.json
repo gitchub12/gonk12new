@@ -1,0 +1,13 @@
+{
+    "id": "mandalorian_5_flamethrower_gauntlet",
+    "name": "Flamethrower Gauntlet",
+    "tier": 5,
+    "faction": "mandalorian",
+    "description": "Adds a short range flame attack to melee.",
+    "icon": "data/pngs/MODULES/mandalorian_5_flamethrower_gauntlet.png",
+    "effects": {
+        "immediate": {
+            "melee_fire_damage": 5
+        }
+    }
+}

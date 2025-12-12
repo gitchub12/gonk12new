@@ -1,0 +1,13 @@
+{
+    "id": "clone_4_weapon_focus_rifles",
+    "name": "Weapon Focus (Rifles)",
+    "tier": 4,
+    "faction": "clone",
+    "description": "+15% Damage with Rifles.",
+    "icon": "data/pngs/MODULES/clone_4_weapon_focus_rifles.png",
+    "effects": {
+        "immediate": {
+            "rifle_damage_bonus_pct": 15
+        }
+    }
+}

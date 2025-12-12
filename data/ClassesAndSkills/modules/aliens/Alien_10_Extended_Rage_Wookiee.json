@@ -1,0 +1,14 @@
+{
+    "id": "alien_10_extended_rage_wookiee",
+    "name": "Extended Rage Wookiee",
+    "tier": 10,
+    "faction": "alien",
+    "description": "Grants temporary rage (damage boost) in combat.",
+    "icon": "data/pngs/MODULES/alien_10_extended_rage_wookiee.png",
+    "effects": {
+        "immediate": {
+            "combat_rage_damage_bonus": 0.2,
+            "combat_rage_duration": 5
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "id": "droid_5_overclock_speed",
+    "name": "Overclock Speed",
+    "tier": 5,
+    "faction": "droid",
+    "description": "+10% Movement Speed and Fire Rate.",
+    "icon": "data/pngs/MODULES/droid_5_overclock_speed.png",
+    "effects": {
+        "immediate": {
+            "movement_speed_bonus": 0.1,
+            "fire_rate_bonus": 0.1
+        }
+    }
+}

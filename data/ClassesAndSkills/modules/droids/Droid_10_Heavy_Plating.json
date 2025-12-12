@@ -1,0 +1,13 @@
+{
+    "id": "droid_10_heavy_plating",
+    "name": "Heavy Plating",
+    "tier": 10,
+    "faction": "droid",
+    "description": "+3 Armor.",
+    "icon": "data/pngs/MODULES/droid_10_heavy_plating.png",
+    "effects": {
+        "immediate": {
+            "armor": 3
+        }
+    }
+}

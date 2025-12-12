@@ -1,0 +1,13 @@
+{
+    "id": "sith_7_force_lightning",
+    "name": "Force Lightning",
+    "tier": 7,
+    "faction": "sith",
+    "description": "Unlocks Force Lightning ability.",
+    "icon": "data/pngs/MODULES/sith_7_force_lightning.png",
+    "effects": {
+        "immediate": {
+            "enable_force_lightning": true
+        }
+    }
+}

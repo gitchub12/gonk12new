@@ -1,0 +1,14 @@
+{
+    "id": "droid_8_shield_generator",
+    "name": "Shield Generator",
+    "tier": 8,
+    "faction": "droid",
+    "description": "Generate a personal shield with 20 capacity.",
+    "icon": "data/pngs/MODULES/droid_8_shield_generator.png",
+    "effects": {
+        "immediate": {
+            "shield_max": 20,
+            "shield_regen": 1
+        }
+    }
+}

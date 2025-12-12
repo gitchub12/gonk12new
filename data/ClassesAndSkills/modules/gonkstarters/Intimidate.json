@@ -1,0 +1,11 @@
+{
+    "id":  "Intimidate",
+    "name":  "Intimidate",
+    "type":  "passive",
+    "faction":  "Gonk",
+    "description":  "Uses Strength to coerce others.",
+    "rank":  1,
+    "effects":  {
+                    "skill_intimidate":  1
+                }
+}

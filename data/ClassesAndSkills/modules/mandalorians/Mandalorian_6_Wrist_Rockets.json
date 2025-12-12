@@ -1,0 +1,13 @@
+{
+    "id": "mandalorian_6_wrist_rockets",
+    "name": "Wrist Rockets",
+    "tier": 6,
+    "faction": "mandalorian",
+    "description": "Unlock infinite ammo micro-rockets (cooldown).",
+    "icon": "data/pngs/MODULES/mandalorian_6_wrist_rockets.png",
+    "effects": {
+        "immediate": {
+            "enable_wrist_rockets": true
+        }
+    }
+}

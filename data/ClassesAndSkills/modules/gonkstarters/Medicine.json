@@ -1,0 +1,11 @@
+{
+    "id":  "Medicine",
+    "name":  "Medicine",
+    "type":  "passive",
+    "faction":  "Gonk",
+    "description":  "Uses Wisdom to heal organic injuries.",
+    "rank":  1,
+    "effects":  {
+                    "skill_medicine":  1
+                }
+}

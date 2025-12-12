@@ -1,0 +1,11 @@
+{
+    "id":  "Repair",
+    "name":  "Repair",
+    "type":  "passive",
+    "faction":  "Gonk",
+    "description":  "Uses Intelligence to fix mechanical objects.",
+    "rank":  1,
+    "effects":  {
+                    "skill_repair":  1
+                }
+}

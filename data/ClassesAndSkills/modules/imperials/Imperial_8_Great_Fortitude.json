@@ -1,0 +1,14 @@
+{
+    "id": "imperial_8_great_fortitude",
+    "name": "Great Fortitude",
+    "tier": 8,
+    "faction": "imperial",
+    "description": "+25 HP and +2 Melee Damage.",
+    "icon": "data/pngs/MODULES/imperial_8_great_fortitude.png",
+    "effects": {
+        "immediate": {
+            "max_hp_bonus": 25,
+            "melee_damage_bonus": 2
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "id":  "HK Quickcharge",
+    "name":  "HK Quickcharge",
+    "type":  "passive",
+    "faction":  "Gonk",
+    "description":  "Increases Energy Regeneration rate.",
+    "rank":  1,
+    "effects":  {
+                    "energy_regen_flat":  1
+                }
+}

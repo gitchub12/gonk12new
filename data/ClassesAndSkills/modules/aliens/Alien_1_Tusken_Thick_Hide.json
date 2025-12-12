@@ -1,0 +1,13 @@
+{
+    "id": "alien_1_tusken_thick_hide",
+    "name": "Tusken Thick Hide",
+    "tier": 1,
+    "faction": "alien",
+    "description": "Thick hide grants +2 armor. Stacks for increased protection.",
+    "icon": "data/pngs/MODULES/alien_1_tusken_thick_hide.png",
+    "effects": {
+        "immediate": {
+            "armor": 2
+        }
+    }
+}

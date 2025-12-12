@@ -1,0 +1,13 @@
+{
+    "id": "mandalorian_2_improved_flight",
+    "name": "Improved Flight",
+    "tier": 2,
+    "faction": "mandalorian",
+    "description": "Jetpack usage cost reduced by 10%.",
+    "icon": "data/pngs/MODULES/mandalorian_2_improved_flight.png",
+    "effects": {
+        "immediate": {
+            "jetpack_cost_reduction_pct": 10
+        }
+    }
+}

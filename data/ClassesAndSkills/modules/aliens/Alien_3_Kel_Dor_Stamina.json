@@ -1,0 +1,13 @@
+{
+    "id": "alien_3_kel_dor_stamina",
+    "name": "Kel Dor Stamina",
+    "tier": 3,
+    "faction": "alien",
+    "description": "Passive HP regeneration (+1/sec). Stacks for faster regen.",
+    "icon": "data/pngs/MODULES/alien_3_kel_dor_stamina.png",
+    "effects": {
+        "immediate": {
+            "hp_regen": 1
+        }
+    }
+}

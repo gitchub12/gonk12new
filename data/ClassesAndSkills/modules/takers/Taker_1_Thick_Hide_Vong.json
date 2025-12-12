@@ -1,0 +1,14 @@
+{
+    "id": "taker_1_thick_hide_vong",
+    "name": "Thick Hide (Vong)",
+    "tier": 1,
+    "faction": "taker",
+    "description": "Absorbs 2 damage and reflects 1 damage back to attacker.",
+    "icon": "data/pngs/MODULES/taker_1_thick_hide_vong.png",
+    "effects": {
+        "immediate": {
+            "flat_damage_absorb": 2,
+            "damage_reflect_flat": 1
+        }
+    }
+}

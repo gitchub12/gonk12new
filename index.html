@@ -1432,10 +1432,12 @@
         </div>
         <!-- Tooltip -->
         <div id="module-tooltip"
-            style="position: absolute; display: none; background: rgba(0,0,0,0.95); border: 2px solid #0ff; padding: 15px; font-family: 'Courier New', monospace; color: #fff; max-width: 400px; z-index: 3000; pointer-events: none;">
-            <div id="tooltip-module-name" style="font-size: 18px; font-weight: bold; color: #ff0; margin-bottom: 10px;">
+            style="position: absolute; display: none; background: rgba(0,0,0,0.95); border: 2px solid #0ff; padding: 15px; font-family: 'Courier New', monospace; color: #fff; max-width: 400px; z-index: 3000; pointer-events: none; word-wrap: break-word; box-shadow: 0 0 10px rgba(0,0,0,0.8); border-radius: 5px;">
+            <div id="tooltip-module-name"
+                style="font-size: 18px; font-weight: bold; color: #ff0; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
             </div>
-            <div id="tooltip-module-description" style="font-size: 14px; color: #fff; margin-bottom: 8px;">
+            <div id="tooltip-module-description"
+                style="font-size: 14px; color: #fff; margin-bottom: 8px; line-height: 1.4;">
             </div>
             <div id="tooltip-module-effects" style="font-size: 12px; color: #0ff;"></div>
         </div>
@@ -1535,11 +1537,17 @@
                     <option value="">-- Select Module --</option>
                 </select><button id="add-module-cheat-btn"
                     style="width: 100%; padding: 10px; background: #004444; color: #0ff; border: 2px solid #0ff; cursor: pointer; font-size: 14px;">ADD
-                    MODULE </button></div><button id="close-cheats-menu"
+                    MODULE </button></div>
+            <div style="margin-bottom: 5px;"><button id="fill-modules-cheat-btn"
+                    style="width: 100%; padding: 10px; background: #440044; color: #f0f; border: 2px solid #f0f; cursor: pointer; font-size: 14px;">FILL
+                    MODULES</button></div>
+            <div style="margin-bottom: 10px;"><button id="level-up-modules-cheat-btn"
+                    style="width: 100%; padding: 10px; background: #444400; color: #ff0; border: 2px solid #ff0; cursor: pointer; font-size: 14px;">LEVEL
+                    UP MODULES (ALL)</button></div><button id="close-cheats-menu"
                 style="position: absolute; top: 5px; right: 5px;">X</button>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-        <script src="data/ClassesAndSkills/character_upgrades.js"></script>
+        <script src="character_upgrades.js"></script>
         <script src="map_screen.js"></script>
         <div id="droidsmith-menu"
             style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; border: 1px solid white; z-index: 10000; width: 400px;">

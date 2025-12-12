@@ -1,0 +1,13 @@
+{
+    "id": "clone_1_improved_low_light",
+    "name": "Improved Low-Light Vision",
+    "tier": 1,
+    "faction": "clone",
+    "description": "Flat damage bonus (+1) to all attacks.",
+    "icon": "data/pngs/MODULES/clone_1_improved_low_light.png",
+    "effects": {
+        "immediate": {
+            "flat_damage_bonus": 1
+        }
+    }
+}

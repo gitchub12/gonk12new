@@ -1,0 +1,13 @@
+{
+    "id": "sith_3_precise_attack",
+    "name": "Precise Attack",
+    "tier": 3,
+    "faction": "sith",
+    "description": "Increased critical chance vs weakened foes.",
+    "icon": "data/pngs/MODULES/sith_3_precise_attack.png",
+    "effects": {
+        "immediate": {
+            "crit_on_weakened_bonus": 0.2
+        }
+    }
+}

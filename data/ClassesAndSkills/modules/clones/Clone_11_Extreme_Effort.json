@@ -1,0 +1,13 @@
+{
+    "id": "clone_11_extreme_effort",
+    "name": "Extreme Effort",
+    "tier": 11,
+    "faction": "clone",
+    "description": "Heal 25% of HP when reaching a new level.",
+    "icon": "data/pngs/MODULES/clone_11_extreme_effort.png",
+    "effects": {
+        "immediate": {
+            "level_start_heal_pct": 25
+        }
+    }
+}
