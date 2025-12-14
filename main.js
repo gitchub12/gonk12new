@@ -482,8 +482,36 @@ class Game {
         this.hasSelectedClass = true; // Bypass selection screen using this flag
         if (window.characterStats) {
             // Force load our specific Gonk JSON immediately (no timeout) to win race condition against UI
+            // Force load our specific Gonk JSON immediately (no timeout) to win race condition against UI
             fetch('data/ClassesAndSkills/gonk_classes.json')
-                .then(r => r.json())
+                .then(r => {
+                    if (!r.ok) throw new Error('404');
+                    return r.json();
+                })
+                .catch(err => {
+                    console.warn("gonk_classes.json not found, using internal defaults.");
+                    // Return minimal structure to satisfy next .then and CharacterStatsManager
+                    return {
+                        classes: [{
+                            className: 'Gonk',
+                            baseStats: window.assetManager.playerStats || {},
+                            features: [],
+                            startingEquipment: [],
+                            // FIX: progression must be an Array, not an Object
+                            // FIX: progressionTable matching CharacterStatsManager
+                            progressionTable: [
+                                { // Level 1 (Index 0)
+                                    str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10,
+                                    hp_per_level: 10, // KEY FIX: explicit hp_per_level
+                                    power_per_level: 10, // Added for safety
+                                    stats: { hp: 10, energy: 10 },
+                                    features: [],
+                                    special: ""
+                                }
+                            ]
+                        }]
+                    };
+                })
                 .then(data => {
                     const gonk = data.classes.find(c => c.className === 'Gonk');
                     if (gonk && window.characterStats) {
@@ -1519,7 +1547,7 @@ class Game {
             // Play greeting sound
             if (window.audioSystem) {
                 // Try playing with the specific path format requested
-                window.audioSystem.playSound('data\\speech\\vendors\\theguidehellothere.mp3', 1.0);
+                window.audioSystem.playSound('data/speech/vendors/theguidehellothere.mp3', 1.0);
             } else {
                 new Audio('data/speech/vendors/theguidehellothere.mp3').play().catch(e => console.warn(e));
             }
@@ -1650,6 +1678,7 @@ class Game {
                     this.entities.droppedWeapons.splice(i, 1);
                 }
             }
+            if (window.levelRenderer) window.levelRenderer.updateWater(this.deltaTime);
             // Only check for new conversations when the game is not paused.
             this.checkForNpcConversations();
         } else {

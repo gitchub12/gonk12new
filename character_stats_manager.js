@@ -3,56 +3,25 @@
 
 class CharacterStatsManager {
     constructor() {
-        this.stats = {
-            STR: 10,
-            DEX: 10,
-            CON: 10,
-            INT: 10,
-            WIS: 10,
-            CHA: 10
-        };
+        this.stats = { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 10, CHA: 10 };
 
-        this.skills = {
-            intimidate: 0,
-            jump: 0,
-            climb: 0,
-            slicing: 0,
-            insight: 0,
-            persuasion: 0,
-            repair: 0,
-            deception: 0,
-            medicine: 0,
-            running: 0,
-            athletics: 0,
-            stealth: 0,
-            perception: 0,
-            speaklanguages: 0,
-            craft: 0,
-            scavenge: 0
-        };
+        // Deprecated Skills (Kept empty to prevent UI crashes if referenced)
+        this.skills = {};
 
         this.level = 1;
-        this.currentClass = 'Gonk'; // Default starting class - "Hunter Killer", "Slicer", "Protocol Droid", "Adept", "Medical", "Sith", "Gonk"
-
-        this.hp = 60; // Starting HP (5×CON + level×hp_per_level, approximately)
+        this.currentClass = 'Gonk';
+        this.hp = 60;
         this.maxHp = 60;
-
-        this.armor = 0; // Damage reduction
-        this.weaponSlots = 0; // Number of weapon slots
-
-        this.energyMaxBonusPct = 0; // Percentage bonus to max energy
-        this.maxEnergy = 100; // Base energy
-        this.energyRegenBonusPct = 5; // Percentage bonus to energy regen rate (Base 5%)
-        this.damageBonusPct = 0; // Percentage bonus to all damage
-
-        this.maxAllies = 0; // Maximum number of allies
-
-        this.classPowers = []; // Array of special power names acquired
-        this.pendingPowerChoice = null; // For major unlock levels (5, 10, 15, 20)
-        this.selectedPowers = {}; // Track which power variant was chosen at each level
-
-        // Load progression tables
-        this.progressionTables = null;
+        this.armor = 0;
+        this.weaponSlots = 0;
+        this.energyMaxBonusPct = 0;
+        this.maxEnergy = 100;
+        this.energyRegenRate = 20;
+        this.energyRegenBonusPct = 5;
+        this.damageBonusPct = 0;
+        this.maxAllies = 0;
+        this.classPowers = [];
+        this.playerClasses = {}; // New storage for class data
         this.currentClassData = null;
         this.chassis = 'gonk';
     }
@@ -74,224 +43,139 @@ class CharacterStatsManager {
         };
     }
 
-    // Load progression tables from JSON
-    async loadProgressionTables() {
-        try {
-            const response = await fetch('data/ClassesAndSkills/class_progression_tables.json');
-            this.progressionTables = await response.json();
-            console.log('Loaded class progression tables:', this.progressionTables);
-            return true;
-        } catch (error) {
-            console.error('Failed to load progression tables:', error);
-            return false;
+    // Load new Player Class JSONs
+    async loadPlayerClasses() {
+        // Filenames map to expected class keys.
+        const classFiles = ['Gonk', 'HunterKiller', 'Protocol', 'Slicer', 'Adept'];
+        this.playerClasses = {};
+
+        console.log("Loading Player Classes...");
+        for (const filename of classFiles) {
+            try {
+                const response = await fetch(`data/ClassesAndSkills/PlayerClasses/${filename}.json`);
+                if (response.ok) {
+                    const data = await response.json();
+                    // Use the className from the file as the key
+                    this.playerClasses[data.className] = data;
+                    console.log(`Loaded class: ${data.className} from ${filename}.json`);
+                } else {
+                    console.error(`Failed to load ${filename}.json`);
+                }
+            } catch (e) {
+                console.error(`Error loading ${filename}:`, e);
+            }
         }
+        return true;
     }
 
-    // Select a class (only at level 1)
+    // Legacy method name support - redirects to new loader
+    async loadProgressionTables() {
+        return this.loadPlayerClasses();
+    }
+
+    // Select a class
     async selectClass(className) {
-        if (this.level !== 1) {
-            console.warn('Can only select class at level 1!');
-            return false;
+        if (!this.playerClasses || Object.keys(this.playerClasses).length === 0) {
+            await this.loadPlayerClasses();
         }
 
-        if (!this.progressionTables) {
-            await this.loadProgressionTables();
-        }
-
-        const classData = this.progressionTables.classes[className];
+        const classData = this.playerClasses[className];
         if (!classData) {
-            console.error(`Class "${className}" not found in progression tables`);
-            return false;
-        }
-
-        if (classData.locked) {
-            console.warn(`Class "${className}" is locked!`);
+            console.error(`Class "${className}" not found.`);
             return false;
         }
 
         this.currentClass = className;
         this.currentClassData = classData;
+        this.level = 1; // Reset level on class change
 
-        // Apply level 1 bonuses
-        this.applyLevelBonuses(1);
-
-        // Grant starting modules
-        let startingModuleList = [];
-        // Use the centralized list from CharacterUpgrades (SOURCE OF TRUTH)
-        if (window.characterUpgrades && window.characterUpgrades.getClassStartingModules) {
-            startingModuleList = window.characterUpgrades.getClassStartingModules(className);
-        } else if (classData.starting_modules) {
-            // Fallback (deprecated)
-            startingModuleList = classData.starting_modules;
+        // RESET Modules (Prevent retaining old class modules)
+        if (window.moduleManager) {
+            console.log('Resetting modules for new class selection...');
+            window.moduleManager.reset();
         }
 
-        if (startingModuleList.length > 0) {
-            console.log(`[CharacterStats] Granting starting modules for ${className}:`, startingModuleList);
+        // Apply Starting Attributes (Standard Array)
+        if (classData.starting_attributes) {
+            this.stats = { ...classData.starting_attributes };
+            console.log(`Set starting stats for ${className}:`, this.stats);
+        }
 
-            if (window.moduleManager) {
-                for (const modStr of startingModuleList) {
-                    // Parse "Name Rank" format (e.g. "Jump 3")
-                    const match = modStr.match(/^(.+?)\s+(\d+)$/);
-                    let modId = modStr;
-                    let rank = 1;
+        // Apply Level 1 Bonuses (Stats only)
+        this.applyLevelBonuses(1);
 
-                    if (match) {
-                        modId = match[1]; // "Jump"
-                        rank = parseInt(match[2]); // 3
-                    }
-
-                    // Normalize ID (remove spaces if needed, but our new files use spaces in filenames/IDs like "Force Heal")
-                    // Actually, the new JSONs use "Force Heal" as ID?
-                    // Let's check: "Force_Heal.json" likely has ID "Force Heal" or "Force_Heal"?
-                    // File content step 582: "id": "Force Heal" for Force_Heal.json.
-                    // So "Force Heal" is correct.
-                    // But if user typed "Jump 3", modId is "Jump".
-                    // The file is "Jump.json", ID "Jump".
-                    // So we are good.
-
-                    console.log(`[CharacterStats] Granting ${modId} (Rank ${rank})`);
-                    for (let i = 0; i < rank; i++) {
-                        window.moduleManager.grantModule(modId);
-                    }
-                }
-            } else {
-                console.error('[CharacterStats] window.moduleManager missing, cannot grant modules.');
+        // Grant Starting Modules from Level 1 Progression
+        if (classData.progression) {
+            const level1 = classData.progression.find(p => p.level === 1);
+            if (level1 && level1.modules && window.moduleManager) {
+                console.log(`Granting starting modules for ${className}...`);
+                level1.modules.forEach(modName => {
+                    window.moduleManager.grantModule(modName);
+                });
             }
-        } else {
-            console.log(`[CharacterStats] No starting modules for ${className}`);
         }
 
         console.log(`Selected class: ${className}`);
         return true;
     }
 
-    // Apply all bonuses from a specific level in the progression table
+    // Apply bonuses for a specific level (Refactored for Module System)
     applyLevelBonuses(level) {
         if (!this.currentClassData) {
             console.error('No class selected!');
             return;
         }
 
-        const levelData = this.currentClassData.progression[level - 1];
-        if (!levelData) {
-            console.error(`No data for level ${level}`);
-            return;
-        }
+        console.log(`Applying Level ${level} stats for ${this.currentClass}...`);
 
-        // Apply stats
-        this.stats.STR = levelData.str;
-        this.stats.DEX = levelData.dex;
-        this.stats.CON = levelData.con;
-        this.stats.INT = levelData.int;
-        this.stats.WIS = levelData.wis;
-        this.stats.CHA = levelData.cha;
+        // USER REQUEST: No bonus modules on level up inside this function.
+        // Derived stats calculation only.
 
-        // Apply skills (only update if they exist in levelData)
-        for (const skill in this.skills) {
-            if (levelData[skill] !== undefined) {
-                this.skills[skill] = levelData[skill];
-            }
-        }
+        // 1. Calculate HP
+        // Formula: (HP_Per_Level + CON_Mod) * Level + CON_Score (Base Buffer)
+        const conMod = this.getStatModifier(this.stats.CON);
+        const hpPerLevel = this.currentClassData.hp_per_level || 8;
+        // Ensure at least 1 HP gain per level
+        const hpGrowth = Math.max(1, hpPerLevel + conMod);
 
-        // Apply other stats
-        this.armor = levelData.armor || 0;
-        this.weaponSlots = levelData.weapon_slots || 0;
-        this.energyMaxBonusPct = levelData.energy_max_bonus_pct || 0;
-        this.energyRegenBonusPct = levelData.energy_regen_bonus_pct || 0;
-        this.damageBonusPct = levelData.damage_bonus_pct || 0;
-        this.maxAllies = levelData.max_allies || 0;
+        // Recalculate Max HP
+        this.maxHp = this.stats.CON + (level * hpGrowth);
 
-        // Calculate Max Energy (Base 100 + INT * 5 + Level * 2)
-        // User specified INT increases max, WIS increases regen.
+        // Current HP adjustment
+        this.hp = Math.min(this.hp, this.maxHp);
+        // Start fresh char with full HP
+        if (level === 1) this.hp = this.maxHp;
+
+
+        // 2. Calculate Energy
         const intMod = this.getStatModifier(this.stats.INT);
         const wisMod = this.getStatModifier(this.stats.WIS);
         const baseEnergy = 100;
+        // Energy scaling: Base + INT*5 + Level*2
         const statEnergy = (intMod * 5);
         this.maxEnergy = Math.floor((baseEnergy + statEnergy + (level * 2)) * (1 + (this.energyMaxBonusPct / 100)));
 
-        // Calculate Energy Regen Rate
-        // Base: 20
-        // Overcharge: +1 per rank (Flat Base Increase)
-        // WIS: +5% per modifier point (Multiplier to Base)
-
+        // 3. Energy Regen
+        // Base: 20 + HK Quickcharge
         let baseRegen = 20;
         let overchargeFlat = 0;
 
-        // Scan powers for Overcharge/Quickcharge
-        if (this.classPowers) {
-            const regex = /(?:Overcharge|Quickcharge|HK Quickcharge)\s*(\d+)/i;
-            for (const power of this.classPowers) {
-                const match = power.match(regex);
-                if (match) {
-                    overchargeFlat += parseInt(match[1]);
-                }
-            }
-        }
-
-        // Check for specific modules if known and not in powers
-        if (window.moduleManager && window.moduleManager.hasModule) {
-            if (window.moduleManager.hasModule('HK Quickcharge 5') && !this.classPowers.includes('HK Quickcharge 5')) {
+        // Check for Quickcharge module
+        if (window.moduleManager) {
+            // Safe check using hasModule if available, or manual check
+            if (window.moduleManager.hasModule && window.moduleManager.hasModule('HK Quickcharge 5')) {
+                overchargeFlat += 5;
+            } else if (window.moduleManager.activeModules && window.moduleManager.activeModules.includes('HK Quickcharge 5')) {
                 overchargeFlat += 5;
             }
-            // Add other overrides if needed
         }
 
         const totalBaseRegen = baseRegen + overchargeFlat;
-        const wisBonusPct = wisMod * 5; // 5% per point
+        const wisBonusPct = wisMod * 5; // 5% per point of WIS modifier
 
-        // Combined Regen
         this.energyRegenRate = totalBaseRegen * (1 + (wisBonusPct / 100));
 
-        // Apply Power Bonuses (Legacy hook, might account for non-standard bonuses)
-        // this.applyPowerBonuses(); // Removing this call as we integrated the logic above for clarity
-
-        // Calculate HP: 5×CON + (level × HP_per_level)
-        const hpPerLevel = this.currentClassData.base_stats.hp_per_level;
-        this.maxHp = (5 * this.stats.CON) + (level * hpPerLevel);
-        this.hp = Math.min(this.hp, this.maxHp); // Don't overflow current HP
-
-        // Check for special power choice
-        if (levelData.special && levelData.special.includes('OR')) {
-            // This level has a power choice
-            this.pendingPowerChoice = {
-                level: level,
-                special: levelData.special,
-                options: this.parsePowerOptions(levelData.special)
-            };
-            console.log(`Power choice available at level ${level}: ${levelData.special}`);
-        } else if (levelData.special && levelData.special !== '') {
-            // Automatic power (no choice)
-            this.classPowers.push(levelData.special);
-            console.log(`Gained power: ${levelData.special}`);
-        }
-
-        console.log(`Applied level ${level} bonuses. HP: ${this.hp}/${this.maxHp}, Armor: ${this.armor}, Damage: +${this.damageBonusPct}%`);
-    }
-
-    // Parse power options from special string "Power A OR Power B"
-    parsePowerOptions(specialText) {
-        const parts = specialText.split(' OR ');
-        return parts.map(p => p.trim());
-    }
-
-    // Select a power from pending choice
-    selectPower(powerName) {
-        if (!this.pendingPowerChoice) {
-            console.warn('No pending power choice!');
-            return false;
-        }
-
-        if (!this.pendingPowerChoice.options.includes(powerName)) {
-            console.warn(`"${powerName}" is not a valid option!`);
-            return false;
-        }
-
-        this.classPowers.push(powerName);
-        this.selectedPowers[this.pendingPowerChoice.level] = powerName;
-        console.log(`Selected power: ${powerName}`);
-
-        this.pendingPowerChoice = null;
-        return true;
+        console.log(`Stats Updated. HP: ${this.maxHp}, Energy: ${this.maxEnergy}, Regen: ${this.energyRegenRate}`);
     }
 
     // Level up to next level
@@ -299,10 +183,6 @@ class CharacterStatsManager {
         if (!this.currentClass) {
             console.warn('Cannot level up without selecting a class first!');
             return false;
-        }
-
-        if (!this.progressionTables) {
-            await this.loadProgressionTables();
         }
 
         const nextLevel = this.level + 1;
@@ -313,68 +193,100 @@ class CharacterStatsManager {
         }
 
         this.level = nextLevel;
+
+        // 1. Attribute Progression (Gold/Silver/Bronze)
+        console.log(`[LevelUp] Processing GSB Stats for Level ${this.level}`);
+        if (this.currentClassData && this.currentClassData.GoldSilverBronzeStats) {
+            const gsb = this.currentClassData.GoldSilverBronzeStats;
+            const gold = gsb.gold || 'STR';
+            const silver = gsb.silver || 'CON';
+            const bronze = gsb.bronze || 'DEX';
+
+            // Gold: Every Level
+            this.stats[gold] = (this.stats[gold] || 10) + 1;
+            console.log(`Gold (${gold}) +1 -> ${this.stats[gold]}`);
+
+            // Silver: Every 2 Levels
+            if (this.level % 2 === 0) {
+                this.stats[silver] = (this.stats[silver] || 10) + 1;
+                console.log(`Silver (${silver}) +1 -> ${this.stats[silver]}`);
+            }
+
+            // Bronze: Every 3 Levels
+            if (this.level % 3 === 0) {
+                this.stats[bronze] = (this.stats[bronze] || 10) + 1;
+                console.log(`Bronze (${bronze}) +1 -> ${this.stats[bronze]}`);
+            }
+        } else {
+            // Fallback logic
+            if (this.level % 4 === 0) {
+                this.stats.STR++;
+                this.stats.CON++;
+            }
+        }
+
+        // 2. Module Progression (Upgrade one existing module)
+        // User request: "adds 1 level to one of the existing modules per level"
+        if (window.moduleManager && window.moduleManager.activeModules.length > 0) {
+            const uniqueMods = [...new Set(window.moduleManager.activeModules)];
+            if (uniqueMods.length > 0) {
+                // Rotate through modules based on level to ensure spreads
+                const index = (this.level) % uniqueMods.length;
+                const modToUpgrade = uniqueMods[index];
+
+                console.log(`[LevelUp] Upgrading module: ${modToUpgrade}`);
+                window.moduleManager.grantModule(modToUpgrade);
+            }
+        }
+
+        // 3. Recalculate Derived Stats (HP, Energy)
         this.applyLevelBonuses(nextLevel);
 
         console.log(`Leveled up to ${nextLevel}!`);
         return true;
     }
 
-    // Calculate max HP (for external calls)
+    // Calculate max HP (for external calls) (Updated to new formula)
     calculateMaxHP() {
-        if (!this.currentClassData) return 100;
+        if (!this.currentClassData) return 60;
 
-        const baseHp = this.currentClassData.base_stats.starting_hp_base;
-        const hpPerLevel = this.currentClassData.base_stats.hp_per_level;
-        this.maxHp = (baseHp + this.stats.CON + (this.level * hpPerLevel)) * 10;
+        const conMod = this.getStatModifier(this.stats.CON);
+        const hpPerLevel = this.currentClassData.hp_per_level || 8;
+        const hpGrowth = Math.max(1, hpPerLevel + conMod);
+        this.maxHp = this.stats.CON + (this.level * hpGrowth);
         return this.maxHp;
     }
 
-    // Calculate damage with all bonuses
     calculateDamage(baseDamage, weaponType = null, targetIsOrganic = false, isBehind = false, targetHealthPercent = 1.0, isCrit = false) {
         let totalDamage = baseDamage;
-
-        // Apply percentage damage bonus
         totalDamage *= (1 + (this.damageBonusPct / 100));
-
-        // Apply stat bonus (STR for melee, DEX for ranged - simplified)
-        const statBonus = this.getStatModifier(this.stats.STR); // Can be enhanced per weapon type
+        const statBonus = this.getStatModifier(this.stats.STR);
         totalDamage += statBonus;
-
-        // Apply special power modifiers (these would be checked here)
-        // For now, just apply percentage bonus
-
         return Math.max(1, Math.round(totalDamage));
     }
 
-    // Get damage reduction from armor
     getDamageReduction(incomingDamage) {
-        // Armor reduces damage by percentage (e.g., 10 armor = 10% reduction)
         const reduction = (this.armor / 100) * incomingDamage;
         return Math.floor(reduction);
     }
 
-    // Apply damage to character
     takeDamage(amount) {
         const reduction = this.getDamageReduction(amount);
-        const actualDamage = Math.max(1, amount - reduction); // Minimum 1 damage
+        const actualDamage = Math.max(1, amount - reduction);
         this.hp = Math.max(0, this.hp - actualDamage);
-        console.log(`Took ${actualDamage} damage (${amount} - ${reduction} armor). HP: ${this.hp}/${this.maxHp}`);
+        console.log(`Took ${actualDamage} damage. HP: ${this.hp}/${this.maxHp}`);
         return actualDamage;
     }
 
-    // Heal character
     heal(amount) {
         const oldHp = this.hp;
         this.hp = Math.min(this.maxHp, this.hp + amount);
         const healed = this.hp - oldHp;
-        console.log(`Healed ${healed} HP. HP: ${this.hp}/${this.maxHp}`);
         return healed;
     }
 
-    // Get display data for UI
     getDisplayData() {
         const modifiers = this.getStatModifiers();
-
         return {
             level: this.level,
             currentClass: this.currentClass,
@@ -396,165 +308,76 @@ class CharacterStatsManager {
         };
     }
 
-    // Get full progression table for a class (for UI display)
     getClassProgression(className) {
-        if (!this.progressionTables) return null;
-        return this.progressionTables.classes[className];
+        // Return full JSON data if requested by UI
+        return this.playerClasses[className];
     }
 
-    // Get all available classes
     getAvailableClasses() {
-        if (!this.progressionTables) return [];
-
-        const classes = [];
-        for (const [name, data] of Object.entries(this.progressionTables.classes)) {
-            classes.push({
-                name: name,
-                description: data.description,
-                locked: data.locked || false,
-                unlock_condition: data.unlock_condition || null
-            });
-        }
-        return classes;
-    }
-
-    // Get power description
-    getPowerDescription(powerName) {
-        if (!this.progressionTables) return 'Unknown power';
-        return this.progressionTables.special_power_descriptions[powerName] || powerName;
+        // Return list of loaded classes
+        if (!this.playerClasses) return [];
+        return Object.values(this.playerClasses).map(c => ({
+            name: c.className,
+            description: c.description
+        }));
     }
 
     applyChassis(chassisName) {
+        // Simplified Chassis logic
         if (!this.currentClass) return;
         this.chassis = chassisName;
-
-        // Reset to base stats for the current level
+        // Re-calc stats for level
         this.applyLevelBonuses(this.level);
 
         switch (chassisName) {
             case 'mouse':
-                console.log("Applying Mouse Droid chassis");
-                // speed is not a stat in characterStats, it's in playerStats in game.state
                 if (window.game && window.game.state.playerStats) window.game.state.playerStats.speed *= 2;
-                if (this.stats.jump_strength) this.stats.jump_strength = 0;
                 this.weaponSlots = 1;
                 break;
             case 'hk':
-                console.log("Applying HK chassis");
-                if (this.stats.jump_strength) this.stats.jump_strength += 0.01;
-                // climb height is not a stat here
                 this.weaponSlots = 7;
-                // HK chassis passive: faster energy regen? 
-                // User mentioned "HK Quickcharge 5". If that's a module, it's separate.
-                // But if it's innate:
-                // this.energyRegenBonusPct += 50; 
                 break;
             case 'gonk':
             default:
-                console.log("Applying Gonk chassis (default)");
-                // No changes for default chassis
                 break;
         }
-
         if (window.game) window.game.updateCharacterSheet();
-        if (window.characterUpgrades) window.characterUpgrades.updateD20Display();
     }
 
     applyArmor(armorName) {
         if (!this.currentClass) return;
-
-        // Re-apply class and chassis bonuses
         this.applyLevelBonuses(this.level);
         this.applyChassis(this.chassis);
 
         switch (armorName) {
-            case 'duraplate':
-                this.maxHp *= 1.10;
-                break;
-            case 'superplate':
-                this.maxHp *= 1.50;
-                break;
-            case 'beskar':
-                this.maxHp *= 1.50;
-                this.armor += 10;
-                break;
-            case 'molecular_bonding':
-                this.maxHp *= 0.70;
-                this.armor += 50;
-                break;
+            case 'duraplate': this.maxHp *= 1.10; break;
+            case 'superplate': this.maxHp *= 1.50; break;
+            case 'beskar': this.maxHp *= 1.50; this.armor += 10; break;
+            case 'molecular_bonding': this.maxHp *= 0.70; this.armor += 50; break;
         }
         this.hp = Math.min(this.hp, this.maxHp);
         if (window.game) window.game.updateCharacterSheet();
-        if (window.characterUpgrades) window.characterUpgrades.updateD20Display();
     }
 
-    // Apply bonuses from special powers
-    applyPowerBonuses() {
-        if (!this.classPowers) return;
-
-        // HK Quickcharge 5: +5 flat regen + 10% bonus
-        let hasQuickcharge = this.classPowers.includes('HK Quickcharge 5');
-
-        // Also check module manager if available
-        if (!hasQuickcharge && window.moduleManager && window.moduleManager.hasModule) {
-            hasQuickcharge = window.moduleManager.hasModule('HK Quickcharge 5') ||
-                window.moduleManager.hasModule('hk_quickcharge_5'); // Check ID as well
-        }
-
-        if (hasQuickcharge) {
-            this.energyRegenRate += 5.0;
-            this.energyRegenRate *= 1.10;
-            console.log("Applied HK Quickcharge 5 bonus (Power/Module active)");
-        } else {
-            console.log("HK Quickcharge 5 not found in powers or modules");
-        }
-    }
-
-    // Save state
     saveState() {
         return {
             stats: { ...this.stats },
-            skills: { ...this.skills },
             level: this.level,
             currentClass: this.currentClass,
             hp: this.hp,
             maxHp: this.maxHp,
-            armor: this.armor,
-            weaponSlots: this.weaponSlots,
-            energyMaxBonusPct: this.energyMaxBonusPct,
-            energyRegenBonusPct: this.energyRegenBonusPct,
-            damageBonusPct: this.damageBonusPct,
-            maxAllies: this.maxAllies,
-            classPowers: [...this.classPowers],
-            selectedPowers: { ...this.selectedPowers }
+            // ... other fields if needed for persistence
         };
     }
 
-    // Load state
     async loadState(state) {
-        this.stats = { ...state.stats };
-        this.skills = { ...state.skills };
-        this.level = state.level;
-        this.currentClass = state.currentClass;
-        this.hp = state.hp;
-        this.maxHp = state.maxHp;
-        this.armor = state.armor || 0;
-        this.weaponSlots = state.weaponSlots || 0;
-        this.energyMaxBonusPct = state.energyMaxBonusPct || 0;
-        this.energyRegenBonusPct = state.energyRegenBonusPct || 0;
-        this.maxEnergy = state.maxEnergy || 100; // Load maxEnergy or default
-        this.damageBonusPct = state.damageBonusPct || 0;
-        this.maxAllies = state.maxAllies || 0;
-        this.classPowers = [...(state.classPowers || [])];
-        this.selectedPowers = { ...(state.selectedPowers || {}) };
-
-        if (!this.progressionTables) {
-            await this.loadProgressionTables();
+        if (state.currentClass) await this.selectClass(state.currentClass);
+        if (state.level) {
+            this.level = state.level;
+            this.applyLevelBonuses(this.level);
         }
-
-        if (this.currentClass) {
-            this.currentClassData = this.progressionTables.classes[this.currentClass];
-        }
+        if (state.stats) this.stats = { ...state.stats };
+        if (state.hp) this.hp = state.hp;
     }
 }
 

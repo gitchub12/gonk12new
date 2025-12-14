@@ -1,0 +1,56 @@
+{
+    "className": "Slicer",
+    "description": "Expert at electronic warfare, security bypass, and technical support.",
+    "starting_attributes": {
+        "STR": 8,
+        "DEX": 14,
+        "CON": 12,
+        "INT": 15,
+        "WIS": 13,
+        "CHA": 10
+    },
+    "GoldSilverBronzeStats": {
+        "gold": "INT",
+        "silver": "DEX",
+        "bronze": "WIS"
+    },
+    "hp_per_level": 8,
+    "progression": [
+        {
+            "level": 1,
+            "modules": [
+                "Climb",
+                "Medicine",
+                "Repair",
+                "Slicing",
+                "Insight",
+                "Craft",
+                "Scavenge"
+            ]
+        },
+        {
+            "level": 2,
+            "modules": [
+                "Code Breaker I"
+            ]
+        },
+        {
+            "level": 3,
+            "modules": [
+                "Security Bypass"
+            ]
+        },
+        {
+            "level": 4,
+            "modules": [
+                "Overload"
+            ]
+        },
+        {
+            "level": 5,
+            "modules": [
+                "Master Hacker"
+            ]
+        }
+    ]
+}

@@ -9,9 +9,37 @@
     const _vector = new THREE.Vector3();
     class OBB {
         constructor(center = new THREE.Vector3(), halfSize = new THREE.Vector3(), rotation = new THREE.Matrix3()) { this.center = center; this.halfSize = halfSize; this.rotation = rotation; }
-        set(center, halfSize, rotation) { this.center.copy(center); this.halfSize.copy(halfSize); this.rotation.copy(rotation); return this; }
-        copy(obb) { this.center.copy(obb.center); this.halfSize.copy(obb.halfSize); this.rotation.copy(obb.rotation); return this; }
-        clone() { return new this.constructor().copy(this); }
+        resolveEntityCollision(colA, colB) {
+            const distVec = new THREE.Vector3().subVectors(colB.position, colA.position);
+            distVec.y = 0;
+            const distance = distVec.length();
+            const totalRadius = colA.radius + colB.radius;
+
+            if (distance < totalRadius) {
+                const overlap = totalRadius - distance;
+                const resolutionVec = distance > 0 ? distVec.normalize().multiplyScalar(overlap) : new THREE.Vector3(totalRadius, 0, 0);
+                const totalWeight = colA.weight + colB.weight;
+
+                // USER REQUEST: NPCs must never push Gonk. Gonk can push NPCs.
+                // Identify if one is player and one is NPC
+                const isPlayerA = colA.isPlayer;
+                const isPlayerB = colB.isPlayer;
+
+                if (isPlayerA && !isPlayerB) {
+                    // A is Player, B is NPC. 
+                    // Player doesn't move. NPC takes full resolution.
+                    colB.position.add(resolutionVec); // Push NPC away
+                } else if (!isPlayerA && isPlayerB) {
+                    // A is NPC, B is Player.
+                    // Player doesn't move. NPC takes full resolution (subtracted to go opposite way)
+                    colA.position.sub(resolutionVec); // Push NPC away
+                } else {
+                    // Normal collision (NPC vs NPC or Player vs Player if multiplayer exists)
+                    colA.position.sub(resolutionVec.clone().multiplyScalar(colB.weight / totalWeight));
+                    colB.position.add(resolutionVec.clone().multiplyScalar(colA.weight / totalWeight));
+                }
+            }
+        }
         getSize(result) { return result.copy(this.halfSize).multiplyScalar(2); }
         getAABB(result) { const { center, halfSize, rotation } = this; const x = rotation.elements[0], y = rotation.elements[1], z = rotation.elements[2]; const x_abs = Math.abs(x), y_abs = Math.abs(y), z_abs = Math.abs(z); const size = halfSize.x * x_abs + halfSize.y * y_abs + halfSize.z * z_abs; result.min.copy(center).subScalar(size); result.max.copy(center).addScalar(size); return result; }
         containsPoint(point) { _vector.subVectors(point, this.center); this.rotation.transformVector(_vector); return Math.abs(_vector.x) <= this.halfSize.x && Math.abs(_vector.y) <= this.halfSize.y && Math.abs(_vector.z) <= this.halfSize.z; }
@@ -67,7 +95,7 @@ window.initializeGlowMaterial = () => {
 
 // --- COLLISION CONSTANTS (loaded from config) ---
 let PLAYER_RADIUS = 0.4;
-let NPC_RADIUS = 0.4;
+let NPC_RADIUS = 0.4 * 0.6; // Reduced by 40% as requested
 let PUSH_FACTOR = 0.05;
 
 class LevelRenderer {
@@ -75,7 +103,39 @@ class LevelRenderer {
         this.gridSize = GAME_GLOBAL_CONSTANTS.GRID.SIZE;
         this.wallHeight = GAME_GLOBAL_CONSTANTS.ENVIRONMENT.WALL_HEIGHT;
         this.elevationStep = GAME_GLOBAL_CONSTANTS.ELEVATION.STEP_HEIGHT;
+        this.elevationStep = GAME_GLOBAL_CONSTANTS.ELEVATION.STEP_HEIGHT;
         this.waterMaterials = [];
+        this.waterTileMeshes = []; // Track water meshes for animation
+    }
+
+    updateWater(deltaTime) {
+        // Water Animation: UV Flow Only
+        // We scroll the texture vertically to simulate flow.
+        // User requested: Flow implies moving down (taking top sliver to bottom).
+        // UV coordinate space: (0,0) is bottom-left usually. +Y is up.
+        // To flow "down", we should INCREASE V if texture covers mesh 0-1.
+        // Or wait, "take A (top) and move it down to B". Visual pixels move down.
+        // If UV V moves UP, texture moves DOWN. So we increase V offset.
+
+        const flowSpeed = 0.013; // Reduced speed (approx 1/30th of previous 0.4)
+
+        this.waterTileMeshes.forEach(mesh => {
+            if (mesh.material && mesh.material.map) {
+                // Ensure wrapping is on so it loops seamlessly
+                if (mesh.material.map.wrapS !== THREE.RepeatWrapping) {
+                    mesh.material.map.wrapS = THREE.RepeatWrapping;
+                    mesh.material.map.wrapT = THREE.RepeatWrapping;
+                    mesh.material.map.needsUpdate = true;
+                }
+
+                // Just scroll the texture. No physical movement.
+                // Move V (y) to flow. 
+                mesh.material.map.offset.y += flowSpeed * deltaTime;
+
+                // Keep offset clean
+                if (mesh.material.map.offset.y > 1) mesh.material.map.offset.y -= 1;
+            }
+        });
     }
 
     createDefaultLayer(settings, layerName, y, rotationX) {
@@ -148,7 +208,7 @@ class LevelRenderer {
         // Create base layers from defaults
         this.createDefaultLayer(settings, 'subfloor', 0, -Math.PI / 2);
         this.createDefaultLayer(settings, 'floor', 0, -Math.PI / 2);
-        this.createDefaultLayer(settings, 'water', 0.1, -Math.PI / 2);
+        this.createDefaultLayer(settings, 'water', -0.5, -Math.PI / 2);
 
         const defaultCeilingHeight = (settings.defaults?.ceiling?.heightMultiplier || 1) * this.wallHeight;
         this.createDefaultLayer(settings, 'ceiling', defaultCeilingHeight, Math.PI / 2);
@@ -309,6 +369,11 @@ class LevelRenderer {
         material.alphaTest = 0.1;
         if (layerName === 'water') { material.opacity = 0.7; material.depthWrite = false; }
         if (layerName === 'decor' || layerName === 'floater') material.side = THREE.DoubleSide;
+        if (layerName === 'water') {
+            // Store for animation
+            // Note: createTile creates a Group, but we need the mesh with material.
+            // We'll catch it in the mesh creation below.
+        }
         const size = item.size || 1;
         const geoSize = this.gridSize * (size >= 1 ? size : 1);
         if (size < 1) { material.map.wrapS = THREE.RepeatWrapping; material.map.wrapT = THREE.RepeatWrapping; material.map.repeat.set(1 / size, 1 / size); }
@@ -328,9 +393,28 @@ class LevelRenderer {
             meshTop.position.y = y + parapetHeight;
             meshTop.rotation.x = -Math.PI / 2;
             group.add(meshTop);
+        } else if (layerName === 'water') {
+            // Store for animation
+            // Note: createTile creates a Group, but we need the mesh with material.
+            const waterPlaneGeo = new THREE.PlaneGeometry(this.gridSize, this.gridSize);
+            // Note: Original code likely had a parapetHeight or similar variable.
+            // I will hardcode 0 relative to Y for now as water is usually floor level + offset.
+
+            const meshTop = new THREE.Mesh(waterPlaneGeo, material);
+            meshTop.userData.isLevelAsset = true;
+
+            // FIX: Push to tracker
+            this.waterTileMeshes.push(meshTop);
+
+            meshTop.position.y = y; // Water flush with generated height
+            meshTop.rotation.x = -Math.PI / 2;
+            group.add(meshTop);
         } else {
             const mesh = new THREE.Mesh(planeGeo, material);
             mesh.position.y = (layerName === 'decor' || layerName === 'floater') ? y + this.wallHeight / 2 : y;
+            if (layerName === 'water') {
+                this.waterTileMeshes.push(mesh);
+            }
             mesh.rotation.x = rotationX;
             group.add(mesh);
         }
@@ -438,7 +522,11 @@ class LevelRenderer {
             const [type, xStr, zStr] = key.split('_');
             const x = Number(xStr), z = Number(zStr);
             let groundHeight1, groundHeight2;
-            if (type === 'H') {
+            if (type === 'BLOCK') {
+                center = new THREE.Vector3(x * this.gridSize + this.gridSize / 2, 0, z * this.gridSize + this.gridSize / 2);
+                groundHeight1 = window.physics.getGroundHeight(x * this.gridSize, z * this.gridSize);
+                groundHeight2 = groundHeight1;
+            } else if (type === 'H') {
                 const centerX = (x + 0.5) * this.gridSize;
                 groundHeight1 = window.physics.getGroundHeight(centerX, (z + 0.5) * this.gridSize);
                 groundHeight2 = window.physics.getGroundHeight(centerX, (z + 1.5) * this.gridSize);
@@ -476,7 +564,9 @@ class LevelRenderer {
             } else {
                 const [type] = key.split('_');
                 material.map.repeat.set(1, 1);
-                mesh = new THREE.Mesh(new THREE.BoxGeometry(type === 'H' ? this.gridSize : 0.08, this.wallHeight, type === 'V' ? this.gridSize : 0.08), material); // Reverted to BoxGeometry for grid walls
+                const width = (type === 'H' || type === 'BLOCK') ? this.gridSize : 0.08;
+                const depth = (type === 'V' || type === 'BLOCK') ? this.gridSize : 0.08;
+                mesh = new THREE.Mesh(new THREE.BoxGeometry(width, this.wallHeight, depth), material);
             }
             mesh.position.y = (this.wallHeight * i) + (this.wallHeight / 2);
             mesh.userData.isDoorSegment = (i === 0);

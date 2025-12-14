@@ -151,6 +151,11 @@
             opacity: 0.9;
         }
 
+        .faction-avatar-box {
+            transform: scale(0.65);
+            transform-origin: center;
+        }
+
         #upgrade-tooltip {
             display: none;
             position: fixed;
@@ -439,6 +444,47 @@
 
         #loading-screen-container #feedback-popup {
             top: 85% !important;
+        }
+
+        /* Feature Toggle Menu ('P' Key) */
+        #feature-toggle-menu {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ffff;
+            padding: 20px;
+            color: #fff;
+            z-index: 10000;
+            font-family: monospace;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        }
+
+        #feature-toggle-menu h3 {
+            margin-top: 0;
+            color: #00ffff;
+            border-bottom: 1px solid #555;
+            padding-bottom: 10px;
+        }
+
+        .feature-toggle-row {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 300px;
+        }
+
+        .feature-toggle-row label {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .feature-toggle-row input {
+            transform: scale(1.5);
         }
 
         /* HUD Styles */
@@ -1396,6 +1442,8 @@
     <div id="feedback-popup"></div>
     <div id="damageFlash"></div>
 
+    <!-- Feature Toggle Menu merged into Cheats Menu -->
+
     <div id="character-page-wrapper"
         style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: none; background: #000; z-index: 1000; grid-template-columns: 300px 1fr; grid-template-rows: 80px 1fr;">
 
@@ -1442,626 +1490,748 @@
             <div id="tooltip-module-effects" style="font-size: 12px; color: #0ff;"></div>
         </div>
         < !-- Hidden container for old legacy targets if JS tries to find them -->
+            <!-- Hidden container for old legacy targets if JS tries to find them -->
             <div id="module-display" style="display: none;"></div>
     </div>
     <div id="upgrade-tooltip"></div>
-    < !-- Map Screen -->
-        <div id="map-screen" style="display: none;"><canvas id="map-canvas"></canvas></div>
-        <div class="game-hud-container">
-            <div class="ally-boxes">
-                <div id="ally-box-1" class="ally-box">
-                    <div class="ally-health-overlay"></div>
-                    <div class="ally-health-overlay-face"></div><img><span class="ally-name"></span>
-                    <div class="ally-color-footer"></div>
-                </div>
-                <div id="ally-box-2" class="ally-box">
-                    <div class="ally-health-overlay"></div>
-                    <div class="ally-health-overlay-face"></div><img><span class="ally-name"></span>
-                    <div class="ally-color-footer"></div>
-                </div>
-                <div id="ally-box-3" class="ally-box">
-                    <div class="ally-health-overlay"></div>
-                    <div class="ally-health-overlay-face"></div><img><span class="ally-name"></span>
-                    <div class="ally-color-footer"></div>
-                </div>
-                <div id="ally-box-4" class="ally-box">
-                    <div class="ally-health-overlay"></div>
-                    <div class="ally-health-overlay-face"></div><img><span class="ally-name"></span>
-                    <div class="ally-color-footer"></div>
-                </div>
-            </div><img id="health-energy-overlay" src="data/pngs/HUD/health_energy_overlay.png">
-            <div class="player-gauges-container"><canvas id="health-gauge-canvas" class="gauge-canvas"></canvas><canvas
-                    id="power-gauge-canvas" class="gauge-canvas"></canvas></div>
-            <div class="weapon-display">
-                <div class="ammo-label">WEAPON</div>
-                <div id="gameHudWeapon">PAMPHLET</div>
+    <!-- Map Screen -->
+    <div id="map-screen" style="display: none;"><canvas id="map-canvas"></canvas></div>
+    <div class="slider-container">
+        <label for="npc-attack-rate-slider">NPC Static Delay (s): <span id="npc-attack-rate-val">2.0</span></label>
+        <input type="range" id="npc-attack-rate-slider" min="0.1" max="5.0" step="0.1" value="2.0">
+    </div>
+    <div class="game-hud-container">
+        <div class="ally-boxes">
+            <div id="ally-box-1" class="ally-box">
+                <div class="ally-health-overlay"></div>
+                <div class="ally-health-overlay-face"></div><img><span class="ally-name"></span>
+                <div class="ally-color-footer"></div>
             </div>
-            <div class="ammo-display">
-                <div id="gameHudAmmo"></div>
+            <div id="ally-box-2" class="ally-box">
+                <div class="ally-health-overlay"></div>
+                <div class="ally-health-overlay-face"></div><img><span class="ally-name"></span>
+                <div class="ally-color-footer"></div>
             </div>
-            <div id="faction-relationship-hud"><svg id="faction-lines-svg" width="100%" height="100%"></svg>
-                <div id="faction-node-shadow-0" class="faction-node faction-node-shadow"></div>
-                <div id="faction-node-0" class="faction-node"></div>
-                <div id="faction-node-shadow-1" class="faction-node faction-node-shadow"></div>
-                <div id="faction-node-1" class="faction-node"></div>
-                <div id="faction-node-shadow-2" class="faction-node faction-node-shadow"></div>
-                <div id="faction-node-2" class="faction-node"></div>
-                <div id="faction-node-shadow-3" class="faction-node faction-node-shadow"></div>
-                <div id="faction-node-3" class="faction-node"></div>
-                <div id="faction-node-shadow-4" class="faction-node faction-node-shadow"></div>
-                <div id="faction-node-4" class="faction-node"></div>
-                <div id="faction-node-shadow-5" class="faction-node faction-node-shadow"></div>
-                <div id="faction-node-5" class="faction-node"></div>
-                <div id="faction-node-shadow-6" class="faction-node faction-node-shadow"></div>
-                <div id="faction-node-6" class="faction-node"></div>
-                <div id="faction-node-shadow-7" class="faction-node faction-node-shadow"></div>
-                <div id="faction-node-7" class="faction-node"></div>
-                <div id="faction-node-shadow-8" class="faction-node faction-node-shadow"></div>
-                <div id="faction-node-8" class="faction-node"></div>
+            <div id="ally-box-3" class="ally-box">
+                <div class="ally-health-overlay"></div>
+                <div class="ally-health-overlay-face"></div><img><span class="ally-name"></span>
+                <div class="ally-color-footer"></div>
             </div>
-            <div id="faction-avatar-container"><img id="hologonk-avatar-relocated"
-                    src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Animated Gonk Avatar"></div>
-            <div id="song-title-display"></div>
-            <div id="song-category-display"></div>
-            <div id="music-volume-display"></div>
-            <div class="crosshair"></div>
-        </div>
-        <div id="loading-screen"></div>
-        <div id="cheats-menu"
-            style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; border: 1px solid white; z-index: 10000;">
-            <h2 style="text-align: center;">Cheats</h2>
-            <div style="margin-bottom: 10px;"><input type="checkbox" id="no-clipping-checkbox"><label
-                    for="no-clipping-checkbox">No Clipping</label></div>
-            <div style="margin-bottom: 10px;"><input type="checkbox" id="invincibility-checkbox"><label
-                    for="invincibility-checkbox">Invincibility</label></div>
-            <div style="margin-bottom: 10px;"><input type="checkbox" id="droidslayer-cheat-checkbox"><label
-                    for="droidslayer-cheat-checkbox">Next Shot Makes DroidSlayer</label></div>
-            <div style="margin-bottom: 10px;"><input type="checkbox" id="damage-numbers-checkbox" checked><label
-                    for="damage-numbers-checkbox">Show Damage Numbers</label></div>
-            <div style="margin-bottom: 10px;"><input type="checkbox" id="debug-mode-checkbox"><label
-                    for="debug-mode-checkbox">Debug Mode (NPC Stats)</label></div>
-            <div style="margin-bottom: 10px;"><label for="pamphlets-input">Pamphlets:</label><input type="number"
-                    id="pamphlets-input" value="999" style="width: 60px;"><button id="set-pamphlets-button">Set</button>
+            <div id="ally-box-4" class="ally-box">
+                <div class="ally-health-overlay"></div>
+                <div class="ally-health-overlay-face"></div><img><span class="ally-name"></span>
+                <div class="ally-color-footer"></div>
             </div>
-            <div style="margin-bottom: 10px;">
-                <div id="current-level-display"
-                    style="color: #0ff; font-size: 18px; text-align: center; margin-bottom: 10px; font-weight: bold;">
-                    Current Level: 1</div><button id="level-up-cheat-btn"
-                    style="width: 100%; padding: 10px; background: #004400; color: #0f0; border: 2px solid #0f0; cursor: pointer; font-size: 14px;">LEVEL
-                    UP </button>
+        </div><img id="health-energy-overlay" src="data/pngs/HUD/health_energy_overlay.png">
+        <div class="player-gauges-container"><canvas id="health-gauge-canvas" class="gauge-canvas"></canvas><canvas
+                id="power-gauge-canvas" class="gauge-canvas"></canvas></div>
+        <div class="weapon-display">
+            <div class="ammo-label">WEAPON</div>
+            <div id="gameHudWeapon">PAMPHLET</div>
+        </div>
+        <div class="ammo-display">
+            <div id="gameHudAmmo"></div>
+        </div>
+        <div id="faction-relationship-hud"><svg id="faction-lines-svg" width="100%" height="100%"></svg>
+            <div id="faction-node-shadow-0" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-0" class="faction-node"></div>
+            <div id="faction-node-shadow-1" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-1" class="faction-node"></div>
+            <div id="faction-node-shadow-2" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-2" class="faction-node"></div>
+            <div id="faction-node-shadow-3" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-3" class="faction-node"></div>
+            <div id="faction-node-shadow-4" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-4" class="faction-node"></div>
+            <div id="faction-node-shadow-5" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-5" class="faction-node"></div>
+            <div id="faction-node-shadow-6" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-6" class="faction-node"></div>
+            <div id="faction-node-shadow-7" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-7" class="faction-node"></div>
+            <div id="faction-node-shadow-8" class="faction-node faction-node-shadow"></div>
+            <div id="faction-node-8" class="faction-node"></div>
+        </div>
+        <div id="faction-avatar-container"><img id="hologonk-avatar-relocated"
+                src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Animated Gonk Avatar"></div>
+        <div id="song-title-display"></div>
+        <div id="song-category-display"></div>
+        <div id="music-volume-display"></div>
+        <div class="crosshair"></div>
+    </div>
+    <div id="loading-screen"></div>
+    <div id="cheats-menu"
+        style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; border: 1px solid #777; z-index: 10000; width: 400px; font-family: sans-serif;">
+        <h2
+            style="text-align: center; margin-top: 0; color: #eee; font-size: 1.2em; border-bottom: 1px solid #555; padding-bottom: 10px;">
+            Cheats</h2>
+
+        <!-- Two Column Checkboxes Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+            <div>
+                <input type="checkbox" id="no-clipping-checkbox">
+                <label for="no-clipping-checkbox">No Clipping</label>
             </div>
-            <div style="margin-bottom: 10px;"><label for="add-module-dropdown"
-                    style="display: block; color: #0ff; font-size: 14px; margin-bottom: 5px;">Add Module:</label><select
-                    id="add-module-dropdown"
-                    style="width: 100%; padding: 8px; background: #222; color: #0ff; border: 1px solid #0ff; font-family: 'Courier New', monospace; font-size: 12px; margin-bottom: 5px;">
-                    <option value="">-- Select Module --</option>
-                </select><button id="add-module-cheat-btn"
-                    style="width: 100%; padding: 10px; background: #004444; color: #0ff; border: 2px solid #0ff; cursor: pointer; font-size: 14px;">ADD
-                    MODULE </button></div>
-            <div style="margin-bottom: 5px;"><button id="fill-modules-cheat-btn"
-                    style="width: 100%; padding: 10px; background: #440044; color: #f0f; border: 2px solid #f0f; cursor: pointer; font-size: 14px;">FILL
-                    MODULES</button></div>
-            <div style="margin-bottom: 10px;"><button id="level-up-modules-cheat-btn"
-                    style="width: 100%; padding: 10px; background: #444400; color: #ff0; border: 2px solid #ff0; cursor: pointer; font-size: 14px;">LEVEL
-                    UP MODULES (ALL)</button></div><button id="close-cheats-menu"
-                style="position: absolute; top: 5px; right: 5px;">X</button>
+            <div>
+                <input type="checkbox" id="invincibility-checkbox">
+                <label for="invincibility-checkbox">Invincibility</label>
+            </div>
+            <div>
+                <input type="checkbox" id="droidslayer-cheat-checkbox">
+                <label for="droidslayer-cheat-checkbox">Next Shot Kill</label>
+            </div>
+            <div>
+                <input type="checkbox" id="damage-numbers-checkbox" checked>
+                <label for="damage-numbers-checkbox">Dmg Numbers</label>
+            </div>
+            <div>
+                <input type="checkbox" id="debug-mode-checkbox">
+                <label for="debug-mode-checkbox">Debug Mode</label>
+            </div>
+            <!-- Debug Features merged here -->
+            <div>
+                <input type="checkbox" id="toggle-water" checked>
+                <label for="toggle-water">Water Anim</label>
+            </div>
+            <div>
+                <input type="checkbox" id="toggle-smoothing" checked>
+                <label for="toggle-smoothing">Smooth Rot</label>
+            </div>
+            <div>
+                <input type="checkbox" id="toggle-validation" checked>
+                <label for="toggle-validation">Validate Lvl</label>
+            </div>
+            <div>
+                <input type="checkbox" id="toggle-scaling" checked>
+                <label for="toggle-scaling">UI Scaling</label>
+            </div>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-        <script src="character_upgrades.js"></script>
-        <script src="map_screen.js"></script>
-        <div id="droidsmith-menu"
-            style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; border: 1px solid white; z-index: 10000; width: 400px;">
-            <h2 style="text-align: center;">Item Trader</h2>
-            <div id="droidsmith-options">
-                <div>
-                    <h3>Gonk</h3>
-                    <p>Standard chassis,
-                        no modifications.</p><button class="droidsmith-option" data-chassis="gonk"
-                        data-cost="0">Select</button>
-                </div>
-                <hr>
-                <div>
-                    <h3>Mouse Droid</h3>
-                    <p>Lower height,
-                        x2 speed,
-                        max one weapon. Cost: 500 Wire</p><button class="droidsmith-option" data-chassis="mouse"
-                        data-cost="500">Unlock</button>
-                </div>
-                <hr>
-                <div>
-                    <h3>HK</h3>
-                    <p>Higher vision,
-                        enhanced jump,
-                        up to 7 weapons. Cost: 1000 Wire</p><button class="droidsmith-option" data-chassis="hk"
-                        data-cost="1000">Unlock</button>
-                </div>
-            </div><button id="close-droidsmith-menu" style="position: absolute; top: 5px; right: 5px;">X</button>
+
+        <!-- Level Controls -->
+        <div style="border-top: 1px solid #555; padding-top: 10px; margin-bottom: 10px;">
+            <div id="current-level-display"
+                style="text-align: center; font-weight: bold; margin-bottom: 5px; color: #ccc;">Current Level: 1</div>
+            <button id="level-up-cheat-btn"
+                style="width: 100%; padding: 6px; background: #ddd; color: #333; border: none; cursor: pointer; margin-bottom: 5px;">Level
+                Up Player</button>
+            <button onclick="location.reload()"
+                style="width: 100%; padding: 6px; background: #999; color: #000; border: none; cursor: pointer;">Reload
+                App</button>
         </div>
-        <div id="armorer-menu"
-            style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; border: 1px solid white; z-index: 10000; width: 400px;">
-            <h2 style="text-align: center;">The Armorer</h2>
-            <div id="armorer-options">
-                <div>
-                    <h3>Duraplate</h3>
-                    <p>HP increased by 10%. Unlock cost: 200 Wire.</p><button class="armorer-option"
-                        data-armor="duraplate" data-unlock-cost="200">Unlock</button><button class="armorer-purchase"
-                        data-armor="duraplate" data-cost="100">Purchase (100 Credits)</button>
-                </div>
-                <hr>
-                <div>
-                    <h3>Superplate</h3>
-                    <p>HP increased by 50%. Unlock cost: 500 Wire.</p><button class="armorer-option"
-                        data-armor="superplate" data-unlock-cost="500">Unlock</button><button class="armorer-purchase"
-                        data-armor="superplate" data-cost="300">Purchase (300 Credits)</button>
-                </div>
-                <hr>
-                <div>
-                    <h3>Beskar</h3>
-                    <p>HP increased by 50% and take 10% less damage. Unlock cost: 1000 Wire.</p><button
-                        class="armorer-option" data-armor="beskar" data-unlock-cost="1000">Unlock</button><button
-                        class="armorer-purchase" data-armor="beskar" data-cost="800">Purchase (800 Credits)</button>
-                </div>
-                <hr>
-                <div>
-                    <h3>Molecular Bonding</h3>
-                    <p>HP decreased 30% and take 50% less damage. Unlock cost: 1500 Wire.</p><button
-                        class="armorer-option" data-armor="molecular_bonding"
-                        data-unlock-cost="1500">Unlock</button><button class="armorer-purchase"
-                        data-armor="molecular_bonding" data-cost="1200">Purchase (1200 Credits)</button>
-                </div>
-            </div><button id="close-armorer-menu" style="position: absolute; top: 5px; right: 5px;">X</button>
+
+        <!-- Items/Modules -->
+        <div style="border-top: 1px solid #555; padding-top: 10px; margin-bottom: 10px;">
+            <div style="display: flex; gap: 5px; margin-bottom: 5px; align-items: center;">
+                <label for="pamphlets-input" style="font-size: 0.9em;">Pamphlets:</label>
+                <input type="number" id="pamphlets-input" value="999" style="width: 50px;">
+                <button id="set-pamphlets-button"
+                    style="padding: 2px 8px; cursor: pointer; background: #ddd; border: none; color: #333;">Set</button>
+            </div>
+
+            <div style="display: flex; gap: 5px; margin-bottom: 5px;">
+                <select id="add-module-dropdown"
+                    style="flex-grow: 1; padding: 4px; background: #222; color: #eee; border: 1px solid #555;">
+                    <option value="">-- Add Module --</option>
+                </select>
+                <button id="add-module-cheat-btn"
+                    style="padding: 4px 8px; cursor: pointer; background: #ddd; border: none; color: #333;">Add</button>
+            </div>
+
+            <div style="display: flex; gap: 5px;">
+                <button id="fill-modules-cheat-btn"
+                    style="flex: 1; padding: 6px; background: #ddd; color: #333; border: none; cursor: pointer;">Fill
+                    Mods</button>
+                <button id="level-up-modules-cheat-btn"
+                    style="flex: 1; padding: 6px; background: #ddd; color: #333; border: none; cursor: pointer;">Lvl Up
+                    Mods</button>
+            </div>
         </div>
-        <div id="weapon-vendor-menu"
-            style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; border: 1px solid white; z-index: 10000; width: 400px;">
-            <h2 style="text-align: center;">Weapon Vendor</h2>
-            <div id="weapon-vendor-options">
-                <div>
-                    <h3>Pistol DL-44</h3>
-                    <p>Unlock cost: 300 Wire.</p><button class="weapon-vendor-option" data-weapon="dl44"
-                        data-unlock-cost="300">Unlock</button><button class="weapon-vendor-purchase" data-weapon="dl44"
-                        data-cost="150">Purchase (150 Credits)</button>
-                </div>
-                <hr>
-                <div>
-                    <h3>E-11</h3>
-                    <p>Unlock cost: 400 Wire.</p><button class="weapon-vendor-option" data-weapon="e11"
-                        data-unlock-cost="400">Unlock</button><button class="weapon-vendor-purchase" data-weapon="e11"
-                        data-cost="200">Purchase (200 Credits)</button>
-                </div>
-            </div><button id="close-weapon-vendor-menu" style="position: absolute; top: 5px; right: 5px;">X</button>
-        </div>
-        <div id="guide-menu"
-            style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000;">
-            <iframe src="data/InteractiveScreens/the_guide.html"
-                style="width: 100%; height: 100%; border: none;"></iframe>
-        </div>
-        <script>class ScriptLoader {
-                constructor() {
-                    this.scriptsToLoad = [ // --- CORE FOUNDATION (INSTANTIATION) ---
 
-                        // These must be loaded first to ensure global singletons are available before use in initGame/Game constructor.
-                        {
-                            path: 'game_and_character_config.js', name: 'Game Config'
+        <button onclick="if(window.levelManager) window.levelManager.loadLevel(99);"
+            style="width: 100%; padding: 8px; background: #555; color: #fff; border: none; cursor: pointer;">Test
+            StarChain (Lvl 99)</button>
+
+        <button id="close-cheats-menu"
+            style="position: absolute; top: 10px; right: 10px; background: transparent; border: none; color: #aaa; font-weight: bold; cursor: pointer; font-size: 1.2em;">✕</button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="character_upgrades.js"></script>
+    <script src="StarChainGenerator.js?v=fix_scg"></script>
+    <script src="map_screen.js"></script>
+    <div id="droidsmith-menu"
+        style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; border: 1px solid white; z-index: 10000; width: 400px;">
+        <h2 style="text-align: center;">Item Trader</h2>
+        <div id="droidsmith-options">
+            <div>
+                <h3>Gonk</h3>
+                <p>Standard chassis,
+                    no modifications.</p><button class="droidsmith-option" data-chassis="gonk"
+                    data-cost="0">Select</button>
+            </div>
+            <hr>
+            <div>
+                <h3>Mouse Droid</h3>
+                <p>Lower height,
+                    x2 speed,
+                    max one weapon. Cost: 500 Wire</p><button class="droidsmith-option" data-chassis="mouse"
+                    data-cost="500">Unlock</button>
+            </div>
+            <hr>
+            <div>
+                <h3>HK</h3>
+                <p>Higher vision,
+                    enhanced jump,
+                    up to 7 weapons. Cost: 1000 Wire</p><button class="droidsmith-option" data-chassis="hk"
+                    data-cost="1000">Unlock</button>
+            </div>
+        </div><button id="close-droidsmith-menu" style="position: absolute; top: 5px; right: 5px;">X</button>
+    </div>
+    <div id="armorer-menu"
+        style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; border: 1px solid white; z-index: 10000; width: 400px;">
+        <h2 style="text-align: center;">The Armorer</h2>
+        <div id="armorer-options">
+            <div>
+                <h3>Duraplate</h3>
+                <p>HP increased by 10%. Unlock cost: 200 Wire.</p><button class="armorer-option" data-armor="duraplate"
+                    data-unlock-cost="200">Unlock</button><button class="armorer-purchase" data-armor="duraplate"
+                    data-cost="100">Purchase (100 Credits)</button>
+            </div>
+            <hr>
+            <div>
+                <h3>Superplate</h3>
+                <p>HP increased by 50%. Unlock cost: 500 Wire.</p><button class="armorer-option" data-armor="superplate"
+                    data-unlock-cost="500">Unlock</button><button class="armorer-purchase" data-armor="superplate"
+                    data-cost="300">Purchase (300 Credits)</button>
+            </div>
+            <hr>
+            <div>
+                <h3>Beskar</h3>
+                <p>HP increased by 50% and take 10% less damage. Unlock cost: 1000 Wire.</p><button
+                    class="armorer-option" data-armor="beskar" data-unlock-cost="1000">Unlock</button><button
+                    class="armorer-purchase" data-armor="beskar" data-cost="800">Purchase (800 Credits)</button>
+            </div>
+            <hr>
+            <div>
+                <h3>Molecular Bonding</h3>
+                <p>HP decreased 30% and take 50% less damage. Unlock cost: 1500 Wire.</p><button class="armorer-option"
+                    data-armor="molecular_bonding" data-unlock-cost="1500">Unlock</button><button
+                    class="armorer-purchase" data-armor="molecular_bonding" data-cost="1200">Purchase (1200
+                    Credits)</button>
+            </div>
+        </div><button id="close-armorer-menu" style="position: absolute; top: 5px; right: 5px;">X</button>
+    </div>
+    <div id="weapon-vendor-menu"
+        style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.8); color: white; padding: 20px; border: 1px solid white; z-index: 10000; width: 400px;">
+        <h2 style="text-align: center;">Weapon Vendor</h2>
+        <div id="weapon-vendor-options">
+            <div>
+                <h3>Pistol DL-44</h3>
+                <p>Unlock cost: 300 Wire.</p><button class="weapon-vendor-option" data-weapon="dl44"
+                    data-unlock-cost="300">Unlock</button><button class="weapon-vendor-purchase" data-weapon="dl44"
+                    data-cost="150">Purchase (150 Credits)</button>
+            </div>
+            <hr>
+            <div>
+                <h3>E-11</h3>
+                <p>Unlock cost: 400 Wire.</p><button class="weapon-vendor-option" data-weapon="e11"
+                    data-unlock-cost="400">Unlock</button><button class="weapon-vendor-purchase" data-weapon="e11"
+                    data-cost="200">Purchase (200 Credits)</button>
+            </div>
+        </div><button id="close-weapon-vendor-menu" style="position: absolute; top: 5px; right: 5px;">X</button>
+    </div>
+    <div id="guide-menu"
+        style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000;">
+        <iframe src="data/InteractiveScreens/the_guide.html" style="width: 100%; height: 100%; border: none;"></iframe>
+    </div>
+    <script>class ScriptLoader {
+            constructor() {
+                this.scriptsToLoad = [ // --- CORE FOUNDATION (INSTANTIATION) ---
+
+                    // These must be loaded first to ensure global singletons are available before use in initGame/Game constructor.
+                    {
+                        path: 'game_and_character_config.js', name: 'Game Config'
+                    }
+
+                    ,
+                    {
+                        path: 'module_manager.js', name: 'Module Manager'
+                    }
+
+                    ,
+                    {
+                        path: 'character_stats_manager.js', name: 'Character Stats Manager'
+                    }
+
+                    ,
+                    {
+                        path: 'TabControls/animated_gauges.js', name: 'Animated Gauges'
+                    }
+
+                    ,
+                    {
+                        path: 'asset_loaders.js', name: 'Asset Loaders'
+                    }
+
+                    ,
+                    {
+                        path: 'furniture.js?v=5', name: 'Furniture'
+                    }
+
+
+
+                    ,
+                    {
+                        path: 'gonk_models.js', name: 'Gonk Models'
+                    }
+
+                    ,
+                    // External model definitions (loaded after core gonk_models.js)
+                    {
+                        path: 'data/models/irongolem/irongolem.js', name: 'Iron Golem Model'
+                    }
+
+                    ,
+                    {
+                        path: 'data/models/snowgolem/snowgolem.js', name: 'Snow Golem Model'
+                    }
+
+                    ,
+                    {
+                        path: 'data/models/pig/pig.js', name: 'Pig Model'
+                    }
+
+                    ,
+                    {
+                        path: 'data/models/creeper/creeper.js', name: 'Creeper Model'
+                    }
+
+                    ,
+                    {
+                        path: 'data/models/slime/slime.js', name: 'Slime Model'
+                    }
+
+                    ,
+                    {
+                        path: 'data/models/bat/bat.js', name: 'Bat Model'
+                    }
+
+                    ,
+                    {
+                        path: 'data/models/camel/camel.js', name: 'Camel Model'
+                    }
+
+                    ,
+                    {
+                        path: 'data/models/chicken/chicken.js', name: 'Chicken Model'
+                    }
+
+                    ,
+                    {
+                        path: 'data/models/ender_dragon/ender_dragon.js', name: 'Ender Dragon Model'
+                    }
+
+                    ,
+                    {
+                        path: 'data/models/llama/llama.js', name: 'Llama Model'
+                    }
+
+                    ,
+                    {
+                        path: 'data/models/villager_new/villager_new.js', name: 'VillagerNew Model'
+                    }
+
+                    ,
+                    {
+                        path: 'faction_manager.js', name: 'Faction Manager'
+                    }
+
+                    ,
+                    {
+                        path: 'weapon_pickup_manager.js', name: 'Weapon Pickup Manager'
+                    }
+
+                    ,
+                    {
+                        path: 'player_gear.js', name: 'Player Gear'
+                    }
+
+                    ,
+                    {
+                        path: 'damage_numbers.js', name: 'Damage Numbers'
+                    }
+
+                    ,
+                    {
+                        path: 'data/ClassesAndSkills/NPCjedi_and_saber_effects.js', name: 'NPC Jedi Effects'
+                    }
+
+                    ,
+                    {
+                        path: 'data/ClassesAndSkills/Gonkjedi_and_saber_effects.js', name: 'Gonk Jedi Effects'
+                    }
+
+
+                    ,
+                    {
+                        path: 'droidslayer_system.js', name: 'DroidSlayer System'
+                    }
+
+                    ,
+                    {
+                        path: 'quests/QuestUI.js', name: 'Quest UI'
+                    }
+
+                    ,
+                    {
+                        path: 'quests/QuestItemManager.js', name: 'Quest Item Manager'
+                    }
+
+                    ,
+                    {
+                        path: 'quests/QuestManager.js', name: 'Quest Manager'
+                    }
+
+                    ,
+                    {
+                        path: 'main.js?v=2', name: 'Main Engine'
+                    }
+
+                    ,
+
+                    // --- UTILITY/DEPENDENCIES ---
+                    {
+                        path: 'skybox_animator.js', name: 'Skybox Animator'
+                    }
+
+                    ,
+                    {
+                        path: 'audio_system.js', name: 'Audio System'
+                    }
+
+                    ,
+                    {
+                        path: 'loadingScreenManager.js?v=bypass_test', name: 'Loading Screen Manager'
+                    }
+
+                    ,
+                    {
+                        path: 'endOfLevelManager.js?v=bypass_test', name: 'End of Level Manager'
+                    }
+
+                    ,
+                    {
+                        path: 'environment_and_physics.js?v=2', name: 'Environment & Physics'
+                    }
+
+                    ,
+                    {
+                        path: 'npc_behavior.js', name: 'NPC Behavior'
+                    }
+
+                    ,
+                    {
+                        path: 'npc_behavior_death.js', name: 'NPC Behavior Death'
+                    }
+
+                    ,
+                    {
+                        path: 'enemy_spawn_point.js', name: 'Enemy Spawn Point'
+                    }
+
+                    ,
+                    {
+                        path: 'slicing_system.js', name: 'Slicing System'
+                    }
+
+                    ,
+                    {
+                        path: 'interaction_system.js', name: 'Interaction System'
+                    }
+
+                    ,
+                    {
+                        path: 'conversation_controller.js', name: 'Conversation Controller'
+                    }
+
+                    ,
+                    {
+                        path: 'conversation_logger.js', name: 'Conversation Logger'
+                    }
+
+                    ,
+
+                    {
+                        path: 'faction_avatar_manager.js', name: 'Faction Avatar Manager'
+                    }
+
+                    ,
+                    {
+                        path: 'weapon_icons.js', name: 'Weapon Icons'
+                    }
+
+                    ,
+                    {
+                        path: 'data/npc_name_assigner.js', name: 'NPC Name Assigner'
+                    }
+
+                    ,
+                    {
+                        path: 'levelManager.js', name: 'Level Manager'
+                    }
+
+                    ,
+
+                    // --- UI/DEBUG (Lowest Priority) ---
+                    {
+                        path: 'TabControls/tab_faction_controls.js', name: 'Faction Tab Controls'
+                    }
+
+                    ,
+                    {
+                        path: 'TabControls/tab_charactersheet_controls.js', name: 'Character Sheet Tab Controls'
+                    }
+
+                    ,
+                    {
+                        path: 'TabControls/tab_gonkweapon_controls.js', name: 'Gonk Weapon Controls'
+                    }
+
+                    ,
+                    {
+                        path: 'TabControls/tab_controls.js', name: 'Tab Controls UI'
+                    }
+
+                    ,
+                    {
+                        path: 'TabControls/tab_hud_controls.js', name: 'HUD Controls Manager'
+                    }
+
+                    ,
+                    {
+                        path: 'conversation_ui_manager.js', name: 'Conversation UI Manager'
+                    }
+
+                ];
+            }
+
+            async loadGame() {
+                for (const script of this.scriptsToLoad) {
+                    try {
+                        await this.loadScript(script.path);
+
+                        if (script.name === 'Asset Loaders') {
+                            window.assetManager = new AssetManager();
                         }
+                    }
 
-                        ,
-                        {
-                            path: 'module_manager.js', name: 'Module Manager'
-                        }
-
-                        ,
-                        {
-                            path: 'character_stats_manager.js', name: 'Character Stats Manager'
-                        }
-
-                        ,
-                        {
-                            path: 'TabControls/animated_gauges.js', name: 'Animated Gauges'
-                        }
-
-                        ,
-                        {
-                            path: 'asset_loaders.js', name: 'Asset Loaders'
-                        }
-
-                        ,
-                        {
-                            path: 'furniture.js?v=5', name: 'Furniture'
-                        }
-
-
-
-                        ,
-                        {
-                            path: 'gonk_models.js', name: 'Gonk Models'
-                        }
-
-                        ,
-                        // External model definitions (loaded after core gonk_models.js)
-                        {
-                            path: 'data/models/irongolem/irongolem.js', name: 'Iron Golem Model'
-                        }
-
-                        ,
-                        {
-                            path: 'data/models/snowgolem/snowgolem.js', name: 'Snow Golem Model'
-                        }
-
-                        ,
-                        {
-                            path: 'data/models/pig/pig.js', name: 'Pig Model'
-                        }
-
-                        ,
-                        {
-                            path: 'data/models/creeper/creeper.js', name: 'Creeper Model'
-                        }
-
-                        ,
-                        {
-                            path: 'data/models/slime/slime.js', name: 'Slime Model'
-                        }
-
-                        ,
-                        {
-                            path: 'data/models/bat/bat.js', name: 'Bat Model'
-                        }
-
-                        ,
-                        {
-                            path: 'data/models/camel/camel.js', name: 'Camel Model'
-                        }
-
-                        ,
-                        {
-                            path: 'data/models/chicken/chicken.js', name: 'Chicken Model'
-                        }
-
-                        ,
-                        {
-                            path: 'data/models/ender_dragon/ender_dragon.js', name: 'Ender Dragon Model'
-                        }
-
-                        ,
-                        {
-                            path: 'data/models/llama/llama.js', name: 'Llama Model'
-                        }
-
-                        ,
-                        {
-                            path: 'data/models/villager_new/villager_new.js', name: 'VillagerNew Model'
-                        }
-
-                        ,
-                        {
-                            path: 'faction_manager.js', name: 'Faction Manager'
-                        }
-
-                        ,
-                        {
-                            path: 'weapon_pickup_manager.js', name: 'Weapon Pickup Manager'
-                        }
-
-                        ,
-                        {
-                            path: 'player_gear.js', name: 'Player Gear'
-                        }
-
-                        ,
-                        {
-                            path: 'damage_numbers.js', name: 'Damage Numbers'
-                        }
-
-                        ,
-                        {
-                            path: 'data/ClassesAndSkills/NPCjedi_and_saber_effects.js', name: 'NPC Jedi Effects'
-                        }
-
-                        ,
-                        {
-                            path: 'data/ClassesAndSkills/Gonkjedi_and_saber_effects.js', name: 'Gonk Jedi Effects'
-                        }
-
-
-                        ,
-                        {
-                            path: 'droidslayer_system.js', name: 'DroidSlayer System'
-                        }
-
-                        ,
-                        {
-                            path: 'quests/QuestUI.js', name: 'Quest UI'
-                        }
-
-                        ,
-                        {
-                            path: 'quests/QuestItemManager.js', name: 'Quest Item Manager'
-                        }
-
-                        ,
-                        {
-                            path: 'quests/QuestManager.js', name: 'Quest Manager'
-                        }
-
-                        ,
-                        {
-                            path: 'main.js?v=2', name: 'Main Engine'
-                        }
-
-                        ,
-
-                        // --- UTILITY/DEPENDENCIES ---
-                        {
-                            path: 'skybox_animator.js', name: 'Skybox Animator'
-                        }
-
-                        ,
-                        {
-                            path: 'audio_system.js', name: 'Audio System'
-                        }
-
-                        ,
-                        {
-                            path: 'loadingScreenManager.js', name: 'Loading Screen Manager'
-                        }
-
-                        ,
-                        {
-                            path: 'endOfLevelManager.js', name: 'End of Level Manager'
-                        }
-
-                        ,
-                        {
-                            path: 'environment_and_physics.js?v=2', name: 'Environment & Physics'
-                        }
-
-                        ,
-                        {
-                            path: 'npc_behavior.js', name: 'NPC Behavior'
-                        }
-
-                        ,
-                        {
-                            path: 'npc_behavior_death.js', name: 'NPC Behavior Death'
-                        }
-
-                        ,
-                        {
-                            path: 'enemy_spawn_point.js', name: 'Enemy Spawn Point'
-                        }
-
-                        ,
-                        {
-                            path: 'slicing_system.js', name: 'Slicing System'
-                        }
-
-                        ,
-                        {
-                            path: 'interaction_system.js', name: 'Interaction System'
-                        }
-
-                        ,
-                        {
-                            path: 'conversation_controller.js', name: 'Conversation Controller'
-                        }
-
-                        ,
-                        {
-                            path: 'conversation_logger.js', name: 'Conversation Logger'
-                        }
-
-                        ,
-
-                        {
-                            path: 'faction_avatar_manager.js', name: 'Faction Avatar Manager'
-                        }
-
-                        ,
-                        {
-                            path: 'weapon_icons.js', name: 'Weapon Icons'
-                        }
-
-                        ,
-                        {
-                            path: 'data/npc_name_assigner.js', name: 'NPC Name Assigner'
-                        }
-
-                        ,
-                        {
-                            path: 'levelManager.js', name: 'Level Manager'
-                        }
-
-                        ,
-
-                        // --- UI/DEBUG (Lowest Priority) ---
-                        {
-                            path: 'TabControls/tab_faction_controls.js', name: 'Faction Tab Controls'
-                        }
-
-                        ,
-                        {
-                            path: 'TabControls/tab_charactersheet_controls.js', name: 'Character Sheet Tab Controls'
-                        }
-
-                        ,
-                        {
-                            path: 'TabControls/tab_gonkweapon_controls.js', name: 'Gonk Weapon Controls'
-                        }
-
-                        ,
-                        {
-                            path: 'TabControls/tab_controls.js', name: 'Tab Controls UI'
-                        }
-
-                        ,
-                        {
-                            path: 'TabControls/tab_hud_controls.js', name: 'HUD Controls Manager'
-                        }
-
-                        ,
-                        {
-                            path: 'conversation_ui_manager.js', name: 'Conversation UI Manager'
-                        }
-
-                    ];
-                }
-
-                async loadGame() {
-                    for (const script of this.scriptsToLoad) {
-                        try {
-                            await this.loadScript(script.path);
-
-                            if (script.name === 'Asset Loaders') {
-                                window.assetManager = new AssetManager();
-                            }
-                        }
-
-                        catch (error) {
-                            console.error(`CRITICAL ERROR loading $ {
+                    catch (error) {
+                        console.error(`CRITICAL ERROR loading $ {
                             script.name
                         }
 
                         .`, error);
-                            return;
-                        }
+                        return;
                     }
-
-                    if (typeof initGame === 'function') initGame();
-                    else console.error('initGame function not found!');
                 }
 
-                loadScript(path) {
-                    return new Promise((resolve, reject) => {
-                        const script = document.createElement('script');
-                        script.src = path;
-                        script.async = false;
-                        script.onload = () => resolve();
+                if (typeof initGame === 'function') initGame();
+                else console.error('initGame function not found!');
+            }
 
-                        script.onerror = () => reject(new Error(`Failed to load script: $ {
+            loadScript(path) {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = path;
+                    script.async = false;
+                    script.onload = () => resolve();
+
+                    script.onerror = () => reject(new Error(`Failed to load script: $ {
                                 path
                             }
 
                             `));
-                        document.head.appendChild(script);
-                    });
+                    document.head.appendChild(script);
+                });
+            }
+        }
+
+        async function initGame() {
+            // Don't clear character state on init - only clear on true death (0 cores)
+            // localStorage.removeItem('gonk_character_state'); // REMOVED - persistence now handled in respawnPlayer()
+            console.log('--- GAME INITIALIZING ---');
+            // === INSTANTIATION ===
+            window.game = new Game();
+            window.weaponPickupManager = new WeaponPickupManager();
+            window.playerWeaponSystem = new PlayerWeaponSystem();
+            window.inputHandler = new InputHandler();
+
+            // Initialize external model definitions (Iron Golem, Snow Golem, Pig, Creeper, Slime)
+            if (window.gonkModels && window.gonkModels.initializeExternalModels) {
+                window.gonkModels.initializeExternalModels();
+            }
+
+            // Instantiation of LNM must be inside initGame because its class definition depends on previous scripts.
+            window.loadingScreenManager = new LoadingScreenManager();
+            window.endOfLevelManager = new EndOfLevelManager();
+
+            // assetManager is guaranteed to exist here due to script load order change.
+            await loadingScreenManager.loadTriviaData();
+            await assetManager.loadEssentialData();
+
+            // Load module system
+            if (window.moduleManager) {
+                await window.moduleManager.loadModules();
+            }
+
+            await window.questItemManager.init();
+            await window.questManager.init();
+            game.init();
+            window.gaugeManager = new GaugeManager();
+            window.gaugeManager.init(); // Initialize animated gauge system
+            window.conversationUIManager = new ConversationUIManager();
+            window.tabControls = new TabControls(game, window.playerWeaponSystem, window.physics);
+
+            // Apply all initial UI positions from tab control defaults to prevent "jumping"
+            setTimeout(() => {
+                if (window.tabControls) {
+                    window.tabControls.updateUIFromUI();
                 }
             }
 
-            async function initGame() {
-                // Don't clear character state on init - only clear on true death (0 cores)
-                // localStorage.removeItem('gonk_character_state'); // REMOVED - persistence now handled in respawnPlayer()
-                console.log('--- GAME INITIALIZING ---');
-                // === INSTANTIATION ===
-                window.game = new Game();
-                window.weaponPickupManager = new WeaponPickupManager();
-                window.playerWeaponSystem = new PlayerWeaponSystem();
-                window.inputHandler = new InputHandler();
+                , 100);
+            window.conversationUIManager.init(game.camera, game.canvas);
+            audioSystem.init(game.camera);
+            await audioSystem.initializeMusic();
+            window.factionAvatarManager = new FactionAvatarManager();
+            await window.factionAvatarManager.initialize();
 
-                // Initialize external model definitions (Iron Golem, Snow Golem, Pig, Creeper, Slime)
-                if (window.gonkModels && window.gonkModels.initializeExternalModels) {
-                    window.gonkModels.initializeExternalModels();
-                }
-
-                // Instantiation of LNM must be inside initGame because its class definition depends on previous scripts.
-                window.loadingScreenManager = new LoadingScreenManager();
-                window.endOfLevelManager = new EndOfLevelManager();
-
-                // assetManager is guaranteed to exist here due to script load order change.
-                await loadingScreenManager.loadTriviaData();
-                await assetManager.loadEssentialData();
-
-                // Load module system
-                if (window.moduleManager) {
-                    await window.moduleManager.loadModules();
-                }
-
-                await window.questItemManager.init();
-                await window.questManager.init();
-                game.init();
-                window.gaugeManager = new GaugeManager();
-                window.gaugeManager.init(); // Initialize animated gauge system
-                window.conversationUIManager = new ConversationUIManager();
-                window.tabControls = new TabControls(game, window.playerWeaponSystem, window.physics);
-
-                // Apply all initial UI positions from tab control defaults to prevent "jumping"
-                setTimeout(() => {
-                    if (window.tabControls) {
-                        window.tabControls.updateUIFromUI();
-                    }
-                }
-
-                    , 100);
-                window.conversationUIManager.init(game.camera, game.canvas);
-                audioSystem.init(game.camera);
-                await audioSystem.initializeMusic();
-                window.factionAvatarManager = new FactionAvatarManager();
-                await window.factionAvatarManager.initialize();
-
-                // Initialize slicing system
-                if (typeof SlicingSystem !== 'undefined') {
-                    window.slicingSystem = new SlicingSystem();
-                }
-
-                // Initialize map screen
-                initMapScreen();
-
-                await levelManager.loadLevel(1);
-                game.respawnAllies();
-                startGameLoop();
+            // Initialize slicing system
+            if (typeof SlicingSystem !== 'undefined') {
+                window.slicingSystem = new SlicingSystem();
             }
 
-            function startGameLoop() {
-                const clock = new THREE.Clock();
+            // Initialize map screen
+            initMapScreen();
 
-                function gameLoop() {
-                    requestAnimationFrame(gameLoop);
-                    if (!game.isInitialized) return;
-                    const deltaTime = clock.getDelta();
-                    const totalTime = clock.getElapsedTime();
+            // Initialize StarChain
+            window.starChainGenerator = new StarChainGenerator();
+            window.starChainGenerator.init();
 
-                    if (window.loadingScreenManager && window.loadingScreenManager.isActive) {
-                        window.loadingScreenManager.update();
-                        game.render();
-                        return;
-                    }
+            await levelManager.loadLevel(1);
+            game.respawnAllies();
+            startGameLoop();
+        }
 
-                    game.update(deltaTime, totalTime);
-                    window.conversationUIManager.update();
-                    window.gaugeManager.update(deltaTime); // Update animated gauges
-                    if (window.slicingSystem) window.slicingSystem.update(deltaTime);
+        // --- FEATURE TOGGLE SYSTEM ---
+        window.FeatureToggles = {
+            water: true,
+            smoothing: true,
+            validation: true,
+            scaling: true
+        };
 
-                    if (!game.state.isPaused) {
-                        for (const npc of game.entities.npcs) {
-                            npc.update(game.deltaTime, physics.playerCollider.position);
-                            npc.updateHitboxes();
+        function initFeatureToggles() {
+            const menu = document.getElementById('feature-toggle-menu');
+            const toggles = {
+                water: document.getElementById('toggle-water'),
+                smoothing: document.getElementById('toggle-smoothing'),
+                validation: document.getElementById('toggle-validation'),
+                scaling: document.getElementById('toggle-scaling')
+            };
+
+            // Sync initial state
+            for (const [key, el] of Object.entries(toggles)) {
+                el.checked = window.FeatureToggles[key];
+                el.addEventListener('change', (e) => {
+                    window.FeatureToggles[key] = e.target.checked;
+                    console.log(`Feature '${key}' set to ${e.target.checked}`);
+
+                    // Immediate Effects
+                    if (key === 'scaling') {
+                        if (e.target.checked) {
+                            document.body.classList.add('feature-scaling-active');
+                        } else {
+                            document.body.classList.remove('feature-scaling-active');
                         }
+                    }
+                });
+            }
 
-                        for (let i = game.entities.pickups.length - 1; i >= 0; i--) {
-                            const pickup = game.entities.pickups[i];
+            // Apply initial CSS state
+            document.body.classList.add('feature-scaling-active');
 
-                            if (pickup.update) {
-                                if (!pickup.update(game.deltaTime)) {
-                                    pickup.dispose();
-                                    game.entities.pickups.splice(i, 1);
-                                }
+            // Toggle Menu
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'KeyP') {
+                    if (menu.style.display === 'block') {
+                        menu.style.display = 'none';
+                    } else {
+                        menu.style.display = 'block';
+                    }
+                }
+            });
+        }
+
+        // Initialize toggles
+        initFeatureToggles();
+
+        let lastTime = 0;
+        function startGameLoop() {
+            const clock = new THREE.Clock();
+
+            function gameLoop() {
+                requestAnimationFrame(gameLoop);
+                if (!game.isInitialized) return;
+                const deltaTime = clock.getDelta();
+                const totalTime = clock.getElapsedTime();
+
+                if (window.loadingScreenManager && window.loadingScreenManager.isActive) {
+                    window.loadingScreenManager.update();
+                    game.render();
+                    if (game.levelRenderer && game.levelRenderer.updateWater) {
+                        if (window.FeatureToggles && window.FeatureToggles.water) {
+                            game.levelRenderer.updateWater(deltaTime);
+                        }
+                    } return;
+                }
+
+                game.update(deltaTime, totalTime);
+                window.conversationUIManager.update();
+                window.gaugeManager.update(deltaTime); // Update animated gauges
+                if (window.slicingSystem) window.slicingSystem.update(deltaTime);
+
+                if (!game.state.isPaused) {
+                    for (const npc of game.entities.npcs) {
+                        npc.update(game.deltaTime, physics.playerCollider.position);
+                        npc.updateHitboxes();
+                    }
+
+                    for (let i = game.entities.pickups.length - 1; i >= 0; i--) {
+                        const pickup = game.entities.pickups[i];
+
+                        if (pickup.update) {
+                            if (!pickup.update(game.deltaTime)) {
+                                pickup.dispose();
+                                game.entities.pickups.splice(i, 1);
                             }
                         }
-
-                        for (const npc of game.entities.npcs) npc.updateAnimation(game.deltaTime);
-                        physics.update(game.deltaTime, inputHandler, game.camera);
                     }
 
-                    game.render();
+                    for (const npc of game.entities.npcs) npc.updateAnimation(game.deltaTime);
+                    physics.update(game.deltaTime, inputHandler, game.camera);
                 }
 
-                requestAnimationFrame(gameLoop);
+                game.render();
             }
 
-            document.addEventListener('DOMContentLoaded', () => {
-                const loader = new ScriptLoader();
-                loader.loadGame();
-            });
-        </script>
+            requestAnimationFrame(gameLoop);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loader = new ScriptLoader();
+            loader.loadGame();
+        });
+    </script>
 </body>
 
 </html>

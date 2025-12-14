@@ -272,6 +272,57 @@ class AnimatedGauge {
 
         // Restore context state
         ctx.restore();
+
+        // --- NEW: Overlay Effects (Line & Text) ---
+        ctx.save();
+
+        // 1. Horizontal 1px Line at top of current value
+        // Only draw if we have some value and it's not empty, and not full (aesthetic choice, optional, but user asked for "at top of current value")
+        // Actually, user just said "at the top of the current value".
+        if (this.percentage > 0 && this.percentage < 1.0) {
+            const fillHeight = height * this.percentage;
+            const lineY = Math.floor(height - fillHeight) + 0.5; // +0.5 for crisp 1px line
+
+            // We need to clip the line to the circle so it doesn't bleed out
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = width / 2;
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.clip();
+
+            ctx.beginPath();
+            ctx.moveTo(0, lineY);
+            ctx.lineTo(width, lineY);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)'; // Bright white line
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // 2. Number Overlay
+        // Centered text showing current value
+        if (typeof this.currentValue !== 'undefined') { // Check if we have values
+            ctx.font = "bold 24px Arial"; // Awesome bold font
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            const textX = width / 2;
+            const textY = height / 2;
+
+            // Outline/Shadow for readability
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = "rgba(0, 0, 0, 0.8)";
+            ctx.strokeText(Math.floor(this.currentValue), textX, textY);
+
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fillText(Math.floor(this.currentValue), textX, textY);
+        }
+
+        ctx.restore();
+
     }
 
     renderFallback() {
@@ -405,12 +456,16 @@ class GaugeManager {
     updateHealth(current, max) {
         if (this.healthGauge && max > 0) {
             this.healthGauge.setPercentage(current / max);
+            this.healthGauge.currentValue = current; // Store for display
+            this.healthGauge.maxValue = max;
         }
     }
 
     updatePower(current, max, nextShotCost = 0) {
         if (this.powerGauge && max > 0) {
             this.powerGauge.setPercentage(current / max);
+            this.powerGauge.currentValue = current; // Store for display
+            this.powerGauge.maxValue = max;
 
             // Set preview for next shot
             if (nextShotCost > 0) {

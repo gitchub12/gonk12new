@@ -126,13 +126,44 @@ class LevelManager {
             let rawText;
             if (playtestDataString) {
                 rawText = playtestDataString;
+                const cleanText = rawText.split('\n').filter(line => !line.trim().startsWith('//') && !line.trim().startsWith('#')).join('\n');
+                levelData = JSON.parse(cleanText);
             } else {
-                const response = await fetch(`data/levels/level_${levelId}.json`);
-                if (!response.ok) throw new Error(`Level file not found for level_${levelId}.json`);
-                rawText = await response.text();
+                // SPECIAL TEST ID: 99 forces Procedural
+                if (window.starChainGenerator && levelId === 99) {
+                    console.log(`[LevelManager] Level 99 Requested. Forcing StarChain Generation...`);
+                    levelData = window.starChainGenerator.generateLevel(0); // Generate 'Level 1' of the chain
+                } else {
+                    try {
+                        // 1. Try to Load File First (Supports User Overrides)
+                        const response = await fetch(`data/levels/level_${levelId}.json`);
+                        if (!response.ok) throw new Error('404');
+                        rawText = await response.text();
+
+                        // Check for HTML 404 response that mimics 200 OK in some servers
+                        if (rawText.trim().startsWith('<')) throw new Error('Invalid JSON (HTML)');
+
+                        const cleanText = rawText.split('\n').filter(line => !line.trim().startsWith('//') && !line.trim().startsWith('#')).join('\n');
+                        levelData = JSON.parse(cleanText);
+
+                    } catch (e) {
+                        // 2. Fallback to Procedural Generation
+                        console.warn(`[LevelManager] Level ${levelId} file invalid or missing. Attempting StarChain...`, e);
+
+                        if (window.starChainGenerator && levelId >= 20) {
+                            // If Level 99 (Test), use index 0. Otherwise use levelId - 1.
+                            // Also ensure we wrap around if levelId exceeds node count to prevent crashes?
+                            const genIndex = (levelId === 99) ? 0 : (levelId - 1);
+                            levelData = window.starChainGenerator.generateLevel(genIndex);
+                        }
+
+                        // 3. Final Fail
+                        if (!levelData) {
+                            throw new Error(`Failed to load Level ${levelId}.`);
+                        }
+                    }
+                }
             }
-            const cleanText = rawText.split('\n').filter(line => !line.trim().startsWith('//') && !line.trim().startsWith('#')).join('\n');
-            levelData = JSON.parse(cleanText);
 
             // Decompress if needed (auto-detects v2 compressed format)
             levelData = this.decompressLevel(levelData);
@@ -217,6 +248,9 @@ class LevelManager {
                 if (window.game && window.levelRenderer.furnitureObjects) {
                     window.game.entities.furniture = window.levelRenderer.furnitureObjects.filter(f => f.userData.isQuestVendor);
                 }
+            }
+            if (levelData.layers.furniture) {
+                levelRenderer.buildFurniture(levelData.layers.furniture);
             }
             if (levelData.layers.enemy_spawn_points) {
                 levelRenderer.buildEnemySpawnPoints(levelData.layers.enemy_spawn_points);

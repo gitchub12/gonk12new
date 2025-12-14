@@ -247,7 +247,7 @@ class TabControls {
             <div class="control-group"><label>Pitch: <span id="npc_rotX_val">0.0</span></label><input type="range" class="npc-weapon-slider" id="npc_weapon_rotX" min="-180" max="180" value="0" step="0.1"></div>
             <div class="control-group"><label>Yaw: <span id="npc_rotY_val">-90.0</span></label><input type="range" class="npc-weapon-slider" id="npc_weapon_rotY" min="-180" max="180" value="-90" step="0.1"></div>
             <div class="control-group"><label>Roll: <span id="npc_rotZ_val">0.0</span></label><input type="range" class="npc-weapon-slider" id="npc_weapon_rotZ" min="-180" max="180" value="0" step="0.1"></div><hr>
-            <div class="control-group"><label>Scale: <span id="npc_scale_val">266</span></label><input type="range" class="npc-weapon-slider" id="npc_weapon_scale" min="1" max="500" value="266" step="1"></div>
+            <div class="control-group"><label>Scale: <span id="npc_scale_val">1.0</span></label><input type="range" class="npc-weapon-slider" id="npc_weapon_scale" min="0.1" max="5.0" value="1.0" step="0.1"></div>
             <hr><h4>Weapon Planes</h4>
             <div class="control-group"><label>Plane Distance (x1000): <span id="npc_plane_dist_val">10.0</span></label><input type="range" class="npc-weapon-slider" id="npc_weapon_plane_dist" min="-0.02" max="0.03" value="0.01" step="0.0001"></div>
             <div class="control-group"><label>Plane Yaw Angle: <span id="npc_plane_yaw_val">0.50</span></label><input type="range" class="npc-weapon-slider" id="npc_weapon_plane_yaw" min="-2" max="2" value="0.5" step="0.01"></div>
@@ -265,9 +265,8 @@ class TabControls {
 
         const rightPanelHTML = `
             <div class="editor-main-content">
-                <div id="npc-weapon-pane" class="tab-pane active">${npcWeaponSliderHTML}</div>
-            </div>
-            <div class="tab-buttons">${weaponCatTabs}</div>`;
+                <!-- Content Moved to Left Panel -->
+            </div>`;
 
         // Generate character sheet controls HTML
         const charSheetHTML = window.characterSheetTabControls ? window.characterSheetTabControls.createTabContent() : '<p style="color: #f00;">CharacterSheetTabControls not loaded</p>';
@@ -281,6 +280,12 @@ class TabControls {
                 <div id="tab-pane-speed" class="tab-pane">${speedHTML}</div>
                 <div id="tab-pane-range" class="tab-pane">${rangeHTML}</div>
                 <div id="tab-pane-npcs" class="tab-pane">${npcPoseHTML}</div>
+                <div id="tab-pane-npc-weapons" class="tab-pane">
+                    <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 15px; border-bottom: 1px solid #555; padding-bottom: 10px;">
+                        ${weaponCatTabs}
+                    </div>
+                    ${npcWeaponSliderHTML}
+                </div>
                 <div id="tab-pane-player-weapon" class="tab-pane">${playerWeaponHTML}</div>
                 <div id="tab-pane-label" class="tab-pane active">${labelHTML}</div>
                 <div id="tab-pane-ui" class="tab-pane">${uiPositionHTML}</div>
@@ -298,6 +303,7 @@ class TabControls {
                 <button class="editor-tab-btn" data-tab="tab-pane-speed">Speed</button>
                 <button class="editor-tab-btn" data-tab="tab-pane-range">Range</button>
                 <button class="editor-tab-btn" data-tab="tab-pane-npcs">NPCs</button>
+                <button class="editor-tab-btn" data-tab="tab-pane-npc-weapons">NPC Weapons</button>
                 <button class="editor-tab-btn" data-tab="tab-pane-player-weapon">Player Weapon</button>
                 <button class="editor-tab-btn" data-tab="tab-pane-label">Label</button>
                 <button class="editor-tab-btn active" data-tab="tab-pane-ui">UI</button>

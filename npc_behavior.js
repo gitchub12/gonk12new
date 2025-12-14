@@ -912,6 +912,31 @@ class NPC {
     }
 
 
+    // SMOOTH ROTATION HELPER
+    rotateTowards(targetPos, deltaTime, turnSpeed = 5.0) {
+        const direction = new THREE.Vector3().subVectors(targetPos, this.mesh.group.position);
+        direction.y = 0; // Keep rotation horizontal
+        if (direction.lengthSq() > 0.001) {
+            direction.normalize();
+            const targetRotation = Math.atan2(direction.x, direction.z);
+
+            // Smoothly interpolate current rotation to target rotation
+            let currentRotation = this.mesh.group.rotation.y;
+
+            // Normalize angle difference to -PI to PI
+            let diff = targetRotation - currentRotation;
+            while (diff > Math.PI) diff -= Math.PI * 2;
+            while (diff < -Math.PI) diff += Math.PI * 2;
+
+            const step = turnSpeed * deltaTime;
+            if (Math.abs(diff) < step) {
+                this.mesh.group.rotation.y = targetRotation;
+            } else {
+                this.mesh.group.rotation.y += Math.sign(diff) * step;
+            }
+        }
+    }
+
     update(deltaTime) {
         if (this.isDead) return;
         if (this.reactionTimer > 0) this.reactionTimer -= deltaTime;
@@ -1077,7 +1102,8 @@ class NPC {
                     // The body should only rotate on the Y-axis to prevent tilting.
                     const lookAtTarget = targetCollider.position.clone();
                     lookAtTarget.y = this.mesh.group.position.y;
-                    this.mesh.group.lookAt(lookAtTarget);
+                    // this.mesh.group.lookAt(lookAtTarget); // OLD SNAP ROTATION
+                    this.rotateTowards(lookAtTarget, deltaTime, 10.0); // Fast turn for combat
 
                     const visionPoints = this.getVisionPoints(this.target);
                     if (!visionPoints) { // Target might have become invalid between checks
@@ -1112,7 +1138,8 @@ class NPC {
                         const direction = this.wanderTarget.clone().sub(this.mesh.group.position).normalize();
                         this.velocity.x = direction.x * this.speed;
                         this.velocity.z = direction.z * this.speed;
-                        this.mesh.group.lookAt(this.wanderTarget.x, this.mesh.group.position.y, this.wanderTarget.z);
+                        // this.mesh.group.lookAt(this.wanderTarget.x, this.mesh.group.position.y, this.wanderTarget.z);
+                        this.rotateTowards(this.wanderTarget, deltaTime, 5.0);
                         isMoving = true;
                     } else {
                         this.wanderTarget = null;
@@ -1152,7 +1179,8 @@ class NPC {
                         const direction = this.followTarget.clone().sub(this.mesh.group.position).normalize();
                         this.velocity.x = direction.x * this.speed;
                         this.velocity.z = direction.z * this.speed;
-                        this.mesh.group.lookAt(this.followTarget.x, this.mesh.group.position.y, this.followTarget.z);
+                        // this.mesh.group.lookAt(this.followTarget.x, this.mesh.group.position.y, this.followTarget.z);
+                        this.rotateTowards(this.followTarget, deltaTime, 5.0);
                         isMoving = true;
                     } else {
                         // Ally is at its follow position, now perform idle actions
@@ -1166,12 +1194,14 @@ class NPC {
                                 this.wanderTarget = null; // Clear wander target
                                 const playerPos = physics.playerCollider.position.clone();
                                 playerPos.y = this.mesh.group.position.y; // Only look horizontally
-                                this.mesh.group.lookAt(playerPos);
+                                // this.mesh.group.lookAt(playerPos);
+                                this.rotateTowards(playerPos, deltaTime, 2.0); // Slow look
                             } else { // 30% chance to look around randomly
                                 this.wanderTarget = null; // Clear wander target
                                 const lookAtPoint = this.followTarget.clone().add(new THREE.Vector3((Math.random() - 0.5) * 5, 0, (Math.random() - 0.5) * 5));
                                 lookAtPoint.y = this.mesh.group.position.y; // Only look horizontally
-                                this.mesh.group.lookAt(lookAtPoint);
+                                // this.mesh.group.lookAt(lookAtPoint);
+                                this.rotateTowards(lookAtPoint, deltaTime, 2.0);
                             }
                         }
 
@@ -1180,7 +1210,8 @@ class NPC {
                                 const direction = this.wanderTarget.clone().sub(this.mesh.group.position).normalize();
                                 this.velocity.x = direction.x * this.speed * 0.3; // Wander slowly
                                 this.velocity.z = direction.z * this.speed * 0.3;
-                                this.mesh.group.lookAt(this.wanderTarget.x, this.mesh.group.position.y, this.wanderTarget.z);
+                                // this.mesh.group.lookAt(this.wanderTarget.x, this.mesh.group.position.y, this.wanderTarget.z);
+                                this.rotateTowards(this.wanderTarget, deltaTime, 3.0);
                                 isMoving = true;
                             } else {
                                 this.wanderTarget = null;
@@ -1221,7 +1252,11 @@ class NPC {
                 // Make them face each other
                 const lookAtTarget = otherPosition.clone();
                 lookAtTarget.y = myPosition.y;
-                this.mesh.group.lookAt(lookAtTarget);
+                if (window.FeatureToggles && window.FeatureToggles.smoothing) {
+                    this.rotateTowards(lookAtTarget, deltaTime, 5.0);
+                } else {
+                    this.mesh.group.lookAt(lookAtTarget);
+                }
 
                 // Calculate desired distance (collision radiuses almost touching)
                 const myRadius = this.config.collision_radius || 0.5;

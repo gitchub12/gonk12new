@@ -33,7 +33,7 @@ class LoadingScreenManager {
         this.mouse = { x: 0, y: 0 };
         this.accumulatedX = 0;
         this.accumulatedY = 0;
-        this.selectionThreshold = 50; 
+        this.selectionThreshold = 50;
         this.highlightedElement = null;
 
         document.addEventListener('mousemove', e => {
@@ -42,6 +42,8 @@ class LoadingScreenManager {
         });
 
         this.update = this.update.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        document.addEventListener('click', this.handleClick);
     }
 
     handleClick() {
@@ -90,8 +92,14 @@ class LoadingScreenManager {
     }
 
     show() {
-        game.state.isPaused = true; 
+        game.state.isPaused = true;
         this.status.style.display = 'none';
+
+        // TEMPORARY: DISABLE FOR TESTING
+        console.log("BYPASSING TRIVIA SCREEN...");
+        this.finishLoading();
+        this.hide();
+        return;
 
         if (!this.triviaData) {
             this.container.style.display = 'flex';
@@ -203,9 +211,9 @@ class LoadingScreenManager {
                 const mouseX = this.mouse.x, mouseY = this.mouse.y;
                 const centerX = screenW / 2, centerY = screenH / 2;
                 const dx = mouseX - centerX, dy = mouseY - centerY;
-                if (Math.abs(dx) < Math.abs(dy)) { 
+                if (Math.abs(dx) < Math.abs(dy)) {
                     newHighlight = (dy < 0) ? this.answers.top : this.answers.bottom;
-                } else { 
+                } else {
                     newHighlight = (dx < 0) ? this.answers.left : this.answers.right;
                 }
             }
@@ -231,7 +239,7 @@ class LoadingScreenManager {
 
         if (isCorrect) {
             if (window.audioSystem) audioSystem.playSound('triviacorrect');
-            
+
             const elapsedSeconds = (performance.now() - this.triviaStartTime) / 1000;
             let wireBonus = 0;
             if (elapsedSeconds <= 6) wireBonus = 5;
@@ -242,7 +250,7 @@ class LoadingScreenManager {
 
             if (window.game && window.game.state) {
                 window.game.state.wire = (window.game.state.wire || 0) + wireBonus;
-                if(window.game.updateWireCount) window.game.updateWireCount();
+                if (window.game.updateWireCount) window.game.updateWireCount();
             }
 
             this.showFeedback('Correct!', true, `+${wireBonus} wire`);
@@ -273,7 +281,7 @@ class LoadingScreenManager {
             bonusSpan.style.fontWeight = 'bold';
             this.feedbackPopup.appendChild(bonusSpan);
         }
-        
+
         this.feedbackPopup.className = 'feedback-popup ' + (isCorrect ? 'correct' : 'incorrect');
         this.feedbackPopup.style.display = 'block';
     }
@@ -289,7 +297,7 @@ class LoadingScreenManager {
         this.isActive = false;
         this.currentCorrectAnswer = '';
         this.isGameReady = false;
-        game.state.isPaused = false; 
+        game.state.isPaused = false;
         if (game.hudContainer) game.hudContainer.style.display = 'block';
         if (game.canvas) game.canvas.requestPointerLock();
     }

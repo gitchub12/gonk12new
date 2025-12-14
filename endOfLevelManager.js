@@ -29,6 +29,10 @@ class EndOfLevelManager {
     }
 
     show(stats) {
+        // TEMPORARY: DISABLE FOR TESTING
+        console.log("BYPASSING END-OF-LEVEL SCREEN...");
+        return Promise.resolve();
+
         return new Promise(async (resolve) => {
             this.resolvePromise = resolve;
 
@@ -38,10 +42,10 @@ class EndOfLevelManager {
                 spawnersSliced: Math.floor(Math.random() * 3),
                 alliesMade: Math.floor(Math.random() * 2),
                 friendsMade: Math.floor(Math.random() * 5),
-                factionChanges: [{faction: 'Rebels', change: '+5 Friendship'}, {faction: 'Imperials', change: '+9 Conflict'}],
+                factionChanges: [{ faction: 'Rebels', change: '+5 Friendship' }, { faction: 'Imperials', change: '+9 Conflict' }],
                 damageTaken: Math.floor(Math.random() * 100),
                 powerUsed: Math.floor(Math.random() * 500),
-                timeTaken: `${Math.floor(Math.random() * 10)}:${Math.floor(Math.random()*60).toString().padStart(2,'0')}`,
+                timeTaken: `${Math.floor(Math.random() * 10)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
                 wireBonus: Math.random() > 0.5 ? 50 : 0,
             };
 
@@ -96,21 +100,21 @@ class EndOfLevelManager {
 
     populateStats(stats) {
         this.statsContainer.innerHTML = `
-            <h2>Level Complete</h2>
-            <p>Foes Defeated: ${stats.foesDefeated}</p>
-            <p>Spawners Sliced: ${stats.spawnersSliced}</p>
-            <p>Allies Made: ${stats.alliesMade}</p>
-            <p>Friends Made: ${stats.friendsMade}</p>
-            <p>Damage Taken: ${stats.damageTaken}</p>
-            <p>Power Used: ${stats.powerUsed}</p>
-            <p>Time Taken: ${stats.timeTaken}</p>
-            <p>Speed Bonus: ${stats.wireBonus} wire</p>
-            <hr>
-            <p>Faction Relationship Changes:</p>
-            ${stats.factionChanges.map(c => `<span>${c.faction}: ${c.change}</span>`).join('<br>')}
-            <hr>
-            <p><em>Collect Faction Award TBD</em></p>
-        `;
+    <h2>Level Complete</h2>
+    <p>Foes Defeated: ${stats.foesDefeated}</p>
+    <p>Spawners Sliced: ${stats.spawnersSliced}</p>
+    <p>Allies Made: ${stats.alliesMade}</p>
+    <p>Friends Made: ${stats.friendsMade}</p>
+    <p>Damage Taken: ${stats.damageTaken}</p>
+    <p>Power Used: ${stats.powerUsed}</p>
+    <p>Time Taken: ${stats.timeTaken}</p>
+    <p>Speed Bonus: ${stats.wireBonus} wire</p>
+    <hr>
+    <p>Faction Relationship Changes:</p>
+    ${stats.factionChanges.map(c => `<span>${c.faction}: ${c.change}</span>`).join('<br>')}
+    <hr>
+    <p><em>Collect Faction Award TBD</em></p>
+`;
     }
 
     populateAllies() {
@@ -120,9 +124,9 @@ class EndOfLevelManager {
                 const allyDiv = document.createElement('div');
                 allyDiv.className = 'eol-ally';
                 allyDiv.innerHTML = `
-                    <span>${ally.npc.name} (Health: ${ally.npc.health.toFixed(0)}/${ally.npc.maxHealth})</span>
-                    <button data-ally-id="${ally.npc.mesh.group.uuid}">Dismiss</button>
-                `;
+            <span>${ally.npc.name} (Health: ${ally.npc.health.toFixed(0)}/${ally.npc.maxHealth})</span>
+            <button data-ally-id="${ally.npc.mesh.group.uuid}">Dismiss</button>
+        `;
                 this.allyContainer.appendChild(allyDiv);
             });
         } else {
@@ -158,16 +162,16 @@ class EndOfLevelManager {
 
         // Compact, single-screen layout with Q/E keybinds
         this.perksContainer.innerHTML = `
-            <div style="display: flex; gap: 20px; width: 100%; height: 100%; align-items: center; justify-content: center;">
-                ${chosenPerks.map((perk, index) => `
-                    <div class="eol-perk-option" style="flex: 1; padding: 20px; background: rgba(0,255,0,0.1); border: 3px solid #0f0; cursor: pointer; text-align: center;" onclick="window.endOfLevelManager.applyPerk(window.endOfLevelManager.selectedPerks[${index}])">
-                        <div style="color: #ff0; font-size: 32px; font-weight: bold; margin-bottom: 10px;">[${index === 0 ? 'Q' : 'E'}]</div>
-                        <h3 style="color: #0ff; margin-bottom: 10px; font-size: 18px;">${perk.title}</h3>
-                        <p style="color: #0f0; font-size: 14px; line-height: 1.4;">${perk.description}</p>
-                    </div>
-                `).join('')}
+    <div style="display: flex; gap: 20px; width: 100%; height: 100%; align-items: center; justify-content: center;">
+        ${chosenPerks.map((perk, index) => `
+            <div class="eol-perk-option" style="flex: 1; padding: 20px; background: rgba(0,255,0,0.1); border: 3px solid #0f0; cursor: pointer; text-align: center;" onclick="window.endOfLevelManager.applyPerk(window.endOfLevelManager.selectedPerks[${index}])">
+                <div style="color: #ff0; font-size: 32px; font-weight: bold; margin-bottom: 10px;">[${index === 0 ? 'Q' : 'E'}]</div>
+                <h3 style="color: #0ff; margin-bottom: 10px; font-size: 18px;">${perk.title}</h3>
+                <p style="color: #0f0; font-size: 14px; line-height: 1.4;">${perk.description}</p>
             </div>
-        `;
+        `).join('')}
+    </div>
+`;
     }
 
     applyPerk(perk) {

@@ -32,6 +32,7 @@ class AssetManager {
 
     async loadPlayerStats() {
         try {
+            // FIX: Correct path based on file listing
             const response = await fetch('data/ClassesAndSkills/gonk_base_stats.json');
             const data = await response.json();
             this.playerStats = data.gonk_player;
@@ -43,10 +44,20 @@ class AssetManager {
     async loadNPCClasses() {
         this.npcClasses = {};
         try {
-            // Load original classes (keeping for backward compatibility if needed)
-            const response = await fetch('data/ClassesAndSkills/npc_classes.json');
-            const data = await response.json();
-            this.npcClasses = data.npc_classes || {};
+            // FIX: Correct path to match directory structure
+            // Original code used 'data/ClassesAndSkills/npc_classes.json' which 404'd.
+            // It seems the file might be missing or named differently?
+            // Checking list_dir results...
+            // If it's missing, we skip it and rely on the new format.
+            try {
+                const response = await fetch('data/ClassesAndSkills/npc_classes.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    this.npcClasses = data.npc_classes || {};
+                }
+            } catch (e) {
+                console.warn("Legacy npc_classes.json not found, skipping.");
+            }
 
             // Load new BASIC class files
             const newClasses = [

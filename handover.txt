@@ -1,0 +1,190 @@
+
+================================================================================
+                          PROJECT HANDOVER & STATUS REPORT
+================================================================================
+DATE: 2025-12-13
+PROJECT: GONK - RPG ENGINE & PROCEDURAL GENERATION
+PREPARED BY: ANTIGRAVITY AGENT
+
+--------------------------------------------------------------------------------
+1. EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+This document serves as a comprehensive handover for the next development session.
+It details the significant refactoring of the Player Class Progression system, the
+overhaul of Procedural Level Generation (Level 99), and the critical, ongoing struggles
+with Environmental Rendering (specifically Water/Liquids and Wall/Ceiling generation).
+
+The User is highly focused on "Visual Fidelity" (Wow factor), "Variety" (NPCs, Furniture),
+and "Logic Accuracy" (Stats math). The User has expressed frustration with:
+1. Water rendering (height, movement, overlap/z-fighting).
+2. Lack of variety in procedural levels (same NPCs, empty rooms).
+3. Progression logic errors (stats not tracking correctly).
+
+--------------------------------------------------------------------------------
+2. CRITICAL ISSUE: WATER & LIQUIDS RENDERING
+--------------------------------------------------------------------------------
+**User Complaint:** 
+"Water in the levels is not moving... z-fighting with the water (which is INSIDE the walls)...
+water should be placed in a lowered elevation... disconnected from the sides and far too high."
+
+**Current State & Logic:**
+The Water rendering logic resides in `environment_and_physics.js` (Renderer) and 
+`StarChainGenerator.js` (Generator).
+
+A. Z-FIGHTING & PLACEMENT
+   - **Problem:** Procedural generation was placing "Floor" tiles or "Walls" on the same coordinates
+     as "Water" tiles. `LevelRenderer` would render both, causing flickering (z-fighting).
+     Additionally, Walls were being built *inside* water pools because the Wall Generator
+     treated Water tiles as "Void" (not Floor), causing it to wrap walls around them or through them.
+   - **Resolution Attempt:**
+     1. In `StarChainGenerator.js` -> `growRoom`: We introduced logic (lines ~410) to ensure
+        that if a tile is `isPool`, we set `levelData.layers.water` and DO NOT set `levelData.layers.floor`.
+     2. In `StarChainGenerator.js` -> `buildWalls`: We modified the neighbor check.
+        Previously: `if (!floors.has(nKey))` (If not floor, build wall).
+        New: `if (!floors.has(nKey) && !water.has(nKey))` (If not floor AND not water, build wall).
+        *Goal:* Treat Water as an "Open Room Space" so walls border it, but don't cut through it.
+   - **Remaining Risk:** If the renderer draws a "default subfloor" at y=0 everywhere, water at y=-0.5
+     might still clip if the subfloor isn't masked out.
+
+B. ELEVATION & HEIGHT
+   - **Problem:** Water was drawing at `y=0.1` or higher, making it look like a floating carpet.
+   - **Resolution:**
+     - In `environment_and_physics.js` -> `buildLevelFromData`:
+       Changed default water layer creation to `y = -0.5` (below floor).
+     - In `createTile`: Hardcoded water mesh offset to `y - 0.2`.
+     *Goal:* Water should visually sit inside the "trough" of the grid square, revealing the
+     sides of neighboring floor tiles.
+
+C. ANIMATION & FLOW
+   - **User Constraint:** "Move down 2 px and right 1 px each frame... subtle rippling effect."
+   - **Implementation:**
+     - `LevelRenderer.updateWater(deltaTime)` was refactored.
+     - We map "pixels" to UV coordinates (assuming 64x64 texture, 1px ~= 0.015 UV).
+     - Scale Factors added: `speedX = 0.015 * 1.0`, `speedY = 0.015 * 2.0`.
+     - Logic: `mesh.material.map.offset.x += speedX * deltaTime`.
+     - *Issue:* "Not doing at all what it should" - User feedback suggests this might still look static 
+       or the loop isn't being called correctly in the main game loop. 
+       **CHECK REQUIRED:** Ensure `window.levelRenderer.updateWater` is actually called in the main `animate()` loop!
+
+--------------------------------------------------------------------------------
+3. FEATURE: CLASS PROGRESSION OVERHAUL
+--------------------------------------------------------------------------------
+**User Objective:** "Fix Progression... Gold/Silver/Bronze attributes."
+
+A. ARCHITECTURE CHANGE
+   - Deprecated: `class_progression_tables.json` (The old monolithic file).
+   - Adopted: Individual JSON files in `data/ClassesAndSkills/PlayerClasses/`:
+     - `Gonk.json`, `HunterKiller.json`, `Protocol.json`, `Slicer.json`, `Adept.json`.
+   - Each file defines:
+     - `starting_attributes`: { STR, DEX... }
+     - `GoldSilverBronzeStats`: { "gold": "STR", "silver": "CON", "bronze": "INT" }
+     - `progression`: [ { level: 1, modules: [...] } ] (Only used for Level 1 starts).
+
+B. STAT SCALING CALCULUS (The "Gold" Standard)
+   - Implemented in `CharacterStatsManager.levelUp()`:
+     - **GOLD Attribute:** Increases +1 EVERY Level (Level % 1 == 0).
+     - **SILVER Attribute:** Increases +1 EVERY 2 Levels (Level % 2 == 0).
+     - **BRONZE Attribute:** Increases +1 EVERY 3 Levels (Level % 3 == 0).
+   - This creates a high-power curve. A Level 20 character will have +20 to their primary stat.
+
+C. MODULE PROGRESSION
+   - **Complaint:** "I seem to retain the old modules from the old class."
+   - **Fix:** In `CharacterStatsManager.selectClass()`, we now explicitly call:
+     `window.moduleManager.reset()` BEFORE applying new class data.
+   - **Level Up Logic:** 
+     - We do NOT grant new random modules.
+     - We take the list of `activeModules`.
+     - We select ONE based on `(Level % count)` rotation.
+     - We call `grantModule(name)` again, which stacks/ranks up that specific module.
+
+D. UI VISUALIZATION
+   - Modified `character_upgrades.js` (`updateD20Display`):
+   - Dynamic coloring of stat labels (STR/DEX/etc) based on the class's Gold (Gold color), Silver (Silver color), Bronze (Bronze color).
+   - Tooltips updated to explicitly state the growth rate (e.g., "GOLD: +1 per level").
+
+--------------------------------------------------------------------------------
+4. FEATURE: PROCEDURAL LEVEL GENERATION (StarChain)
+--------------------------------------------------------------------------------
+**User Objective:** "More Variety... Skyboxes... Ceilings... Furniture."
+
+A. CEILINGS & SKYBOXES
+   - **Problem:** "Huge gaps in the ceilings."
+   - **Fix:** `StarChainGenerator.finalizeLevelData`:
+     - Now iterates over both `floor` AND `wall` layers.
+     - Generates a ceiling tile at `heightMultiplier: 3` for every floor and wall tile.
+     - Selects Ceiling & Skybox texture based on `dominantStyle` (Imperial, Rebel, or Overgrown).
+     - Mappings:
+       - Imperial: `imperialinteriors/imp_hangar_1` (inferred)
+       - Rebel: `rebelinteriors`
+       - Overgrown: `forestexterior`
+
+B. NPC VARIETY & THREAT
+   - **Complaint:** "There are still only TWO types of npcs... At least one threat 4 foe..."
+   - **Implementation:**
+     - Modified `StarChainGenerator.growRoom` spawn logic.
+     - New Weighted Probability Table per spawn:
+       - 6% Chance: **Threat 4** (Elite/Boss)
+       - 20% Chance: **Threat 3** (Captain)
+       - 34% Chance: **Threat 2** (Veteran)
+       - 40% Chance: **Threat 1** (Grunt)
+     - Skin Selection: Queries `window.assetManager.getNpcsByCriteria({ macroCategory })` 
+       to pick a random skin from the entire available pool (Stormtrooper, Scout, Officer, etc.),
+       preventing the "Clone Army" look.
+
+C. DECOR & FURNITURE
+   - Added logic to `growRoom` to scatter furniture (`crate.json`, `computer_terminal.json`, `table_round.json`)
+     into non-pathing tiles (10% chance per tile).
+
+--------------------------------------------------------------------------------
+5. FILE MANIFEST & TECHNICAL DEBT
+--------------------------------------------------------------------------------
+The following files were heavily modified and require careful handling:
+
+1. **e:\gonk\character_stats_manager.js**
+   - *Status:* Critical. Handles all math for HP/Energy/Stats.
+   - *Note:* Ensure `applyLevelBonuses` is idempotent (can be called multiple times without breaking stats).
+
+2. **e:\gonk\environment_and_physics.js**
+   - *Status:* Critical / Fragile. Handles Three.js mesh creation.
+   - *Note:* The OBB (Oriented Bounding Box) class is embedded at the top of this file to prevent crashes. 
+     DO NOT REMOVE THE OBB CODE BLOCK. 
+   - *Water Logic:* `updateWater` and `createTile` (water block) are here.
+
+3. **e:\gonk\StarChainGenerator.js**
+   - *Status:* Active Development.
+   - *Note:* Generates the JSON data structure for levels. 
+     Coordinate system must match `LevelRenderer` (Grid size 5?).
+
+4. **e:\gonk\data\ClassesAndSkills\PlayerClasses\*.json**
+   - *Status:* New Source of Truth.
+   - *Note:* Any new class must follow this schema.
+
+--------------------------------------------------------------------------------
+6. OUTSTANDING ACTION ITEMS (FOR NEXT SESSION)
+--------------------------------------------------------------------------------
+1. **VERIFY ANIMATION LOOP:**
+   - Check `main.js` or `game_loop.js`. Is `levelRenderer.updateWater()` actually being called?
+   - If not, the code in `environment_and_physics.js` is correct but dead.
+
+2. **WATER Z-FIGHTING TEST:**
+   - Load Level 99. Find a pool.
+   - Does the water flicker against the subfloor?
+   - If yes, we may need to disable subfloor generation for tiles that have water using a mask.  (this concept is wrong, the water is suppposed to ripple along the TOP of the water at exactly elevation 1.  The last AI broke this function of height and also didn't make it move)
+
+3. **MISSING AUDIO:**
+   - `data\speech\vendors\theguidehellothere.mp3` is 404ing. Needs a placeholder or file restore.
+
+4. **UI CLEANUP:**
+   - Verify `character_upgrades.js` tooltip positioning isn't off-screen for the bottom attributes (CHA).
+
+5. game is slow as shit 
+
+6. furniture totally broken and has no clipping effective.
+
+7. no quests or NPCs of interest in procedural levels.
+
+8.  the cheats menu is for some reason TWO SEPARATE menus that need to be merged.
+
+--------------------------------------------------------------------------------
+END OF HANDOVER REPORT
+================================================================================

@@ -1,0 +1,223 @@
+{
+    "className": "Tech",
+    "description": "A resourceful engineer who uses cutting-edge gadgets, hacking, and deployable weapons to control the battlefield.",
+    "primaryStatChoice": "INT is the primary stat for crafting and hacking. DEX improves gadget deployment speed and personal shield.",
+    "startingStatMods": {
+        "INT": "+4",
+        "DEX": "+2",
+        "STR": "-2",
+        "WIS": "-2"
+    },
+    "hpPerLevel": 5,
+    "skillsPerLevel": 4,
+    "classFeatures": {
+        "1": {
+            "type": "power",
+            "name": "Tinkerer",
+            "description": "You can craft basic consumables (medkits, grenades) and temporary weapon mods from scrap materials."
+        },
+        "2": {
+            "type": "power",
+            "name": "Personal Energy Shield",
+            "description": "Gain a personal shield that absorbs 10 damage and recharges after not taking damage for 10 seconds."
+        },
+        "3": {
+            "type": "stats",
+            "name": "Tech Training I",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "4": {
+            "type": "power",
+            "name": "Deployable Mine",
+            "description": "Craft and deploy proximity mines that detonate when enemies get close."
+        },
+        "5": {
+            "type": "stats",
+            "name": "Tech Training II",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "6": {
+            "type": "power",
+            "name": "Improved Energy Shield",
+            "description": "Personal shield now absorbs 20 damage."
+        },
+        "7": {
+            "type": "stats",
+            "name": "Tech Training III",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "8": {
+            "type": "power",
+            "name": "Slicing I: Droids",
+            "description": "You can hack basic droids, causing them to fight for you for 15 seconds."
+        },
+        "9": {
+            "type": "stats",
+            "name": "Tech Training IV",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "10": {
+            "type": "power",
+            "name": "Deployable Turret",
+            "description": "Craft and deploy a small automated turret that fires at nearby enemies."
+        },
+        "11": {
+            "type": "stats",
+            "name": "Tech Training V",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "12": {
+            "type": "power",
+            "name": "Shield Overcharge",
+            "description": "You can overcharge your shield, doubling its capacity for 10 seconds. 1/combat."
+        },
+        "13": {
+            "type": "stats",
+            "name": "Tech Training VI",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "14": {
+            "type": "power",
+            "name": "Advanced Crafting",
+            "description": "You can now craft advanced consumables (stimpacks) and permanent weapon/armor mods."
+        },
+        "15": {
+            "type": "stats",
+            "name": "Tech Training VII",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "16": {
+            "type": "power",
+            "name": "Resourceful",
+            "description": "+2 INT permanently."
+        },
+        "17": {
+            "type": "stats",
+            "name": "Tech Training VIII",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "18": {
+            "type": "power",
+            "name": "Slicing II: Turrets",
+            "description": "You can hack enemy turrets, turning them against their owners permanently."
+        },
+        "19": {
+            "type": "stats",
+            "name": "Tech Training IX",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "20": {
+            "type": "power",
+            "name": "Deployable Shield Generator",
+            "description": "Craft and deploy a device that creates a large, stationary energy shield for cover."
+        },
+        "21": {
+            "type": "stats",
+            "name": "Tech Training X",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "22": {
+            "type": "power",
+            "name": "Drone Companion",
+            "description": "You gain a permanent, non-combat drone that can retrieve items and provide light."
+        },
+        "23": {
+            "type": "stats",
+            "name": "Tech Training XI",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "24": {
+            "type": "power",
+            "name": "Master Energy Shield",
+            "description": "Personal shield now absorbs 40 damage and recharges faster."
+        },
+        "25": {
+            "type": "stats",
+            "name": "Tech Training XII",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "26": {
+            "type": "power",
+            "name": "EMP Blast",
+            "description": "1/combat - Unleash an EMP blast that stuns all droids and disables all shields in a large radius for 10 seconds."
+        },
+        "27": {
+            "type": "stats",
+            "name": "Tech Training XIII",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "28": {
+            "type": "power",
+            "name": "Combat Drone",
+            "description": "Your drone companion can now be upgraded with a small blaster."
+        },
+        "29": {
+            "type": "stats",
+            "name": "Tech Training XIV",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "30": {
+            "type": "power",
+            "name": "Slicing III: Advanced Droids",
+            "description": "You can hack advanced droids, with a chance to permanently convert them to your side."
+        },
+        "31": {
+            "type": "stats",
+            "name": "Tech Training XV",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "32": {
+            "type": "power",
+            "name": "Master Crafting",
+            "description": "You can craft epic-level items and unique gadgets."
+        },
+        "33": {
+            "type": "stats",
+            "name": "Tech Training XVI",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "34": {
+            "type": "power",
+            "name": "Tesla Coil Turret",
+            "description": "Your turrets are now tesla coils that deal chain lightning damage to multiple enemies."
+        },
+        "35": {
+            "type": "stats",
+            "name": "Tech Training XVII",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "36": {
+            "type": "power",
+            "name": "Targeting Scrambler",
+            "description": "Deploy a device that reduces the accuracy of all enemies in a large radius by 50%."
+        },
+        "37": {
+            "type": "stats",
+            "name": "Tech Training XVIII",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +1 skill point"
+        },
+        "38": {
+            "type": "power",
+        "name": "Personal Cloaking Device",
+            "description": "1/combat - Become invisible for 15 seconds."
+        },
+        "39": {
+            "type": "stats",
+            "name": "Tech Training XIX",
+            "description": "+1 to INT (auto), +1 to any other stat (player choice), +2 skill points"
+        },
+        "40": {
+            "type": "power",
+            "name": "Techno-Wizardry",
+            "description": "Ultimate Tech Protocol - You can have two turrets active at once. Your personal shield has a 25% chance to reflect projectiles. Hacking is instantaneous."
+        }
+    },
+    "allyScaling": {
+        "baseMaxAllies": 1,
+        "xpMultiplier": 0,
+        "canExceedGonkLevel": false,
+        "maxLevelAboveGonk": -4,
+        "recruitmentPenalty": -5,
+        "maxPossibleAllies": 2
+    }
+}

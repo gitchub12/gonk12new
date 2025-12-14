@@ -425,6 +425,11 @@ class ModuleManager {
         }
     }
 
+    // Check if player has a module
+    hasModule(moduleId) {
+        return this.activeModules.includes(moduleId);
+    }
+
     // Get all active modules with their data
     getActiveModules() {
         return this.activeModules.map(id => this.modules[id]).filter(m => m);

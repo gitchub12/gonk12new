@@ -1653,7 +1653,93 @@ class LevelEditor {
         return levelObject;
     }
 
+    async validateLevelLinks() {
+        const links = [];
+        // Collect all links from doors and docks
+        ['door', 'dock'].forEach(layer => {
+            if (this.levelData[layer]) {
+                this.levelData[layer].forEach((item, key) => {
+                    if (item.properties && item.properties.target) {
+                        links.push({ key, target: item.properties.target, type: layer });
+                    }
+                });
+            }
+        });
+
+        const errors = [];
+        for (const link of links) {
+            // Expected Format: "TO LEVEL {X}" or "TO LEVEL {X}A"
+            const match = link.target.match(/TO LEVEL (\d+)([A-Z]?)/);
+            if (!match) {
+                errors.push(`Invalid target format '${link.target}' in ${link.type} at ${link.key}. Expected 'TO LEVEL X' or 'TO LEVEL XA'.`);
+                continue;
+            }
+
+            const targetLevelNum = match[1];
+            const targetSubLevel = match[2] || '';
+            // Check if file exists
+            const path = `/data/levels/level_${targetLevelNum}${targetSubLevel}.json`;
+            try {
+                const res = await fetch(path);
+                if (!res.ok) {
+                    errors.push(`Broken Link in ${link.type} at ${link.key}: Target file 'level_${targetLevelNum}${targetSubLevel}.json' not found.`);
+                    continue;
+                }
+
+                // Deep Validation: Check for return spawn point
+                const targetJson = await res.json();
+                let hasMatchingSpawn = false;
+
+                // Construct expected ID: "FROM LEVEL {Current}"
+                // Note: Current level might have a sublevel suffix? this.currentLevel is usually just a number.
+                // If we are in "1A", expected is "FROM LEVEL 01A".
+                // We need to know OUR current full level string.
+                const sublevelSelect = document.getElementById('level-sublevel-select');
+                const mySub = sublevelSelect ? sublevelSelect.value : '';
+                const myLevelStr = String(this.currentLevel).padStart(2, '0') + mySub;
+                const expectedSpawnId = `FROM LEVEL ${myLevelStr}`;
+
+                if (targetJson.layers && targetJson.layers.spawns) {
+                    // Spawns might be an array (from Map entries) or object depending on format (v1 vs v2 decompressed)
+                    // But raw JSON from file is usually v2 compressed OR v1 array-of-arrays.
+                    // Let's assume standard array-of-entries format for "spawns" layer in JSON.
+                    const spawnsRaw = targetJson.layers.spawns;
+
+                    // Helper to check items
+                    const checkItems = (items) => {
+                        for (const item of items) {
+                            // item is [key, data]
+                            if (item[1] && item[1].id === expectedSpawnId) return true;
+                        }
+                        return false;
+                    };
+
+                    if (Array.isArray(spawnsRaw)) {
+                        hasMatchingSpawn = checkItems(spawnsRaw);
+                    } else if (typeof spawnsRaw === 'object') {
+                        // v2 format might have weird structure? Usually v2 layers are objects.
+                        // But commonly we save as Map entries (Array).
+                        // If it IS an object (rare for this codebase's save format), iterate values.
+                        hasMatchingSpawn = Object.values(spawnsRaw).some(s => s.id === expectedSpawnId);
+                    }
+                }
+
+                if (!hasMatchingSpawn) {
+                    errors.push(`Broken Logic in ${link.type} at ${link.key}: Target level '${targetLevelNum}${targetSubLevel}' exists, but has no Spawn Point with ID '${expectedSpawnId}'.`);
+                }
+
+            } catch (e) {
+                console.warn('Validation fetch failed', e);
+                errors.push(`Error fetching target level '${targetLevelNum}${targetSubLevel}' for link in ${link.type} at ${link.key}.`);
+            }
+        }
+
+        return errors;
+    }
+
     async saveLevel() {
+        await this.validateLevelLinks();
+
         const levelDataToSave = this.getLevelDataObject();
         const jsonString = JSON.stringify(levelDataToSave, null, 2);
         const sublevelSelect = document.getElementById('level-sublevel-select');
